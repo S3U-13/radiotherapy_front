@@ -46,7 +46,7 @@ export default function page() {
     setSelectForm,
   } = useHook();
   return (
-    <div className="border rounded-xl border-divider px-6 py-6 h-full">
+    <div className="p-6 h-full bg-white rounded-xl">
       <h1 className="mb-4 text-2xl text-center">หน้าเพิ่มรายการ</h1>
       <div className="">
         <ModalForm1

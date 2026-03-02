@@ -70,11 +70,29 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
           ),
         })}
       >
-        {!isSelected || isSSR ? (
-          <SunFilledIcon size={22} />
-        ) : (
-          <MoonFilledIcon size={22} />
-        )}
+        <div className=" bg-white p-1 rounded-full dark:bg-[#28282c] space-y-2">
+          <SunFilledIcon
+            onClick={() => setTheme("dark")}
+            className={clsx(
+              "cursor-pointer p-1 rounded transition",
+              isSelected
+                ? "bg-white border border-divider shadow-sm rounded-full"
+                : "opacity-50 hover:opacity-100",
+            )}
+            size={28}
+          />
+
+          <MoonFilledIcon
+            onClick={() => setTheme("light")}
+            className={clsx(
+              "cursor-pointer p-1 rounded transition",
+              !isSelected
+                ? "bg-[#19191d] dark:border dark:border-divider shadow-sm rounded-full"
+                : "opacity-50 hover:opacity-100",
+            )}
+            size={28}
+          />
+        </div>
       </div>
     </Component>
   );
