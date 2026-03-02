@@ -11,6 +11,7 @@ export default function useHook() {
   const [modalForm3, setModalForm3] = useState(false);
 
   const [form, setForm] = useState([]);
+  console.log(form)
 
   const [selectForm, setSelectForm] = useState("");
   const openForm1 = () => {
