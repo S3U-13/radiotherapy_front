@@ -31,7 +31,7 @@ export function Content({ children }) {
 
         {/* ---- Main ---- */}
         <main
-          className={`flex-1 transition-all duration-300 rounded-lg pr-4 pb-4`}
+          className={`flex-1 transition-all duration-300 rounded-lg pr-4 pb-4 `}
         >
           {children}
         </main>

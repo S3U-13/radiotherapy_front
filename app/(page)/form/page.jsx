@@ -8,22 +8,13 @@ import {
   TableRow,
   TableCell,
 } from "@heroui/table";
-import {
-  Dropdown,
-  DropdownTrigger,
-  DropdownMenu,
-  DropdownSection,
-  DropdownItem,
-} from "@heroui/dropdown";
 import { Button } from "@heroui/button";
 import {
-  Check,
-  ChevronDown,
+  Edit3,
+  Eye,
   FileText,
-  PlusCircle,
-  Save,
+  MoreHorizontal,
   Search,
-  Slash,
 } from "@deemlol/next-icons";
 import { Tooltip } from "@heroui/tooltip";
 import { Pagination } from "@heroui/pagination";
@@ -33,6 +24,12 @@ import ModalForm3 from "./create_form_3/page";
 import useHook from "./useHook";
 import { Input } from "@heroui/input";
 import { div } from "framer-motion/client";
+import {
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+} from "@heroui/dropdown";
 
 export default function page() {
   const {
@@ -43,106 +40,158 @@ export default function page() {
     setModalForm2,
     modalForm3,
     setModalForm3,
+    mockData,
+    formPatList,
+    searchFormByHn,
+    setSearchFormByHn,
+    handleSearch,
+    statusStyle,
+    FormByFormId,
   } = useHook();
   return (
-    <div className="h-full flex flex-col justify-center items-center">
-      <div className="w-full max-w-5xl border border-divider shadow-sm rounded-2xl p-4">
-        {/* Title */}
-        <div className="text-center mb-4">
+    <div className="w-full shadow-sm rounded-2xl p-6 bg-white dark:bg-[#131317]">
+      {/* Title */}
+
+      {/* Search Section */}
+      <div className="flex flex-col sm:flex-row justify-between items-center px-2 mt-6">
+        <div className="text-left mb-4">
           <h1 className="text-3xl font-semibold ">หน้าค้นหารายการ</h1>
-          <p className=" text-sm mt-2">
+          <p className="text-default-500 text-sm">
             ค้นหาและจัดการข้อมูลแบบฟอร์มต่าง ๆ ภายในระบบ
           </p>
         </div>
 
-        {/* Search Section */}
-        <div className="flex flex-col sm:flex-row justify-end items-center px-2">
-          <div className="flex items-center justify-end gap-2 w-full sm:w-1/2">
-            <Input
-              size="sm"
-              label="ค้นหา"
-              placeholder="กรอก HN ...."
-              variant="flat"
-              className="w-2/3"
-            />
-            <Button isIconOnly color="secondary" variant="solid">
-              <Search size={16} color="#FFFFFF" />
-            </Button>
-          </div>
-        </div>
-
-        {/* Table Section */}
-        <div className="overflow-x-auto mt-2 rounded-lg p-2">
-          <Table
-            aria-label="ตารางรายการ"
-            className="min-w-full text-sm"
-            classNames={{
-              th: "py-4 text-md font-semibold",
-              td: "py-3",
-            }}
+        <div className="flex items-center justify-end gap-2 w-full sm:w-1/2">
+          <Input
+            size="md"
+            radius="md"
+            placeholder="กรอก HN ...."
+            variant="flat"
+            className="max-w-xs"
+            value={searchFormByHn}
+            onChange={(e) => setSearchFormByHn(e.target.value)}
+          />
+          <Button
+            isIconOnly
+            className="bg-neutral-900"
+            variant="solid"
+            onPress={handleSearch}
           >
-            <TableHeader>
-              <TableColumn>ID</TableColumn>
-              <TableColumn>HN</TableColumn>
-              <TableColumn>ชื่อ-นามสกุล</TableColumn>
-              <TableColumn>ประเภทรายการ</TableColumn>
-              <TableColumn className="text-center">ACTION</TableColumn>
-            </TableHeader>
+            <Search size={16} color="#FFFFFF" />
+          </Button>
+        </div>
+      </div>
 
-            <TableBody emptyContent="ไม่พบข้อมูล">
-              <TableRow key="1">
-                <TableCell>1</TableCell>
-                <TableCell>6815347</TableCell>
-                <TableCell>Tony Reichert</TableCell>
-                <TableCell>
-                  ใบรับทราบข้อมูลเเละยินยอมรับการรักษาด้วยการฉายรังสี
+      {/* Table Section */}
+      <div className="overflow-x-auto mt-2 rounded-lg p-2">
+        <Table
+          radius="none"
+          aria-label="ตารางรายการ"
+          className="min-w-full text-sm"
+          // classNames={{
+          //   th: "py-4 text-md font-semibold",
+          //   td: "py-3",
+          // }}
+        >
+          <TableHeader>
+            <TableColumn>ID</TableColumn>
+            <TableColumn>HN</TableColumn>
+            <TableColumn>NAME</TableColumn>
+            <TableColumn>FORM TYPE</TableColumn>
+            <TableColumn className="text-center">CREATED AT</TableColumn>
+            <TableColumn className="text-center">STATUS</TableColumn>
+            <TableColumn className="text-center">ACTION</TableColumn>
+          </TableHeader>
+
+          <TableBody emptyContent="ไม่พบข้อมูล">
+            {formPatList.map((i) => (
+              <TableRow
+                key={i.id}
+                className="hover:bg-neutral-100 dark:hover:bg-[#27272A]"
+              >
+                <TableCell>{i.id}</TableCell>
+                <TableCell>{i.hn}</TableCell>
+                <TableCell>{i.name}</TableCell>
+                <TableCell>{i.form_type}</TableCell>
+                <TableCell className="text-center">{i.created_at}</TableCell>
+                {/* 🔥 Status Badge */}
+                <TableCell className="text-center">
+                  <span
+                    className={`
+                               px-6 py-2 text-xs rounded-full font-medium
+                              ${statusStyle[i?.status] || "bg-gray-100 text-gray-600"}
+                             `}
+                  >
+                    {i.status}
+                  </span>
                 </TableCell>
-                <TableCell className="flex justify-center">
-                  <Tooltip color="default" content="แก้ไขข้อมูล">
-                    <Button
-                      size="sm"
-                      isIconOnly
-                      variant="flat"
-                      className="hover:bg-gray-200 transition-colors"
-                      onPress={() => setModalForm3(true)}
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-5 h-5 text-gray-600"
+                {/* 🔥 Action */}
+                <TableCell>
+                  <div className="flex justify-center gap-2">
+                    <Dropdown placement="bottom-center">
+                      <DropdownTrigger>
+                        <Button
+                          size="sm"
+                          variant="light"
+                          isIconOnly
+                          className="text-neutral-500 hover:text-neutral-800"
+                        >
+                          <MoreHorizontal size={18} />
+                        </Button>
+                      </DropdownTrigger>
+
+                      <DropdownMenu
+                        aria-label="Actions"
+                        className="shadow-md rounded-lg"
+                        variant="faded"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                        />
-                      </svg>
-                    </Button>
-                  </Tooltip>
+                        <DropdownItem
+                          key="view"
+                          className=" text-neutral-700 hover:bg-neutral-100 rounded-md px-3 py-1.5"
+                          startContent={<Eye size={16} />}
+                        >
+                          <span>View</span>
+                        </DropdownItem>
+
+                        <DropdownItem
+                          key="edit"
+                          className=" text-neutral-700 hover:bg-neutral-100 rounded-md px-3 py-1.5 font-medium"
+                          startContent={<Edit3 size={16} />}
+                          onPress={() => FormByFormId[i.form_id](true)}
+                        >
+                          <span>Edit</span>
+                        </DropdownItem>
+                        <DropdownItem
+                          key="pdf"
+                          className=" text-neutral-700 hover:bg-neutral-100 rounded-md px-3 py-1.5 font-medium"
+                          startContent={<FileText size={16} />}
+                        >
+                          <span>PDF</span>
+                        </DropdownItem>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
                 </TableCell>
               </TableRow>
-            </TableBody>
-          </Table>
-        </div>
-        <ModalForm1
-          openForm1={modalForm1}
-          modalRef={modalRef}
-          closeForm1={() => setModalForm1(false)}
-        />
-        <ModalForm2
-          openForm2={modalForm2}
-          modalRef={modalRef}
-          closeForm2={() => setModalForm2(false)}
-        />
-        <ModalForm3
-          openForm3={modalForm3}
-          modalRef={modalRef}
-          closeForm3={() => setModalForm3(false)}
-        />
+            ))}
+          </TableBody>
+        </Table>
       </div>
+      <ModalForm1
+        openForm1={modalForm1}
+        modalRef={modalRef}
+        closeForm1={() => setModalForm1(false)}
+      />
+      <ModalForm2
+        openForm2={modalForm2}
+        modalRef={modalRef}
+        closeForm2={() => setModalForm2(false)}
+      />
+      <ModalForm3
+        openForm3={modalForm3}
+        modalRef={modalRef}
+        closeForm3={() => setModalForm3(false)}
+      />
     </div>
   );
 }

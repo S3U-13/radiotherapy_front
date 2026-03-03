@@ -39,13 +39,13 @@ export default function page({ openForm2, closeForm2, modalRef }) {
   return (
     <div>
       <Modal
-        size="3xl"
+        size="5xl"
         isOpen={openForm2}
         onOpenChange={closeForm2}
         classNames={{
-          body: "max-h-[calc(85vh-120px)] overflow-y-scroll py-6",
-          header: "border-b border-divider py-6",
-          footer: "border-t border-divider",
+          body: "max-h-[calc(80vh-145px)] overflow-y-scroll py-6 bg-[#f1f1f1]",
+          header: "border-b border-divider py-6 bg-[#e6e6e6] dark:bg-[#0e0e11]",
+          footer: "border-t border-divider bg-[#e6e6e6] dark:bg-[#0e0e11]",
         }}
         placement="center"
       >
@@ -157,9 +157,7 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                     การยินยอมเข้ารับการรักษา
                   </h2>
 
-                  <RadioGroup 
-                   orientation="vertical"
-                   className="mt-3">
+                  <RadioGroup orientation="vertical" className="mt-3">
                     {choice
                       .filter((ch) => ch.choice_type_id === "4")
                       .map((c, index) =>
@@ -169,7 +167,7 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                               <p className="text-sm pl-2">{c.choice_name}</p>
                             </Radio>
                           </div>
-                        ) : null
+                        ) : null,
                       )}
                   </RadioGroup>
                 </section>
@@ -183,7 +181,7 @@ export default function page({ openForm2, closeForm2, modalRef }) {
 
                   <div className="space-y-4">
                     {/* ผู้ให้ข้อมูล */}
-                    <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-2">
+                    <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-2">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         ผู้ให้ข้อมูล แพทย์ / พยาบาล
                       </h3>
@@ -194,7 +192,7 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                     </div>
 
                     {/* ผู้รับข้อมูล */}
-                    <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-3">
+                    <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-3">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         ผู้รับข้อมูล ผู้ป่วย หรือ ผู้เเทนโดยชอบธรรมด้วยกฎหมาย
                       </h3>
@@ -235,7 +233,7 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                     </div>
 
                     {/* พยานฝ่ายผู้ป่วย */}
-                    <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-3">
+                    <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-3">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         พยานฝ่ายผู้ป่วย
                       </h3>
@@ -287,7 +285,7 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                     </div>
 
                     {/* พยานฝ่ายเจ้าหน้าที่ */}
-                    <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-3">
+                    <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-3">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         พยานฝ่ายเจ้าหน้าที่
                       </h3>
@@ -366,19 +364,11 @@ export default function page({ openForm2, closeForm2, modalRef }) {
 
               {/* Footer */}
               <ModalFooter className="border-t border-gray-200 dark:border-gray-700  dark:bg-gray-800 rounded-b-2xl flex justify-end gap-3 py-4">
-                <Button
-                  color="danger"
-                  variant="light"
-                  radius="sm"
-                  className="font-medium"
-                  onPress={closeForm2}
-                >
+                <Button variant="flat" color="default" onPress={closeForm2}>
                   ปิด
                 </Button>
                 <Button
-                  color="primary"
-                  radius="sm"
-                  className="font-medium"
+                  className="bg-neutral-900 text-white"
                   onPress={closeForm2}
                 >
                   บันทึก

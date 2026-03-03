@@ -38,13 +38,13 @@ export default function page({ openForm3, closeForm3, modalRef }) {
   return (
     <div>
       <Modal
-        size="3xl"
+        size="5xl"
         isOpen={openForm3}
         onOpenChange={closeForm3}
         classNames={{
-          body: "max-h-[calc(85vh-120px)] overflow-y-scroll py-6",
-          header: "border-b border-divider py-6",
-          footer: "border-t border-divider",
+          body: "max-h-[calc(80vh-145px)] overflow-y-scroll py-6 bg-[#f1f1f1]",
+          header: "border-b border-divider py-6 bg-[#e6e6e6] dark:bg-[#0e0e11]",
+          footer: "border-t border-divider bg-[#e6e6e6] dark:bg-[#0e0e11]",
         }}
         placement="center"
       >
@@ -57,7 +57,7 @@ export default function page({ openForm3, closeForm3, modalRef }) {
               </ModalHeader>
 
               <ModalBody className="space-y-4 text-gray-700 dark:text-gray-300">
-                <section className="p-4 bg-white dark:bg-[#27272a] rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm space-y-4">
+                <section className="p-6 bg-white dark:bg-[#27272a] rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm space-y-4">
                   <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2 mb-4">
                     <span className="w-1 h-5 bg-violet-500 rounded-full"></span>
                     ข้อมูลผู้ยินยอม
@@ -120,7 +120,7 @@ export default function page({ openForm3, closeForm3, modalRef }) {
                 </section>
 
                 {/* 💬 ส่วนคำอธิบาย */}
-                <section className="p-4 bg-white dark:bg-[#27272a] rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm space-y-3 leading-relaxed">
+                <section className="p-6 bg-white dark:bg-[#27272a] rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm space-y-3 leading-relaxed">
                   <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2 mb-4">
                     <span className="w-1 h-5 bg-violet-500 rounded-full"></span>
                     รายละเอียดการรักษา
@@ -164,7 +164,7 @@ export default function page({ openForm3, closeForm3, modalRef }) {
 
                   <div className="space-y-4">
                     {/* ผู้ให้ข้อมูล */}
-                    <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-2">
+                    <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-2">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         ผู้ให้ข้อมูล แพทย์ / พยาบาล
                       </h3>
@@ -175,7 +175,7 @@ export default function page({ openForm3, closeForm3, modalRef }) {
                     </div>
 
                     {/* ผู้รับข้อมูล */}
-                    <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-3">
+                    <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-3">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         ผู้ให้คำยินยอม
                       </h3>
@@ -218,7 +218,7 @@ export default function page({ openForm3, closeForm3, modalRef }) {
                     </div>
 
                     {/* พยานฝ่ายผู้ป่วย */}
-                    <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-3">
+                    <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-3">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         พยานฝ่ายผู้ป่วย
                       </h3>
@@ -270,7 +270,7 @@ export default function page({ openForm3, closeForm3, modalRef }) {
                     </div>
 
                     {/* พยานฝ่ายเจ้าหน้าที่ */}
-                    <div className="p-4 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-3">
+                    <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-3">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         พยานฝ่ายเจ้าหน้าที่
                       </h3>
@@ -348,18 +348,12 @@ export default function page({ openForm3, closeForm3, modalRef }) {
               </ModalBody>
 
               <ModalFooter>
-                <Button
-                  color="danger"
-                  variant="light"
-                  onPress={closeForm3}
-                  className="rounded-lg"
-                >
+                <Button variant="flat" color="default" onPress={closeForm3}>
                   ปิด
                 </Button>
                 <Button
-                  color="primary"
                   onPress={closeForm3}
-                  className="bg-blue-600 text-white rounded-lg"
+                  className="bg-neutral-900 text-white"
                 >
                   บันทึก
                 </Button>

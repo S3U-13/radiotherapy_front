@@ -48,87 +48,11 @@ export default function Page() {
     form,
     selectForm,
     setSelectForm,
+    mockData,
   } = useHook();
 
-  const mockData = [
-    {
-      id: 1,
-      hn: "6900181",
-      name: "Somchai Boonmee",
-      form_type:
-        "หนังสืออธิบายและยินยอมให้ทำการจำลองการฉายรังสีโดยใช้รังสีเอกซเรย์และสารทึบรังสี",
-      status: "Success",
-    },
-    {
-      id: 2,
-      hn: "6900182",
-      name: "Pichai Sangthong",
-      form_type:
-        "หนังสืออธิบายและยินยอมให้ทำการจำลองการฉายรังสีโดยใช้รังสีเอกซเรย์และสารทึบรังสี",
-      status: "Success",
-    },
-    {
-      id: 3,
-      hn: "6900183",
-      name: "Niran Suksawat",
-      form_type:
-        "หนังสืออธิบายและยินยอมให้ทำการจำลองการฉายรังสีโดยใช้รังสีเอกซเรย์และสารทึบรังสี",
-      status: "Success",
-    },
-    {
-      id: 4,
-      hn: "6900184",
-      name: "Somsak Chaiyaporn",
-      form_type:
-        "หนังสืออธิบายและยินยอมให้ทำการจำลองการฉายรังสีโดยใช้รังสีเอกซเรย์และสารทึบรังสี",
-      status: "Success",
-    },
-    {
-      id: 5,
-      hn: "6900185",
-      name: "Somsri Srisawat",
-      form_type:
-        "หนังสืออธิบายและยินยอมให้ทำการจำลองการฉายรังสีโดยใช้รังสีเอกซเรย์และสารทึบรังสี",
-      status: "Success",
-    },
-    {
-      id: 6,
-      hn: "6900186",
-      name: "Kittipong Sokdee",
-      form_type: "ใบรับทราบข้อมูลเเละยินยอมรับการรักษาด้วยการฉายรังสี",
-      status: "Success",
-    },
-    {
-      id: 7,
-      hn: "6900187",
-      name: "Kanokwan Thongchai",
-      form_type: "ใบรับทราบข้อมูลเเละยินยอมรับการรักษาด้วยการฉายรังสี",
-      status: "Success",
-    },
-    {
-      id: 8,
-      hn: "6900188",
-      name: "Chatchai Sukjai",
-      form_type: "ใบรับทราบข้อมูลเเละยินยอมรับการรักษาด้วยการฉายรังสี",
-      status: "Success",
-    },
-    {
-      id: 9,
-      hn: "6900189",
-      name: "Chatnam Somjai",
-      form_type: "ใบรับทราบข้อมูลเเละยินยอมรับการรักษาด้วยการใส่เเร่",
-      status: "Success",
-    },
-    {
-      id: 10,
-      hn: "6900190",
-      name: "Chulai Sukprasert",
-      form_type: "ใบรับทราบข้อมูลเเละยินยอมรับการรักษาด้วยการใส่เเร่",
-      status: "Cancel",
-    },
-  ];
   return (
-    <div className="p-6 space-y-5 bg-white rounded-xl ">
+    <div className="p-6 space-y-5 bg-white shadow-md rounded-xl dark:bg-[#131317]">
       <ModalForm1
         openForm1={modalForm1}
         selectForm={selectForm}
@@ -233,7 +157,7 @@ export default function Page() {
       </div>
 
       {/* 🔥 CONTROL BAR */}
-      <div className="flex flex-wrap gap-3 justify-between items-center bg-white p-4 rounded-md shadow-sm">
+      <div className="flex flex-wrap gap-3 justify-between items-center bg-white p-4 rounded-md shadow-sm dark:bg-[#0E0E11]">
         {/* LEFT */}
         <div className="flex gap-3 items-center">
           <Input
@@ -280,8 +204,12 @@ export default function Page() {
       </div>
 
       {/* 🔥 TABLE CARD */}
-      <div className="bg-white shadow-sm overflow-hidden">
-        <Table aria-label="Consent Table" radius="none">
+      <div className=" bg-white overflow-hidden">
+        <Table
+          aria-label="Consent Table"
+          radius="none"
+          classNames={{ wrapper: " bg-white dark:bg-[#0E0E11]", tr: "hover:bg-neutral-50 dark:hover:bg-[#18181B]", th: "bg-neutral-100 dark:bg-[#18181B]" }}
+        >
           <TableHeader>
             <TableColumn>ID</TableColumn>
             <TableColumn>HN</TableColumn>
@@ -352,10 +280,20 @@ export default function Page() {
                         </DropdownItem>
                       </DropdownMenu>
                     </Dropdown> */}
-                    <Button size="sm" radius="lg" variant="flat" className="bg-neutral-900 text-white">
+                    <Button
+                      size="sm"
+                      radius="lg"
+                      variant="flat"
+                      className="bg-neutral-900 text-white"
+                    >
                       View
                     </Button>
-                    <Button size="sm" radius="lg" variant="flat" className="bg-neutral-900 text-white">
+                    <Button
+                      size="sm"
+                      radius="lg"
+                      variant="flat"
+                      className="bg-neutral-900 text-white"
+                    >
                       Edit
                     </Button>
                   </div>
@@ -370,7 +308,7 @@ export default function Page() {
           className="
     flex justify-between items-center
     px-5 py-3
-    bg-white dark:bg-neutral-900
+    bg-white dark:bg-[#0E0E11]
     
    
     shadow-sm
@@ -396,9 +334,9 @@ export default function Page() {
             total={10}
             classNames={{
               wrapper: "gap-1",
-              item: "bg-transparent text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-lg",
+              item: "bg-transparent text-neutral-600  dark:text-neutral-300 rounded-lg",
               cursor:
-                "bg-neutral-900 text-white dark:bg-white dark:text-black font-medium rounded-lg",
+                "bg-neutral-900 text-white dark:bg-neutral-800 dark:text-white font-medium rounded-lg",
             }}
           />
         </div>

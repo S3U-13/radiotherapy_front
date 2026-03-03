@@ -61,7 +61,7 @@ export default function page({ isOpen, onClose, LoginRef }) {
                   })}
                   href="/form"
                 ></Link>
-                <Link isExternal href="/form_doc">
+                <Link isExternal href="/consent_form_radiotherapy">
                   <GithubIcon size={20} />
                   GitHub
                 </Link>

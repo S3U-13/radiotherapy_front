@@ -4,6 +4,7 @@ import { useApiRequest } from "../../../../hooks/useApi";
 
 export default function useHook() {
   const { fetchChoice } = useApiRequest();
+  const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
   const modalRefSign = useRef(null);
   const [choice, setChoice] = useState([]);
   const [openSign01, setOpenSign01] = useState(false);
@@ -39,10 +40,14 @@ export default function useHook() {
   };
 
   useEffect(() => {
+    if (didFetch.current) return; // check flag ก่อน
+    didFetch.current = true;
     fetchChoice()
       .then((data) => setChoice(data || []))
       .catch(console.error);
   }, [fetchChoice]);
+
+  console.log(choice)
 
   const [field, setField] = useState({
     form_type_code: "",

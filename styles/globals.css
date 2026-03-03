@@ -1,3 +1,24 @@
+@font-face {
+  font-family: "Sarabun";
+  src: url("/fonts/THSarabun.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Prompt";
+  src: url("/fonts/Prompt-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  font-family: "Sarabun", "sans-serif";
+  font-family: "Prompt", "sans-serif";
+}
+
 @import "tailwindcss";
 
-@config "../tailwind.config.js"
+@config "../tailwind.config.js";

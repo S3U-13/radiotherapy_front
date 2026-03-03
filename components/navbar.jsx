@@ -52,6 +52,8 @@ export default function Navbar() {
     if (path.startsWith("/dashboard")) return "Dashboard";
     if (path.startsWith("/consent_form_radiotherapy"))
       return "Consent Form Radiotherapy";
+    if (path.startsWith("/form"))
+      return "Consent Form ";
     return "Page";
   };
 
@@ -100,9 +102,9 @@ export default function Navbar() {
               isIconOnly
               radius="full"
               size="md"
-              className="bg-white border border-neutral-200 shadow-sm hover:shadow-md transition relative"
+              className="bg-white border border-neutral-200 dark:bg-[#131317] dark:border-neutral-800 shadow-sm hover:shadow-md transition relative"
             >
-              <Bell size={20} className="text-neutral-600" />
+              <Bell size={20} className="text-neutral-600 dark:text-neutral-100" />
 
               {/* badge */}
               <span className="fixed bottom-5.5 right-2 z-[9999] bg-red-500 text-white text-xs p-1.5 rounded-full"></span>

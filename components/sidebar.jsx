@@ -16,10 +16,11 @@ export default function Sidebar() {
       name: "Dashboard",
       path: "/dashboard",
       icon: <BarChart2 size={22} className="text-default-700" />,
+      role: "doctor",
     },
     {
       id: 2,
-      name: "Product",
+      name: "Consent Form",
       icon: <Edit2 size={18} className="text-default-700" />,
       children: [
         { id: 1, name: "Consent Form", path: "/consent_form_radiotherapy" },
@@ -28,6 +29,14 @@ export default function Sidebar() {
         { id: 4, name: "Comments", path: "/comments" },
         { id: 5, name: "Scheduled", path: "/scheduled", count: 8 },
       ],
+      role: "doctor",
+    },
+    {
+      id: 3,
+      name: "Consent Form",
+      path: "/form",
+      icon: <BarChart2 size={22} className="text-default-700" />,
+      role: ["staff", "nurse"],
     },
   ];
 
@@ -63,7 +72,7 @@ export default function Sidebar() {
                 size="lg"
                 radius="lg"
                 className={`w-full justify-start ${
-                  pathname === item.path ? "bg-white shadow-sm font-medium" : ""
+                  pathname === item.path ? "bg-white shadow-sm font-medium dark:bg-[#18181B] dark:hover:bg-default-100" : ""
                 }`}
                 startContent={item.icon}
               >
@@ -113,7 +122,7 @@ export default function Sidebar() {
                           radius="lg"
                           className={`w-46 justify-between ml-4 pl-3 pr-3 py-2 ${
                             isActive
-                              ? "bg-white shadow-sm font-medium"
+                              ? "bg-white shadow-sm font-medium dark:bg-[#18181B] dark:hover:bg-default-100"
                               : "text-default-500"
                           }`}
                         >

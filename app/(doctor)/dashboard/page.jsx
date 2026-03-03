@@ -4,7 +4,7 @@ import { Card, CardHeader, CardBody } from "@heroui/card";
 
 export default function Dashboard() {
   return (
-    <div className="p-5 space-y-4 bg-white rounded-xl">
+    <div className="p-5 space-y-4 bg-white rounded-xl shadow-md dark:bg-[#18181B]">
       {/* 🔥 Header */}
       <div>
         <p className="text-default-500">Overview of your system performance</p>
@@ -18,7 +18,7 @@ export default function Dashboard() {
           { title: "Approved", value: "78", desc: "อนุมัติแล้ว" },
           { title: "Rejected", value: "10", desc: "ปฏิเสธ" },
         ].map((item, index) => (
-          <Card key={index} className="p-4 shadow-md rounded-2xl bg-[#F1F1F1]">
+          <Card key={index} className="p-4 shadow-md rounded-2xl bg-[#F1F1F1] dark:bg-[#0E0E11]">
             <CardHeader className="flex flex-col items-start">
               <p className="text-default-500 text-sm">{item.title}</p>
               <h2 className="text-2xl font-bold">{item.value}</h2>
@@ -33,7 +33,7 @@ export default function Dashboard() {
       {/* 🔥 Charts + Activity */}
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 ">
         {/* 📊 Chart */}
-        <Card className="col-span-2 p-4 shadow-md rounded-2xl bg-[#F1F1F1]">
+        <Card className="col-span-2 p-4 shadow-md rounded-2xl bg-[#F1F1F1] dark:bg-[#0E0E11]">
           <CardHeader>
             <h3 className="font-semibold">Statistics</h3>
           </CardHeader>
@@ -45,7 +45,7 @@ export default function Dashboard() {
         </Card>
 
         {/* 📌 Activity */}
-        <Card className="p-4 shadow-md rounded-2xl bg-[#F1F1F1]">
+        <Card className="p-4 shadow-md rounded-2xl bg-[#F1F1F1] dark:bg-[#0E0E11]">
           <CardHeader>
             <h3 className="font-semibold">Recent Activity</h3>
           </CardHeader>
@@ -67,7 +67,7 @@ export default function Dashboard() {
       </div>
 
       {/* 🔥 Table */}
-      <Card className="p-4 shadow-md rounded-2xl bg-[#F1F1F1]">
+      <Card className="p-4 shadow-md rounded-2xl bg-[#F1F1F1] dark:bg-[#0E0E11]">
         <CardHeader>
           <h3 className="font-semibold">Latest Records</h3>
         </CardHeader>
@@ -75,19 +75,19 @@ export default function Dashboard() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left border-b border-neutral-300">
+                <tr className="text-left border-b border-neutral-300 dark:border-[#181818]">
                   <th className="py-2">ชื่อ</th>
                   <th>สถานะ</th>
                   <th>วันที่</th>
                 </tr>
               </thead>
               <tbody>
-                <tr className="border-b border-neutral-300">
+                <tr className="border-b border-neutral-300 dark:border-[#181818]">
                   <td className="py-2">Somchai</td>
                   <td className="text-green-600">Approved</td>
                   <td>2026-03-02</td>
                 </tr>
-                <tr className="border-b border-neutral-300">
+                <tr className="border-b border-neutral-300 dark:border-[#181818]">
                   <td className="py-2">Orathai</td>
                   <td className="text-yellow-600">Pending</td>
                   <td>2026-03-01</td>

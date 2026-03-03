@@ -19,6 +19,7 @@ import Sign03 from "./signature03/page";
 import { Edit3 } from "@deemlol/next-icons";
 import { Select, SelectItem } from "@heroui/select";
 import { div } from "framer-motion/client";
+import { Checkbox, CheckboxGroup } from "@heroui/checkbox";
 
 export default function page({ openForm1, closeForm1, modalRef }) {
   const {
@@ -48,13 +49,13 @@ export default function page({ openForm1, closeForm1, modalRef }) {
   return (
     <div>
       <Modal
-        size="3xl"
+        size="5xl"
         isOpen={openForm1}
         onOpenChange={closeForm1}
         classNames={{
-          body: "max-h-[calc(85vh-120px)] overflow-y-scroll py-6",
-          header: "border-b border-divider py-6",
-          footer: "border-t border-divider",
+          body: "max-h-[calc(80vh-145px)] overflow-y-scroll py-6 bg-[#f1f1f1]",
+          header: "border-b border-divider py-6 bg-[#e6e6e6] dark:bg-[#0e0e11]",
+          footer: "border-t border-divider bg-[#e6e6e6] dark:bg-[#0e0e11]",
         }}
         placement="center"
       >
@@ -64,79 +65,68 @@ export default function page({ openForm1, closeForm1, modalRef }) {
               <ModalHeader className="flex flex-col items-center gap-1 text-center text-lg font-semibold text-gray-800">
                 <h1>หนังสืออธิบายและยินยอมให้ทำการจำลองการฉายรังสี</h1>
                 <h1>โดยใช้รังสีเอกซเรย์และสารทึบรังสี</h1>
-                <h1 className="text-xs text-gray-600">
+                <h1 className="text-xs text-default-700">
                   หน่วยงานรังสีรักษา โรงพยาบาลพระปกเกล้า
                 </h1>
               </ModalHeader>
 
               <ModalBody className="space-y-4 text-gray-800 ">
-                <div className="text-center">
-                  <h1 className="font-medium ">
-                    หน่วยงานรังสีรักษา โรงพยาบาลพระปกเกล้า
-                  </h1>
-                </div>
-
                 {/* ---------------- ข้อมูลผู้ป่วย ---------------- */}
-                <section className="border border-gray-200 rounded-2xl p-4 bg-white shadow-sm">
+                <section className="border border-gray-200 rounded-2xl p-6 bg-white shadow-sm">
                   <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2 mb-4">
-                    <span className="w-1 h-5 bg-violet-500 rounded-full"></span>
+                    <span className="w-1 h-5 bg-neutral-600 rounded-full"></span>
                     ข้อมูลผู้ป่วย
                   </h2>
 
                   <div className="grid grid-cols-6 gap-3 ">
                     <Input
-                      labelPlacement="outside-left"
-                      size="md"
+                      size="sm"
                       radius="sm"
-                      classNames={{ label: "text-gray-600" }}
+                      classNames={{ label: "text-default-700" }}
                       className="col-span-3"
                       label="ชื่อ-สกุล ผู้ป่วย"
                     />
                     <div className="flex items-center gap-2 col-span-1 ">
                       <Input
-                        labelPlacement="outside-left"
-                        size="md"
+                        size="sm"
                         radius="sm"
                         label="อายุ"
-                        classNames={{ label: "text-gray-600" }}
+                        classNames={{ label: "text-default-700" }}
                       />
-                      <span className="text-gray-600">ปี</span>
+                      <span className="text-default-700">ปี</span>
                     </div>
 
                     <Input
-                      labelPlacement="outside-left"
-                      size="md"
+                      size="sm"
                       radius="sm"
                       className="col-span-2"
                       label="HN"
-                      classNames={{ label: "text-gray-600" }}
+                      classNames={{ label: "text-default-700" }}
                     />
                     <DatePicker
-                      labelPlacement="outside-left"
-                      size="md"
+                      size="sm"
                       radius="sm"
-                      className="col-span-2 pl-2"
+                      className="col-span-2"
                       label="วันที่"
-                      classNames={{ label: "text-gray-600" }}
+                      classNames={{ label: "text-default-700" }}
                     />
                     <div className="flex items-center gap-2 col-span-2">
                       <Input
-                        labelPlacement="outside-left"
-                        size="md"
+                        size="sm"
                         radius="sm"
                         label="น้ำหนัก"
                         className="w-[120px]"
-                        classNames={{ label: "text-gray-600" }}
+                        classNames={{ label: "text-default-700" }}
                       />
-                      <span className="text-gray-600">กิโลกรัม</span>
+                      <span className="text-default-700">กิโลกรัม</span>
                     </div>
                   </div>
                 </section>
 
                 {/* ---------------- คำอธิบาย ---------------- */}
-                <section className="border border-gray-200 rounded-2xl p-4 bg-white shadow-sm">
+                <section className="border border-gray-200 rounded-2xl p-6 bg-white shadow-sm">
                   <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2 mb-4">
-                    <span className="w-1 h-5 bg-violet-500 rounded-full"></span>
+                    <span className="w-1 h-5 bg-neutral-600 rounded-full"></span>
                     คำอธิบายการตรวจ
                   </h2>
 
@@ -166,7 +156,7 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                 {/* ---------------- แบบสอบถาม ---------------- */}
                 <section className="rounded-2xl border border-gray-100 bg-white/70 backdrop-blur-sm p-6 shadow-sm hover:shadow-md transition-all duration-300">
                   <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2 mb-4">
-                    <span className="w-1 h-5 bg-violet-500 rounded-full"></span>
+                    <span className="w-1 h-5 bg-neutral-600 rounded-full"></span>
                     แบบสอบถามประวัติทางการแพทย์
                   </h2>
 
@@ -179,36 +169,16 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                       <p className="font-medium mb-2">
                         1. ท่านมีโรคประจำตัวดังต่อไปนี้หรือไม่
                       </p>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-4 rounded-xl border border-gray-200 bg-white p-4 shadow-inner">
-                        {[
-                          "โรคภูมิแพ้",
-                          "โรคหอบหืด",
-                          "โรคไตวาย",
-                          "โรคเบาหวาน",
-                          "โรคหัวใจ",
-                          "โรคลมชัก",
-                        ].map((label) => (
-                          <div
-                            key={label}
-                            className="flex flex-col gap-1 bg-white"
-                          >
-                            <span className="font-medium text-gray-800">
-                              {label}
-                            </span>
-                            <RadioGroup
-                              orientation="horizontal"
-                              className="text-sm text-gray-600"
-                            >
-                              {choice
-                                .filter((ch) => ch.choice_type_id === "1")
-                                .map((c) => (
-                                  <Radio key={c.id} value={c.id}>
-                                    {c.choice_name}
-                                  </Radio>
-                                ))}
-                            </RadioGroup>
-                          </div>
-                        ))}
+                      <div className="mt-4 rounded-xl border border-gray-200 bg-white p-6 shadow-inner">
+                        <CheckboxGroup className="text-sm text-default-700">
+                          {choice
+                            .filter((ch) => ch.option_group_id === 7)
+                            .map((c) => (
+                              <Checkbox key={c.id} value={c.id}>
+                                {c.name}
+                              </Checkbox>
+                            ))}
+                        </CheckboxGroup>
                       </div>
                     </div>
 
@@ -219,13 +189,13 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                       </p>
                       <RadioGroup
                         // orientation="horizontal"
-                        className="ml-4 text-gray-600"
+                        className="ml-4 text-default-700"
                       >
                         {choice
-                          .filter((ch) => ch.choice_type_id === "2")
+                          .filter((ch) => ch.option_group_id === 2)
                           .map((c) => (
                             <Radio key={c.id} value={c.id}>
-                              {c.choice_name}
+                              {c.name}
                             </Radio>
                           ))}
                       </RadioGroup>
@@ -240,7 +210,7 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                         <RadioGroup
                           name="contrast_allergy"
                           // orientation="horizontal"
-                          className="text-gray-600"
+                          className="text-default-700"
                           value={field.contrast_allergy}
                           onValueChange={(val) =>
                             setField((prev) => ({
@@ -250,24 +220,21 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                           }
                         >
                           {choice
-                            .filter((ch) => ch.choice_type_id === "2")
+                            .filter((ch) => ch.option_group_id === 2)
                             .map((c) => (
                               <div
                                 key={c.id}
                                 className="flex item-center gap-2"
                               >
                                 {" "}
-                                <Radio value={String(c.id)}>
-                                  {c.choice_name}
-                                </Radio>
-                                {String(c.id) === "3" &&
-                                  field.contrast_allergy === "3" && (
+                                <Radio value={String(c.id)}>{c.name}</Radio>
+                                {String(c.id) === 3 &&
+                                  field.contrast_allergy === 3 && (
                                     <Input
                                       name="contrast_allergy_detail"
-                                      size="md"
+                                      size="sm"
                                       radius="sm"
                                       label="ระบุอาการ"
-                                      labelPlacement="outside-left"
                                       placeholder="เช่น ผื่นขึ้น, หายใจลำบาก"
                                       className="max-w-[280px]"
                                     />
@@ -286,7 +253,7 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                       <div className="flex flex-wrap items-end gap-3 ml-4">
                         <RadioGroup
                           // orientation="horizontal"
-                          className="text-gray-600"
+                          className="text-default-700"
                           value={field.seafood_allergy}
                           onValueChange={(val) =>
                             setField((prev) => ({
@@ -296,7 +263,7 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                           }
                         >
                           {choice
-                            .filter((ch) => ch.choice_type_id === "3")
+                            .filter((ch) => ch.option_group_id === 3)
                             .map((c, index) =>
                               index <= 1 ? (
                                 <div
@@ -304,23 +271,20 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                                   className="flex item-center gap-2"
                                 >
                                   {" "}
-                                  <Radio value={String(c.id)}>
-                                    {c.choice_name}
-                                  </Radio>
-                                  {String(c.id) === "6" &&
-                                    field.seafood_allergy === "6" && (
+                                  <Radio value={String(c.id)}>{c.name}</Radio>
+                                  {String(c.id) === 6 &&
+                                    field.seafood_allergy === 6 && (
                                       <Input
                                         name="seafood_allergy_detail"
-                                        size="md"
+                                        size="sm"
                                         radius="sm"
                                         label="ระบุอาการ"
-                                        labelPlacement="outside-left"
                                         placeholder="เช่น คัน, บวม, คลื่นไส้"
                                         className="max-w-[280px]"
                                       />
                                     )}
                                 </div>
-                              ) : null
+                              ) : null,
                             )}
                         </RadioGroup>
                       </div>
@@ -334,7 +298,7 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                       <div className="flex flex-wrap items-end gap-3 ml-4">
                         <RadioGroup
                           // orientation="horizontal"
-                          className="text-gray-600"
+                          className="text-default-700"
                           value={field.drug_allergy}
                           onValueChange={(val) => {
                             setField((prev) => ({
@@ -344,23 +308,20 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                           }}
                         >
                           {choice
-                            .filter((ch) => ch.choice_type_id === "3")
+                            .filter((ch) => ch.option_group_id === 3)
                             .map((c) => (
                               <div
                                 key={c.id}
                                 className="flex item-center gap-2"
                               >
                                 {" "}
-                                <Radio value={String(c.id)}>
-                                  {c.choice_name}
-                                </Radio>
-                                {String(c.id) === "6" &&
-                                  field.drug_allergy === "6" && (
+                                <Radio value={String(c.id)}>{c.name}</Radio>
+                                {String(c.id) === 6 &&
+                                  field.drug_allergy === 6 && (
                                     <Input
-                                      size="md"
+                                      size="sm"
                                       radius="sm"
                                       label="ระบุอาการ"
-                                      labelPlacement="outside-left"
                                       placeholder="เช่น ผื่น, หน้ามืด, หายใจลำบาก"
                                       className="max-w-[280px]"
                                     />
@@ -380,7 +341,6 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                         <DatePicker
                           radius="sm"
                           className="max-w-[330px]"
-                          labelPlacement="outside-left"
                           label="โดยประจำเดือนสุดท้ายมาวันที่"
                         />
                       </div>
@@ -389,21 +349,21 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                 </section>
 
                 {/* ---------------- ส่วนลงนาม ---------------- */}
-                <section className="rounded-2xl border border-gray-100  p-6 shadow-sm space-y-6">
+                <section className="rounded-2xl bg-white  p-6 shadow-sm space-y-6">
                   <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2">
-                    <span className="w-1 h-5 bg-violet-500 rounded-full"></span>
+                    <span className="w-1 h-5 bg-neutral-600 rounded-full"></span>
                     การยินยอมเข้ารับการตรวจ
                   </h2>
 
                   {/* กล่องเนื้อหาหลัก */}
-                  <div className="grid grid-cols-12 gap-y-3 items-center rounded-xl bg-white/60 ">
-                    <p className="text-sm col-span-1 text-gray-600">ข้าพเจ้า</p>
+                  <div className="grid grid-cols-8 gap-3 items-center rounded-xl bg-white border border-gray-200 shadow-sm p-6">
+                    <p className="text-sm col-span-1 text-default-700">ข้าพเจ้า</p>
 
                     <Select
                       className="col-span-2"
+                      label="คำนำหน้า"
                       items={prename}
-                      placeholder="นาย / นาง / นางสาว"
-                      size="md"
+                      size="sm"
                       radius="sm"
                       variant="flat"
                     >
@@ -411,39 +371,37 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                     </Select>
 
                     <Input
-                      className="col-span-5 ml-2"
-                      size="md"
+                      label="ชื่อ-นามสกุล"
+                      className="col-span-5 "
+                      size="sm"
                       radius="sm"
                       placeholder="ชื่อ-นามสกุล"
                     />
 
-                    <p className="text-sm text-center col-span-2 text-gray-600">
-                      โดยเกี่ยวข้อง
-                    </p>
-
                     <Input
-                      className="col-span-2"
-                      size="md"
+                      label="ความเกี่ยวข้อง"
+                      className="col-span-3"
+                      size="sm"
                       radius="sm"
                       placeholder="ระบุความเกี่ยวข้อง"
                     />
 
-                    <p className="text-sm col-span-1 text-gray-600">ชื่อ</p>
                     <Input
+                      label="ชื่อ-นามสกุล"
                       className="col-span-5"
-                      size="md"
+                      size="sm"
                       radius="sm"
                       placeholder="ชื่อผู้เกี่ยวข้อง"
                     />
 
-                    <p className="text-sm leading-6 col-span-12 text-gray-600 mt-2">
+                    <p className="text-sm leading-6 col-span-8 text-default-700 mt-2">
                       ได้รับทราบคำอธิบายข้างต้น
                       รวมทั้งผลแทรกซ้อนที่อาจเกิดขึ้นจากการตรวจดังกล่าว
                       โดยข้าพเจ้า
                     </p>
 
                     <RadioGroup
-                      className="col-span-12"
+                      className="col-span-8"
                       orientation="horizontal"
                       classNames={{ base: "text-sm text-gray-700" }}
                       value={field.consent}
@@ -455,13 +413,13 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                       }}
                     >
                       {choice
-                        .filter((ch) => ch.choice_type_id === "4")
+                        .filter((ch) => ch.option_group_id === 4)
                         .map((c, index) =>
                           index <= 1 ? (
                             <div key={c.id}>
-                              <Radio value={c.id}>{c.choice_name}</Radio>
+                              <Radio value={c.id}>{c.name}</Radio>
                             </div>
-                          ) : null
+                          ) : null,
                         )}
                     </RadioGroup>
                   </div>
@@ -473,12 +431,12 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                     </span>
 
                     {/* ผู้ป่วย */}
-                    <div className="rounded-xl border border-gray-200 bg-white/70 p-4 space-y-3 shadow-sm">
+                    <div className="rounded-xl border border-gray-200 bg-white/70 p-6 space-y-3 shadow-sm">
                       <span className="font-medium text-gray-700 text-sm">
                         ผู้ป่วย / ตัวแทนผู้ป่วย
                       </span>
                       <div className="flex flex-wrap gap-3 items-center">
-                        <span className="text-sm flex items-center gap-2 text-gray-600">
+                        <span className="text-sm flex items-center gap-2 text-default-700">
                           ลงชื่อ{" "}
                           {!signature ? (
                             <span className="text-gray-400">
@@ -493,9 +451,9 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                           )}
                         </span>
                         <Button
-                          size="md"
+                          size="sm"
                           isIconOnly
-                          color="secondary"
+                          className="bg-neutral-900 text-white"
                           variant="flat"
                           onPress={() => setOpenSign01(true)}
                         >
@@ -504,30 +462,30 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                       </div>
                       <Input
                         className="max-w-xs"
-                        size="md"
+                        size="sm"
                         radius="sm"
                         placeholder="ชื่อ-นามสกุล"
                       />
                     </div>
 
                     {/* แพทย์ */}
-                    <div className="rounded-xl border border-gray-200 bg-white/70 p-4 space-y-3 shadow-sm">
+                    <div className="rounded-xl border border-gray-200 bg-white/70 p-6 space-y-3 shadow-sm">
                       <span className="font-medium text-gray-700 text-sm">
                         แพทย์
                       </span>
-                      <span className="text-sm text-gray-600">
+                      <span className="text-sm text-default-700">
                         ลงชื่อ....................................
                       </span>
                       <span className="text-sm text-gray-500">(ชื่อแพทย์)</span>
                     </div>
 
                     {/* นักรังสีแพทย์ */}
-                    <div className="rounded-xl border border-gray-200 bg-white/70 p-4 space-y-3 shadow-sm">
+                    <div className="rounded-xl border border-gray-200 bg-white/70 p-6 space-y-3 shadow-sm">
                       <span className="font-medium text-gray-700 text-sm">
                         นักรังสีแพทย์
                       </span>
                       <div className="flex flex-wrap gap-3 items-center">
-                        <span className="text-sm flex items-center gap-2 text-gray-600">
+                        <span className="text-sm flex items-center gap-2 text-default-700">
                           ลงชื่อ{" "}
                           {!signature2 ? (
                             <span className="text-gray-400">
@@ -542,9 +500,9 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                           )}
                         </span>
                         <Button
-                          size="md"
+                          size="sm"
                           isIconOnly
-                          color="secondary"
+                          className="bg-neutral-900 text-white"
                           variant="flat"
                           onPress={() => setOpenSign02(true)}
                         >
@@ -553,19 +511,19 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                       </div>
                       <Input
                         className="max-w-xs"
-                        size="md"
+                        size="sm"
                         radius="sm"
                         placeholder="ชื่อ-นามสกุล"
                       />
                     </div>
 
                     {/* พยาบาล */}
-                    <div className="rounded-xl border border-gray-200 bg-white/70 p-4 space-y-3 shadow-sm">
+                    <div className="rounded-xl border border-gray-200 bg-white/70 p-6 space-y-3 shadow-sm">
                       <span className="font-medium text-gray-700 text-sm">
                         พยาบาล
                       </span>
                       <div className="flex flex-wrap gap-3 items-center">
-                        <span className="text-sm flex items-center gap-2 text-gray-600">
+                        <span className="text-sm flex items-center gap-2 text-default-700">
                           ลงชื่อ{" "}
                           {!signature3 ? (
                             <span className="text-gray-400">
@@ -580,9 +538,9 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                           )}
                         </span>
                         <Button
-                          size="md"
+                          size="sm"
                           isIconOnly
-                          color="secondary"
+                          className="bg-neutral-900 text-white"
                           variant="flat"
                           onPress={() => setOpenSign03(true)}
                         >
@@ -591,7 +549,7 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                       </div>
                       <Input
                         className="max-w-xs"
-                        size="md"
+                        size="sm"
                         radius="sm"
                         placeholder="ชื่อ-นามสกุล"
                       />
@@ -608,12 +566,12 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                 </section>
 
                 {/* ---------------- สำหรับเจ้าหน้าที่ ---------------- */}
-                <section className="border border-gray-200 rounded-2xl p-4 bg-white shadow-sm grid grid-cols-7 gap-2">
+                <section className="border border-gray-200 rounded-2xl p-6 bg-white shadow-sm grid grid-cols-7 gap-2">
                   <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2 mb-4 col-span-7">
-                    <span className="w-1 h-5 bg-violet-500 rounded-full"></span>
+                    <span className="w-1 h-5 bg-neutral-600 rounded-full"></span>
                     สำหรับเจ้าหน้าที่
                   </h2>
-                  <div className="grid grid-cols-6 items-center text-sm space-y-3 rounded-xl border border-gray-200 bg-white/60 p-4 shadow-inner col-span-4">
+                  <div className="grid grid-cols-6 items-center text-sm space-y-3 rounded-xl border border-gray-200 bg-white/60 p-6 shadow-inner col-span-4">
                     {" "}
                     <Textarea
                       isClearable
@@ -631,7 +589,7 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-6 gap-2 items-center text-sm  space-y-1 rounded-xl border border-gray-200 bg-white p-4 shadow-inner col-span-3">
+                  <div className="grid grid-cols-6 gap-2 items-center text-sm  space-y-1 rounded-xl border border-gray-200 bg-white p-6 shadow-inner col-span-3">
                     <div className="flex items-center gap-2 col-span-3">
                       <p>Cr</p>
                       <Input size="md" radius="sm" />
@@ -675,10 +633,13 @@ export default function page({ openForm1, closeForm1, modalRef }) {
               </ModalBody>
 
               <ModalFooter>
-                <Button variant="light" color="danger" onPress={closeForm1}>
+                <Button variant="flat" color="default" onPress={closeForm1}>
                   ปิด
                 </Button>
-                <Button color="primary" onPress={closeForm1}>
+                <Button
+                  className="bg-neutral-900 text-white"
+                  onPress={closeForm1}
+                >
                   บันทึก
                 </Button>
               </ModalFooter>
