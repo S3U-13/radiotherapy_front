@@ -73,7 +73,7 @@ export default function page() {
           />
           <Button
             isIconOnly
-            className="bg-neutral-900"
+            className="bg-neutral-900 dark:bg-neutral-800 dark:hover:bg-neutral-700"
             variant="solid"
             onPress={handleSearch}
           >
@@ -134,7 +134,7 @@ export default function page() {
                           size="sm"
                           variant="light"
                           isIconOnly
-                          className="text-neutral-500 hover:text-neutral-800"
+                          className="text-neutral-500 hover:text-neutral-800 dark:hover:text-white"
                         >
                           <MoreHorizontal size={18} />
                         </Button>
@@ -147,7 +147,7 @@ export default function page() {
                       >
                         <DropdownItem
                           key="view"
-                          className=" text-neutral-700 hover:bg-neutral-100 rounded-md px-3 py-1.5"
+                          className=" text-neutral-700 dark:text-white hover:bg-neutral-100 rounded-md px-3 py-1.5"
                           startContent={<Eye size={16} />}
                         >
                           <span>View</span>
@@ -155,7 +155,7 @@ export default function page() {
 
                         <DropdownItem
                           key="edit"
-                          className=" text-neutral-700 hover:bg-neutral-100 rounded-md px-3 py-1.5 font-medium"
+                          className=" text-neutral-700 dark:text-white hover:bg-neutral-100 rounded-md px-3 py-1.5 font-medium"
                           startContent={<Edit3 size={16} />}
                           onPress={() => FormByFormId[i.form_id](true)}
                         >
@@ -163,7 +163,7 @@ export default function page() {
                         </DropdownItem>
                         <DropdownItem
                           key="pdf"
-                          className=" text-neutral-700 hover:bg-neutral-100 rounded-md px-3 py-1.5 font-medium"
+                          className=" text-neutral-700 dark:text-white hover:bg-neutral-100 rounded-md px-3 py-1.5 font-medium"
                           startContent={<FileText size={16} />}
                         >
                           <span>PDF</span>

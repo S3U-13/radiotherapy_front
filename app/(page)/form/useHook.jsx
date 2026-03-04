@@ -125,8 +125,8 @@ export default function useHook() {
   ];
 
   const statusStyle = {
-    Pending: "bg-[#ffedd5] text-[#f97316]",
-    Saved: "bg-blue-100 text-blue-700",
+    Pending: "bg-[#ffedd5] text-[#d97706]",
+    Saved: "bg-blue-100 text-blue-500",
     Success: "bg-green-100 text-green-700",
     Cancel: "bg-red-100 text-red-600",
   };

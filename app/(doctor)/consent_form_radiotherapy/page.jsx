@@ -102,7 +102,8 @@ export default function Page() {
             className="
       p-2 rounded-2xl 
       bg-white/80 backdrop-blur-md 
-      shadow-xl border border-white/40
+      shadow-xl
+      dark:bg-[#18181B]
     "
           >
             {form?.length > 0 &&
@@ -208,7 +209,11 @@ export default function Page() {
         <Table
           aria-label="Consent Table"
           radius="none"
-          classNames={{ wrapper: " bg-white dark:bg-[#0E0E11]", tr: "hover:bg-neutral-50 dark:hover:bg-[#18181B]", th: "bg-neutral-100 dark:bg-[#18181B]" }}
+          classNames={{
+            wrapper: " bg-white dark:bg-[#0E0E11]",
+            tr: "hover:bg-neutral-50 dark:hover:bg-[#18181B]",
+            th: "bg-neutral-100 dark:bg-[#18181B]",
+          }}
         >
           <TableHeader>
             <TableColumn>ID</TableColumn>

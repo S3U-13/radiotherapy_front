@@ -27,40 +27,42 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
   return (
     <div>
       <Modal
-        size="3xl"
+        size="5xl"
         isOpen={openForm1}
         onOpenChange={closeForm1}
         classNames={{
-          body: "max-h-[calc(85vh-120px)] overflow-y-scroll py-6",
-          header: "border-b border-divider py-6",
-          footer: "border-t border-divider",
+          body: "max-h-[calc(80vh-145px)] overflow-y-scroll py-6 bg-[#f1f1f1] dark:bg-[#1f1e1e]",
+          header: "border-b border-divider py-6 bg-[#e6e6e6] dark:bg-[#181818]",
+          footer: "border-t border-divider bg-[#e6e6e6] dark:bg-[#181818]",
+          base: "dark:border dark:border-divider",
         }}
         placement="center"
+        backdrop="blur"
       >
         <ModalContent ref={modalRef}>
           {(closeForm1) => (
             <>
-              <ModalHeader className="flex flex-col items-center gap-1 text-center text-lg font-semibold text-gray-800">
+              <ModalHeader className="flex flex-col items-center gap-1 text-center text-lg font-semibold text-gray-800 dark:text-white">
                 <h1>หนังสืออธิบายและยินยอมให้ทำการจำลองการฉายรังสี</h1>
                 <h1>โดยใช้รังสีเอกซเรย์และสารทึบรังสี</h1>
-                <h1 className="text-xs text-gray-600">
+                <h1 className="text-xs text-gray-600 dark:text-white">
                   หน่วยงานรังสีรักษา โรงพยาบาลพระปกเกล้า
                 </h1>
               </ModalHeader>
 
               <ModalBody className="space-y-6 text-gray-800">
                 {/* ---------------- ข้อมูลผู้ป่วย ---------------- */}
-                <section className="border border-gray-200 rounded-2xl p-4 bg-white shadow-sm">
+                <section className="light:border light:border-gray-200 rounded-2xl p-6 bg-white shadow-sm dark:bg-[#181818]">
                   <div className="">
-                    <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2 mb-4">
-                      <span className="w-1 h-5 bg-violet-500 rounded-full"></span>
+                    <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2 mb-4 dark:text-white">
+                      <span className="w-1 h-5 bg-neutral-600 rounded-full"></span>
                       ข้อมูลผู้ป่วย
                     </h2>
-                    <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
-                      <div className="w-1/4">
+                    <div className="flex flex-col sm:flex-row justify-end items-center mb-4">
+                      {/* <div className="w-1/4">
                         <Input
-                          labelPlacement="outside-left"
-                          size="md"
+                         
+                         size="sm"
                           radius="sm"
                           label="FORM ID :"
                           value={selectForm}
@@ -68,25 +70,24 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                           readOnly
                           disabled
                         />
-                      </div>
+                      </div> */}
 
-                      <div className="flex items-center sm:w-1/2 pl-8">
+                      <div className="flex items-center sm:max-w-xs gap-2">
                         <Input
-                          labelPlacement="outside-left"
-                          size="md"
+                          size="sm"
                           radius="sm"
                           label="ค้นหา"
                           value={hnInput}
                           onChange={(e) => setHnInput(e.target.value)}
                           placeholder="กรอก HN ...."
                           variant="flat"
+                          className=""
                         />
                         <Button
                           size="sm"
                           isIconOnly
                           onPress={handleSearchHn}
-                          color="secondary"
-                          variant="solid"
+                          className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
                         >
                           <Search size={18} />
                         </Button>
@@ -98,12 +99,10 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                     <form.Field name="pat_name">
                       {(field) => (
                         <Input
-                          labelPlacement="outside-left"
-                          size="md"
+                          size="sm"
                           radius="sm"
                           value={field.state.value || ""}
                           onChange={(e) => field.handleChange(e.target.value)}
-                          classNames={{ label: "text-gray-600" }}
                           className="col-span-3"
                           label="ชื่อ-สกุล ผู้ป่วย"
                         />
@@ -111,60 +110,48 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                     </form.Field>
 
                     <div className="flex items-center gap-2 col-span-1 ">
-                      <Input
-                        labelPlacement="outside-left"
-                        size="md"
-                        radius="sm"
-                        label="อายุ"
-                        classNames={{ label: "text-gray-600" }}
-                      />
-                      <span className="text-gray-600">ปี</span>
+                      <Input size="sm" radius="sm" label="อายุ" />
+                      <span className="text-gray-600 dark:text-default-400">ปี</span>
                     </div>
                     <form.Field name="hn">
                       {(field) => (
                         <Input
-                          labelPlacement="outside-left"
-                          size="md"
+                          size="sm"
                           radius="sm"
                           className="col-span-2"
                           label="HN"
                           value={field.state.value || ""}
                           onChange={(e) => field.handleChange(e.target.value)}
-                          classNames={{ label: "text-gray-600" }}
                         />
                       )}
                     </form.Field>
 
                     <DatePicker
-                      labelPlacement="outside-left"
-                      size="md"
+                      size="sm"
                       radius="sm"
-                      className="col-span-2 pl-2"
+                      className="col-span-2"
                       label="วันที่"
-                      classNames={{ label: "text-gray-600" }}
                     />
                     <div className="flex items-center gap-2 col-span-2">
                       <Input
-                        labelPlacement="outside-left"
-                        size="md"
+                        size="sm"
                         radius="sm"
                         label="น้ำหนัก"
                         className="w-[120px]"
-                        classNames={{ label: "text-gray-600" }}
                       />
-                      <span className="text-gray-600">กิโลกรัม</span>
+                      <span className="text-gray-600 dark:text-default-400">กิโลกรัม</span>
                     </div>
                   </div>
                 </section>
 
                 {/* ---------------- คำอธิบาย ---------------- */}
-                <section className="border border-gray-200 rounded-2xl p-4 bg-white shadow-sm">
-                  <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2 mb-4">
-                    <span className="w-1 h-5 bg-violet-500 rounded-full"></span>
+                <section className="light:border light:border-gray-200 rounded-2xl p-6 bg-white shadow-sm dark:bg-[#181818]">
+                  <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2 mb-4 dark:text-white">
+                    <span className="w-1 h-5 bg-neutral-600 rounded-full"></span>
                     คำอธิบายการตรวจ
                   </h2>
 
-                  <div className="space-y-1 text-sm leading-6">
+                  <div className="space-y-1 text-sm leading-6 dark:text-white">
                     <p className="indent-8">
                       ท่านกำลังจะเข้ารับการตรวจทางรังสีโดยใช้รังสีเอกซเรย์
                       หรือการฉีดสารทึบรังสีร่วมกับการเอกซเรย์
@@ -188,20 +175,20 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                 </section>
 
                 {/* ---------------- ส่วนลงนาม ---------------- */}
-                <section className="border border-gray-200 rounded-2xl p-4 bg-white shadow-sm space-y-2">
-                  <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2">
-                    <span className="w-1 h-5 bg-violet-500 rounded-full"></span>
+                <section className="light:border light:border-gray-200 rounded-2xl p-6 bg-white shadow-sm dark:bg-[#181818]">
+                  <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2 mb-4 dark:text-white">
+                    <span className="w-1 h-5 bg-neutral-600 rounded-full"></span>
                     จึงได้ลงลายมือชื่อไว้เป็นหลักฐาน
                   </h2>
 
-                  <div className="rounded-xl border border-gray-200 bg-white/70 p-4 space-y-2 shadow-sm">
-                    <span className="block font-medium text-gray-700 text-md ">
+                  <div className="rounded-xl light:border light:border-gray-200 bg-[#f9f9f9] p-6 space-y-3 shadow-sm dark:bg-[#1f1e1e]">
+                    <span className="block font-medium text-gray-700 dark:text-white text-md ">
                       แพทย์
                     </span>
-                    <span className="block text-sm text-gray-600">
+                    <span className="block text-sm text-gray-600 dark:text-white">
                       ลงชื่อ.........................
                     </span>
-                    <span className="block text-sm text-gray-500">
+                    <span className="block text-sm text-gray-500 dark:text-white">
                       (.............ชื่อ..............)
                     </span>
                   </div>
@@ -209,10 +196,13 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
               </ModalBody>
 
               <ModalFooter>
-                <Button variant="light" color="danger" onPress={closeForm1}>
+                <Button variant="flat" color="default" onPress={closeForm1}>
                   ปิด
                 </Button>
-                <Button color="primary" onPress={closeForm1}>
+                <Button
+                  className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
+                  onPress={closeForm1}
+                >
                   บันทึก
                 </Button>
               </ModalFooter>

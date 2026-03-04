@@ -52,14 +52,15 @@ export default function Navbar() {
     if (path.startsWith("/dashboard")) return "Dashboard";
     if (path.startsWith("/consent_form_radiotherapy"))
       return "Consent Form Radiotherapy";
-    if (path.startsWith("/form"))
-      return "Consent Form ";
+    if (path.startsWith("/form")) return "Consent Form ";
     return "Page";
   };
 
   return (
     <div className="h-20 p-2 flex justify-between items-center px-6 relative">
-      <Logo />
+      <div>
+        <Logo />
+      </div>
 
       <h1 className="absolute left-71 text-3xl font-bold">
         {getTitle(pathname)}
@@ -104,16 +105,19 @@ export default function Navbar() {
               size="md"
               className="bg-white border border-neutral-200 dark:bg-[#131317] dark:border-neutral-800 shadow-sm hover:shadow-md transition relative"
             >
-              <Bell size={20} className="text-neutral-600 dark:text-neutral-100" />
+              <Bell
+                size={20}
+                className="text-neutral-600 dark:text-neutral-100"
+              />
 
               {/* badge */}
-              <span className="fixed bottom-5.5 right-2 z-[9999] bg-red-500 text-white text-xs p-1.5 rounded-full"></span>
+              <span className="fixed bottom-5.5 right-2 z-[9999] bg-red-500 text-white text-xs rounded-full p-1.5"></span>
             </Button>
           </DropdownTrigger>
 
           <DropdownMenu
             aria-label="Notifications"
-            className="w-80 p-0 bg-white border border-neutral-200 shadow-xl rounded-xl overflow-hidden"
+            className="w-80 p-0 bg-white shadow-xl rounded-xl overflow-hidden"
           >
             {/* header */}
             <DropdownItem

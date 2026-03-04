@@ -17,7 +17,6 @@ import Sign02 from "./signature02/page";
 import Sign03 from "./signature03/page";
 import { Edit3 } from "@deemlol/next-icons";
 import { Checkbox, CheckboxGroup } from "@heroui/checkbox";
-import { div } from "framer-motion/client";
 
 export default function page({ openForm2, closeForm2, modalRef }) {
   const {
@@ -43,17 +42,19 @@ export default function page({ openForm2, closeForm2, modalRef }) {
         isOpen={openForm2}
         onOpenChange={closeForm2}
         classNames={{
-          body: "max-h-[calc(80vh-145px)] overflow-y-scroll py-6 bg-[#f1f1f1]",
-          header: "border-b border-divider py-6 bg-[#e6e6e6] dark:bg-[#0e0e11]",
-          footer: "border-t border-divider bg-[#e6e6e6] dark:bg-[#0e0e11]",
+          body: "max-h-[calc(80vh-145px)] overflow-y-scroll py-6 bg-[#f1f1f1] dark:bg-[#1f1e1e]",
+          header: "border-b border-divider py-6 bg-[#e6e6e6] dark:bg-[#181818]",
+          footer: "border-t border-divider bg-[#e6e6e6] dark:bg-[#181818]",
+          base: "dark:border dark:border-divider",
         }}
         placement="center"
+        backdrop="blur"
       >
         <ModalContent ref={modalRef}>
           {(closeForm2) => (
             <>
               {/* Header */}
-              <ModalHeader className="flex flex-col items-center gap-1 text-center text-lg font-semibold text-gray-800">
+              <ModalHeader className="flex flex-col items-center gap-1 text-center text-lg font-semibold text-gray-800 dark:text-white">
                 <h1>ใบรับทราบข้อมูลเเละยินยอมรับการรักษาด้วยการฉายรังสี</h1>
                 <h2>โรงพยาบาลพระปกเกล้า</h2>
               </ModalHeader>
@@ -61,14 +62,13 @@ export default function page({ openForm2, closeForm2, modalRef }) {
               {/* Body */}
               <ModalBody className="space-y-6">
                 {/* SECTION 1: ข้อมูลทั่วไป */}
-                <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm p-5 space-y-4">
-                  <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2 mb-4">
-                    <span className="w-1 h-5 bg-violet-500 rounded-full"></span>
+                <section className="bg-white dark:bg-[#181818] light:border light:border-gray-200 rounded-2xl shadow-sm p-5 space-y-4 ">
+                  <h2 className="text-gray-700 dark:text-white font-semibold text-base flex items-center gap-2 mb-4">
+                    <span className="w-1 h-5 bg-neutral-600 rounded-full"></span>
                     ข้อมูลทั่วไปของผู้ป่วย
                   </h2>
                   <div className="flex justify-end ">
                     <DatePicker
-                      classNames={{ label: "text-gray-600" }}
                       className="w-2/7"
                       label="วันที่"
                       size="md"
@@ -77,47 +77,39 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-6 gap-2 gap-y-3 border-t border-gray-200 pt-4">
+                  <div className="grid grid-cols-1 md:grid-cols-6 gap-3 border-t border-gray-200 dark:border-divider pt-4">
                     <Input
-                      classNames={{ label: "text-gray-600" }}
                       className="col-span-3"
                       label="ข้าพเจ้า ชื่อ"
-                      size="md"
+                      size="sm"
                       radius="sm"
-                      labelPlacement="outside-left"
                     />
                     <div className="flex items-center gap-2 col-span-3">
                       <Input
-                        classNames={{ label: "text-gray-600" }}
                         label="มีความสัมพันธ์เป็น"
-                        size="md"
+                        size="sm"
                         radius="sm"
-                        className="w-[210px]"
-                        labelPlacement="outside-left"
+                        className="max-w-xs"
                       />
-                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                      <span className="text-sm text-gray-600 dark:text-white">
                         เกี่ยวข้องกับผู้ป่วย
-                      </p>
+                      </span>
                     </div>
 
                     <Input
-                      classNames={{ label: "text-gray-600" }}
                       className="col-span-2"
                       label="ชื่อ"
-                      size="md"
+                      size="sm"
                       radius="sm"
-                      labelPlacement="outside-left"
                     />
                     <div className="col-span-4 flex items-center gap-2">
                       <Input
-                        classNames={{ label: "text-gray-600" }}
-                        className="w-[250px]"
                         label="เจ็บป่วยด้วยโรค"
-                        size="md"
+                        size="sm"
                         radius="sm"
-                        labelPlacement="outside-left"
+                        className="max-w-xs"
                       />
-                      <h1 className="text-sm text-gray-600 dark:text-gray-400">
+                      <h1 className="col-span-6 text-center text-sm text-gray-600 dark:text-white">
                         จะต้องเข้ารักษาด้วยการฉายรังสี
                       </h1>
                     </div>
@@ -125,14 +117,14 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                 </section>
 
                 {/* SECTION 2: คำอธิบาย */}
-                <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm p-5 space-y-3 leading-relaxed text-justify">
-                  <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2 mb-4">
-                    <span className="w-1 h-5 bg-violet-500 rounded-full"></span>
+                <section className="bg-white dark:bg-[#181818] light:border light:border-gray-200  rounded-2xl shadow-sm p-5 space-y-3 leading-relaxed text-justify">
+                  <h2 className="text-gray-700 dark:text-white font-semibold text-base flex items-center gap-2 mb-4">
+                    <span className="w-1 h-5 bg-neutral-600 rounded-full"></span>
                     คำอธิบายเกี่ยวกับการรักษา
                   </h2>
 
-                  <div className="space-y-1 text-sm leading-6">
-                    <p className="indent-8">
+                  <div className="space-y-1 text-sm leading-6 pr-6">
+                    <p className="indent-8 text-justify">
                       ข้าพเจ้าเเละผู้เเทนของข้าพเจ้า
                       เข้าใจถึงวิธีการรักษาด้วยรังสี คือ
                       การฉายรังสีด้วยเครื่องฉายภาพนอกร่างกายผ่านตัวผู้ป่วยในท่านอนบนเตียงเฉพาะ
@@ -151,37 +143,35 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                 </section>
 
                 {/* SECTION 3: การยินยอม */}
-                <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm p-5 space-y-4">
-                  <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2 mb-1">
-                    <span className="w-1 h-5 bg-violet-500 rounded-full"></span>
+                <section className="bg-white dark:bg-[#181818] light:border light:border-gray-200  rounded-2xl shadow-sm p-5 space-y-4">
+                  <h2 className="text-gray-700 dark:text-white font-semibold text-base flex items-center gap-2 mb-1">
+                    <span className="w-1 h-5 bg-neutral-600 rounded-full"></span>
                     การยินยอมเข้ารับการรักษา
                   </h2>
 
                   <RadioGroup orientation="vertical" className="mt-3">
                     {choice
-                      .filter((ch) => ch.choice_type_id === "4")
-                      .map((c, index) =>
-                        index >= 2 ? (
-                          <div key={c.id}>
-                            <Radio size="sm" className="pl-8" value={c.id}>
-                              <p className="text-sm pl-2">{c.choice_name}</p>
-                            </Radio>
-                          </div>
-                        ) : null,
-                      )}
+                      .filter((ch) => ch.option_group_id === 5)
+                      .map((c, index) => (
+                        <div key={c.id}>
+                          <Radio size="sm" className="pl-8" value={c.id}>
+                            <p className="text-sm pl-2">{c.name}</p>
+                          </Radio>
+                        </div>
+                      ))}
                   </RadioGroup>
                 </section>
 
                 {/* SECTION 4: ลายเซ็นและพยาน */}
-                <section className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md p-6 space-y-5 text-sm text-gray-700 dark:text-gray-300">
+                <section className="bg-white dark:bg-[#181818] light:border light:border-gray-200  rounded-2xl shadow-md p-6 space-y-5 text-sm text-gray-700 dark:text-gray-300">
                   <h2 className="text-lg font-semibold flex items-center gap-2 text-gray-800 dark:text-gray-100">
-                    <span className="w-1 h-6 bg-violet-500 rounded-full"></span>
+                    <span className="w-1 h-6 bg-neutral-600 rounded-full"></span>
                     ลายเซ็นและพยาน
                   </h2>
 
                   <div className="space-y-4">
                     {/* ผู้ให้ข้อมูล */}
-                    <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-2">
+                    <div className="p-6 rounded-xl light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-2">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         ผู้ให้ข้อมูล แพทย์ / พยาบาล
                       </h3>
@@ -192,7 +182,7 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                     </div>
 
                     {/* ผู้รับข้อมูล */}
-                    <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-3">
+                    <div className="p-6 rounded-xl light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-3">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         ผู้รับข้อมูล ผู้ป่วย หรือ ผู้เเทนโดยชอบธรรมด้วยกฎหมาย
                       </h3>
@@ -213,7 +203,7 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                         </span>
                         <Button
                           size="sm"
-                          color="secondary"
+                          className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
                           variant="flat"
                           isIconOnly
                           onPress={() => setOpenSign01(true)}
@@ -233,7 +223,7 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                     </div>
 
                     {/* พยานฝ่ายผู้ป่วย */}
-                    <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-3">
+                    <div className="p-6 rounded-xl light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-3">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         พยานฝ่ายผู้ป่วย
                       </h3>
@@ -255,7 +245,7 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                         </span>
                         <Button
                           size="sm"
-                          color="secondary"
+                          className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
                           variant="flat"
                           isIconOnly
                           onPress={() => setOpenSign02(true)}
@@ -285,7 +275,7 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                     </div>
 
                     {/* พยานฝ่ายเจ้าหน้าที่ */}
-                    <div className="p-6 rounded-xl border border-gray-200 dark:border-gray-700  dark:bg-gray-800/50 space-y-3">
+                    <div className="p-6 rounded-xl light:border light:border-gray-200  dark:bg-[#1f1e1e] space-y-3">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         พยานฝ่ายเจ้าหน้าที่
                       </h3>
@@ -307,7 +297,7 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                         </span>
                         <Button
                           size="sm"
-                          color="secondary"
+                          className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
                           variant="flat"
                           isIconOnly
                           onPress={() => setOpenSign03(true)}
@@ -363,12 +353,12 @@ export default function page({ openForm2, closeForm2, modalRef }) {
               </ModalBody>
 
               {/* Footer */}
-              <ModalFooter className="border-t border-gray-200 dark:border-gray-700  dark:bg-gray-800 rounded-b-2xl flex justify-end gap-3 py-4">
+              <ModalFooter className="dark:bg-[#181818] rounded-b-2xl flex justify-end gap-3 py-4">
                 <Button variant="flat" color="default" onPress={closeForm2}>
                   ปิด
                 </Button>
                 <Button
-                  className="bg-neutral-900 text-white"
+                  className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
                   onPress={closeForm2}
                 >
                   บันทึก
