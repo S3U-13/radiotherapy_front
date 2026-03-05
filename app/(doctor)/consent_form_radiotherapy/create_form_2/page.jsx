@@ -15,7 +15,14 @@ import useHook from "./useHook";
 import { Search } from "@deemlol/next-icons";
 
 export default function page({ openForm2, closeForm2, modalRef, selectForm }) {
-  const { hnInput, setHnInput, handleSearchHn } = useHook();
+  const {
+    hnInput,
+    setHnInput,
+    handleSearchHn,
+    form,
+    handleSubmit,
+    isSubmitting,
+  } = useHook({ closeForm2, selectForm });
   return (
     <div>
       <Modal
@@ -33,7 +40,12 @@ export default function page({ openForm2, closeForm2, modalRef, selectForm }) {
       >
         <ModalContent ref={modalRef}>
           {(closeForm2) => (
-            <>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                form.handleSubmit();
+              }}
+            >
               {/* Header */}
               <ModalHeader className="flex flex-col items-center gap-1 text-center text-lg font-semibold text-gray-800 dark:text-white">
                 <h1>ใบรับทราบข้อมูลเเละยินยอมรับการรักษาด้วยการฉายรังสี</h1>
@@ -50,17 +62,33 @@ export default function page({ openForm2, closeForm2, modalRef, selectForm }) {
                       <span className="w-1 h-5 bg-neutral-600 rounded-full"></span>
                       ข้อมูลทั่วไปของผู้ป่วย
                     </h2>
-                    {/* <div className="w-1/4">
-                      <Input
-                        size="sm"
-                        radius="sm"
-                        label="FORM ID :"
-                        value={selectForm}
-                        type="text"
-                        readOnly
-                        disabled
-                      />
-                    </div> */}
+                    <div className="w-1/4">
+                      <form.Field name="form_type_id">
+                        {(field) => (
+                          <Input
+                            size="sm"
+                            radius="sm"
+                            label="FORM ID :"
+                            value={field.state.value ?? ""}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            type="hidden"
+                          />
+                        )}
+                      </form.Field>
+                    </div>
+                    <form.Field name="hn">
+                      {(field) => (
+                        <Input
+                          size="sm"
+                          radius="sm"
+                          className="col-span-2"
+                          label="hn"
+                          type="hidden"
+                          value={field.state.value ?? ""}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        />
+                      )}
+                    </form.Field>
                   </div>
 
                   <div className="flex justify-between items-center  ">
@@ -79,6 +107,7 @@ export default function page({ openForm2, closeForm2, modalRef, selectForm }) {
                         onChange={(e) => setHnInput(e.target.value)}
                         placeholder="กรอก HN ...."
                         variant="flat"
+                        className=""
                       />
                       <Button
                         size="sm"
@@ -110,12 +139,19 @@ export default function page({ openForm2, closeForm2, modalRef, selectForm }) {
                       </p>
                     </div>
 
-                    <Input
-                      className="col-span-2"
-                      label="ชื่อ"
-                      size="sm"
-                      radius="sm"
-                    />
+                    <form.Field name="pat_name">
+                      {(field) => (
+                        <Input
+                          className="col-span-2"
+                          label="ชื่อ"
+                          size="sm"
+                          radius="sm"
+                          value={field.state.value ?? ""}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        />
+                      )}
+                    </form.Field>
+
                     <div className="col-span-4 flex items-center gap-2">
                       <Input
                         className="w-[250px]"
@@ -189,14 +225,15 @@ export default function page({ openForm2, closeForm2, modalRef, selectForm }) {
                   ปิด
                 </Button>
                 <Button
-                  radius="sm"
                   className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
-                  onPress={closeForm2}
+                  // onPress={closeForm1}
+                  type="submit"
+                  isDisabled={isSubmitting}
                 >
-                  บันทึก
+                  {isSubmitting ? "กำลังบันทึก..." : "บันทึก"}
                 </Button>
               </ModalFooter>
-            </>
+            </form>
           )}
         </ModalContent>
       </Modal>

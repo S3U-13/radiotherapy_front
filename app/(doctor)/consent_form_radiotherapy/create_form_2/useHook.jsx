@@ -1,9 +1,14 @@
 "use client";
-import React, { useRef, useState } from "react";
-import { useApiRequest } from "../../../../hooks/useApi";
+import * as z from "zod";
+import { useForm } from "@tanstack/react-form";
+import React, { useEffect, useRef, useState } from "react";
+import { useApiRequest } from "@/hooks/useApi";
+import { addToast } from "@heroui/toast";
 
-export default function useHook() {
-  const { SearchHn } = useApiRequest();
+export default function useHook({ closeForm2, selectForm }) {
+  const { SearchHn, DoctorCreateForm } = useApiRequest();
+  const [hnInput, setHnInput] = useState("");
+  const [pat, setPat] = useState(null);
   const modalRefSign = useRef(null);
   const [openSign01, setOpenSign01] = useState(false);
   const [openSign02, setOpenSign02] = useState(false);
@@ -11,8 +16,6 @@ export default function useHook() {
   const [signature, setSignature] = useState(null);
   const [signature2, setSignature2] = useState(null);
   const [signature3, setSignature3] = useState(null);
-  const [hnInput, setHnInput] = useState("");
-  const [pat, setPet] = useState(null);
 
   const openModal = () => {
     setOpenSign01((prev) => !prev);
@@ -40,10 +43,149 @@ export default function useHook() {
   };
 
   const handleSearchHn = async () => {
-    await SearchHn(hnInput, setPet);
+    if (!hnInput) {
+      addToast({
+        title: "ข้อมูลไม่ครบถ้วน",
+        description: "กรุณากรอกหมายเลข HN ก่อนทำการค้นหา",
+        color: "warning",
+        variant: "flat",
+        radius: "lg",
+      });
+      return;
+    }
+
+    try {
+      const data = await SearchHn(hnInput, form, setPat);
+
+      if (data) {
+        addToast({
+          title: "ค้นหาสำเร็จ",
+          description: "ค้นหาข้อมูลผู้ป่วยสำเร็จ",
+          color: "success",
+          variant: "flat",
+          radius: "lg",
+        });
+      } else {
+        addToast({
+          title: "ไม่พบข้อมูล",
+          description: "ไม่พบข้อมูลผู้ป่วยจากหมายเลข HN ที่ระบุ",
+          color: "warning",
+          variant: "flat",
+          radius: "lg",
+        });
+      }
+    } catch (error) {
+      addToast({
+        title: "เกิดข้อผิดพลาด",
+        description: "ไม่สามารถค้นหาข้อมูล HN ได้ กรุณาลองใหม่อีกครั้ง",
+        color: "danger",
+        variant: "flat",
+        radius: "lg",
+      });
+    }
   };
 
-  console.log(pat);
+  const initialField = () => ({
+    form_type_id: null,
+    pat_name: "",
+    hn: null,
+    pat_age: "",
+  });
+
+  const [field, setField] = useState(initialField());
+
+  const defaultValues = initialField();
+
+  const validationSchema = z.object({
+    form_type_id: z.number().nullable(),
+    hn: z.coerce.number().nullable(),
+  });
+
+  const handleChange = async (e) => {
+    const { name, value } = e.target;
+    setField((prev) => ({
+      ...prev,
+      [name]: e.target.value,
+    }));
+  };
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const handleSubmit = async (value) => {
+    if (isSubmitting) return;
+    if (!value.hn) {
+      addToast({
+        title: "ข้อมูลไม่ครบถ้วน",
+        description: "กรุณากรอกหมายเลข HN ก่อนบันทึกข้อมูล",
+        color: "warning",
+        variant: "flat",
+        radius: "lg",
+      });
+      return;
+    }
+    try {
+      setIsSubmitting(true);
+      const data = await DoctorCreateForm(value);
+
+      if (data) {
+        addToast({
+          title: "Success",
+          description: "Successfully Create Form",
+          color: "success",
+          variant: "flat",
+          radius: "lg",
+        });
+        form.reset();
+        setHnInput("");
+        closeForm2();
+      } else if (!data) {
+        addToast({
+          title: "Fails",
+          description: "Failed Create Form",
+          color: "danger",
+          variant: "flat",
+          radius: "lg",
+        });
+      }
+    } catch (error) {
+      addToast({
+        title: "error",
+        description: "error",
+        color: "danger",
+        variant: "flat",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const form = useForm({
+    defaultValues,
+    onSubmit: async ({ value }) => {
+      try {
+        const validatedData = validationSchema.parse(value);
+        await handleSubmit(validatedData);
+      } catch (error) {
+        console.error("Validation or Submit error:", error);
+
+        if (error.errors) {
+          console.table(error.errors);
+        }
+      }
+    },
+    validators: {
+      onSubmit: validationSchema,
+    },
+    onSubmitInvalid: ({ formApi }) => {
+      // console.log("❌ validation ไม่ผ่าน");
+      console.dir(formApi.state.errors, { depth: null });
+    },
+  });
+
+  useEffect(() => {
+    if (selectForm) {
+      form.setFieldValue("form_type_id", selectForm);
+    }
+  }, [selectForm]);
 
   return {
     modalRefSign,
@@ -62,5 +204,8 @@ export default function useHook() {
     hnInput,
     setHnInput,
     handleSearchHn,
+    form,
+    handleSubmit,
+    isSubmitting,
   };
 }

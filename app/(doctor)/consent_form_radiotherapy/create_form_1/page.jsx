@@ -14,16 +14,20 @@ import React from "react";
 import useHook from "./useHook";
 import { Search } from "@deemlol/next-icons";
 
-export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
+export default function page({
+  openForm1,
+  closeForm1,
+  modalRef,
+  selectForm,
+}) {
   const {
     hnInput,
     setHnInput,
     handleSearchHn,
     form,
-    field,
-    setField,
-    handleChange,
-  } = useHook();
+    handleSubmit,
+    isSubmitting,
+  } = useHook({ closeForm1, selectForm });
   return (
     <div>
       <Modal
@@ -41,7 +45,12 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
       >
         <ModalContent ref={modalRef}>
           {(closeForm1) => (
-            <>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                form.handleSubmit();
+              }}
+            >
               <ModalHeader className="flex flex-col items-center gap-1 text-center text-lg font-semibold text-gray-800 dark:text-white">
                 <h1>หนังสืออธิบายและยินยอมให้ทำการจำลองการฉายรังสี</h1>
                 <h1>โดยใช้รังสีเอกซเรย์และสารทึบรังสี</h1>
@@ -59,18 +68,22 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                       ข้อมูลผู้ป่วย
                     </h2>
                     <div className="flex flex-col sm:flex-row justify-end items-center mb-4">
-                      {/* <div className="w-1/4">
-                        <Input
-                         
-                         size="sm"
-                          radius="sm"
-                          label="FORM ID :"
-                          value={selectForm}
-                          type="text"
-                          readOnly
-                          disabled
-                        />
-                      </div> */}
+                      <div className="w-1/4">
+                        <form.Field name="form_type_id">
+                          {(field) => (
+                            <Input
+                              size="sm"
+                              radius="sm"
+                              label="FORM ID :"
+                              value={field.state.value ?? ""}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                              type="hidden"
+                            />
+                          )}
+                        </form.Field>
+                      </div>
 
                       <div className="flex items-center sm:max-w-xs gap-2">
                         <Input
@@ -110,8 +123,21 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                     </form.Field>
 
                     <div className="flex items-center gap-2 col-span-1 ">
-                      <Input size="sm" radius="sm" label="อายุ" />
-                      <span className="text-gray-600 dark:text-default-400">ปี</span>
+                      <form.Field name="pat_age">
+                        {(field) => (
+                          <Input
+                            size="sm"
+                            radius="sm"
+                            label="อายุ"
+                            value={field.state.value || ""}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                          />
+                        )}
+                      </form.Field>
+
+                      <span className="text-gray-600 dark:text-default-400">
+                        ปี
+                      </span>
                     </div>
                     <form.Field name="hn">
                       {(field) => (
@@ -120,7 +146,7 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                           radius="sm"
                           className="col-span-2"
                           label="HN"
-                          value={field.state.value || ""}
+                          value={field.state.value ?? ""}
                           onChange={(e) => field.handleChange(e.target.value)}
                         />
                       )}
@@ -139,7 +165,9 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                         label="น้ำหนัก"
                         className="w-[120px]"
                       />
-                      <span className="text-gray-600 dark:text-default-400">กิโลกรัม</span>
+                      <span className="text-gray-600 dark:text-default-400">
+                        กิโลกรัม
+                      </span>
                     </div>
                   </div>
                 </section>
@@ -201,12 +229,14 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                 </Button>
                 <Button
                   className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
-                  onPress={closeForm1}
+                  // onPress={closeForm1}
+                  type="submit"
+                  isDisabled={isSubmitting}
                 >
-                  บันทึก
+                  {isSubmitting ? "กำลังบันทึก..." : "บันทึก"}
                 </Button>
               </ModalFooter>
-            </>
+            </form>
           )}
         </ModalContent>
       </Modal>

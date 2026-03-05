@@ -48,7 +48,12 @@ export default function Page() {
     form,
     selectForm,
     setSelectForm,
-    mockData,
+    formList,
+    statusStyle,
+    FormByFormId,
+    FormList,
+    setFormList,
+    // mockData,
   } = useHook();
 
   return (
@@ -57,19 +62,37 @@ export default function Page() {
         openForm1={modalForm1}
         selectForm={selectForm}
         modalRef={modalRef}
-        closeForm1={() => setModalForm1(false)}
+        closeForm1={() => {
+          setModalForm1(false);
+          FormList()
+            .then((data) => setFormList(data || []))
+            .catch(console.error);
+          setSelectForm("");
+        }}
       />
       <ModalForm2
         openForm2={modalForm2}
         selectForm={selectForm}
         modalRef={modalRef}
-        closeForm2={() => setModalForm2(false)}
+        closeForm2={() => {
+          setModalForm2(false);
+          FormList()
+            .then((data) => setFormList(data || []))
+            .catch(console.error);
+          setSelectForm("");
+        }}
       />
       <ModalForm3
         openForm3={modalForm3}
         selectForm={selectForm}
         modalRef={modalRef}
-        closeForm3={() => setModalForm3(false)}
+        closeForm3={() => {
+          setModalForm3(false);
+          FormList()
+            .then((data) => setFormList(data || []))
+            .catch(console.error);
+          setSelectForm("");
+        }}
       />
       {/* 🔥 HEADER */}
       <div className="flex justify-between items-center">
@@ -205,12 +228,13 @@ export default function Page() {
       </div>
 
       {/* 🔥 TABLE CARD */}
-      <div className=" bg-white overflow-hidden">
+      <div className=" bg-white overflow-hidden  ">
         <Table
           aria-label="Consent Table"
           radius="none"
           classNames={{
-            wrapper: " bg-white dark:bg-[#0E0E11]",
+            wrapper:
+              " bg-white dark:bg-[#0E0E11] max-h-[calc(80vh-200px)] overflow-y-scroll",
             tr: "hover:bg-neutral-50 dark:hover:bg-[#18181B]",
             th: "bg-neutral-100 dark:bg-[#18181B]",
           }}
@@ -224,27 +248,23 @@ export default function Page() {
             <TableColumn className="text-center">ACTION</TableColumn>
           </TableHeader>
 
-          <TableBody>
-            {mockData.map((i) => (
+          <TableBody emptyContent="ไม่พบข้อมูล">
+            {formList?.map((i) => (
               <TableRow key={i.id} className="hover:bg-neutral-100 rounded-xl">
                 <TableCell>{i.id}</TableCell>
                 <TableCell>{i.hn}</TableCell>
-                <TableCell>{i.name}</TableCell>
-                <TableCell>{i.form_type}</TableCell>
+                <TableCell>{i?.name}</TableCell>
+                <TableCell>{i?.form_type}</TableCell>
 
                 {/* 🔥 Status Badge */}
                 <TableCell className="text-center">
                   <span
                     className={`
-                      px-6 py-2 text-xs rounded-full font-medium
-                      ${
-                        i.status === "Cancel"
-                          ? "bg-red-100 text-red-600"
-                          : "bg-green-100 text-green-600"
-                      }
-                    `}
+                               px-6 py-2 text-xs rounded-full font-medium
+                              ${statusStyle[i?.status] || "bg-gray-100 text-gray-600"}
+                             `}
                   >
-                    {i.status === "Cancel" ? "Cancel" : "Success"}
+                    {i.status}
                   </span>
                 </TableCell>
 

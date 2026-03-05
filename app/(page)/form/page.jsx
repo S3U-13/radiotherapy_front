@@ -40,7 +40,6 @@ export default function page() {
     setModalForm2,
     modalForm3,
     setModalForm3,
-    mockData,
     formPatList,
     searchFormByHn,
     setSearchFormByHn,
@@ -88,10 +87,11 @@ export default function page() {
           radius="none"
           aria-label="ตารางรายการ"
           className="min-w-full text-sm"
-          // classNames={{
-          //   th: "py-4 text-md font-semibold",
-          //   td: "py-3",
-          // }}
+          classNames={{
+            // th: "py-4 text-md font-semibold",
+            // td: "py-3",
+            tbody: "min-h-[80vh-200px] overflow-y-scroll",
+          }}
         >
           <TableHeader>
             <TableColumn>ID</TableColumn>
@@ -157,7 +157,7 @@ export default function page() {
                           key="edit"
                           className=" text-neutral-700 dark:text-white hover:bg-neutral-100 rounded-md px-3 py-1.5 font-medium"
                           startContent={<Edit3 size={16} />}
-                          onPress={() => FormByFormId[i.form_id](true)}
+                          onPress={() => FormByFormId[i.form_type_id](true)}
                         >
                           <span>Edit</span>
                         </DropdownItem>

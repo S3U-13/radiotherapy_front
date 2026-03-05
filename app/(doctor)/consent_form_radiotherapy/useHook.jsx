@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useApiRequest } from "../../../hooks/useApi";
 
 export default function useHook() {
-  const { fetchForm } = useApiRequest();
+  const { fetchForm, FormList } = useApiRequest();
   const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
   const modalRef = useRef(null);
   const [modalForm1, setModalForm1] = useState(false);
@@ -11,7 +11,7 @@ export default function useHook() {
   const [modalForm3, setModalForm3] = useState(false);
 
   const [form, setForm] = useState([]);
-  console.log(form);
+  const [formList, setFormList] = useState([]);
 
   const [selectForm, setSelectForm] = useState("");
   const openForm1 = () => {
@@ -29,85 +29,23 @@ export default function useHook() {
     fetchForm()
       .then((data) => setForm(data || []))
       .catch(console.error);
-  }, [fetchForm]);
+    FormList()
+      .then((data) => setFormList(data || []))
+      .catch(console.error);
+  }, [fetchForm, FormList]);
 
-  const mockData = [
-    {
-      id: 1,
-      hn: "6900181",
-      name: "Somchai Boonmee",
-      form_type:
-        "หนังสืออธิบายและยินยอมให้ทำการจำลองการฉายรังสีโดยใช้รังสีเอกซเรย์และสารทึบรังสี",
-      status: "Success",
-    },
-    {
-      id: 2,
-      hn: "6900182",
-      name: "Pichai Sangthong",
-      form_type:
-        "หนังสืออธิบายและยินยอมให้ทำการจำลองการฉายรังสีโดยใช้รังสีเอกซเรย์และสารทึบรังสี",
-      status: "Success",
-    },
-    {
-      id: 3,
-      hn: "6900183",
-      name: "Niran Suksawat",
-      form_type:
-        "หนังสืออธิบายและยินยอมให้ทำการจำลองการฉายรังสีโดยใช้รังสีเอกซเรย์และสารทึบรังสี",
-      status: "Success",
-    },
-    {
-      id: 4,
-      hn: "6900184",
-      name: "Somsak Chaiyaporn",
-      form_type:
-        "หนังสืออธิบายและยินยอมให้ทำการจำลองการฉายรังสีโดยใช้รังสีเอกซเรย์และสารทึบรังสี",
-      status: "Success",
-    },
-    {
-      id: 5,
-      hn: "6900185",
-      name: "Somsri Srisawat",
-      form_type:
-        "หนังสืออธิบายและยินยอมให้ทำการจำลองการฉายรังสีโดยใช้รังสีเอกซเรย์และสารทึบรังสี",
-      status: "Success",
-    },
-    {
-      id: 6,
-      hn: "6900186",
-      name: "Kittipong Sokdee",
-      form_type: "ใบรับทราบข้อมูลเเละยินยอมรับการรักษาด้วยการฉายรังสี",
-      status: "Success",
-    },
-    {
-      id: 7,
-      hn: "6900187",
-      name: "Kanokwan Thongchai",
-      form_type: "ใบรับทราบข้อมูลเเละยินยอมรับการรักษาด้วยการฉายรังสี",
-      status: "Success",
-    },
-    {
-      id: 8,
-      hn: "6900188",
-      name: "Chatchai Sukjai",
-      form_type: "ใบรับทราบข้อมูลเเละยินยอมรับการรักษาด้วยการฉายรังสี",
-      status: "Success",
-    },
-    {
-      id: 9,
-      hn: "6900189",
-      name: "Chatnam Somjai",
-      form_type: "ใบรับทราบข้อมูลเเละยินยอมรับการรักษาด้วยการใส่เเร่",
-      status: "Success",
-    },
-    {
-      id: 10,
-      hn: "6900190",
-      name: "Chulai Sukprasert",
-      form_type: "ใบรับทราบข้อมูลเเละยินยอมรับการรักษาด้วยการใส่เเร่",
-      status: "Cancel",
-    },
-  ];
+  const statusStyle = {
+    Pending: "bg-[#ffedd5] text-[#d97706]",
+    Saved: "bg-blue-100 text-blue-500",
+    Success: "bg-green-100 text-green-700",
+    Cancel: "bg-red-100 text-red-600",
+  };
+
+  const FormByFormId = {
+    1: setModalForm1,
+    2: setModalForm2,
+    3: setModalForm3,
+  };
 
   return {
     modalRef,
@@ -120,6 +58,11 @@ export default function useHook() {
     form,
     selectForm,
     setSelectForm,
-    mockData,
+    formList,
+    statusStyle,
+    FormByFormId,
+    FormList,
+    setFormList,
+    // mockData,
   };
 }
