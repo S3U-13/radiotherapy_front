@@ -57,6 +57,9 @@ export const useApiRequest = () => {
       console.error(err);
     }
   };
+  const SearchVisit = (hn) => apiRequest(`/api/user/pat_visit/${hn}`);
+  const SearchVitalsign = (visitId) =>
+    apiRequest(`/api/user/pat_visit/${visitId}`);
 
   const FormList = () => apiRequest("/api/user/form-radio-therapy-list", "GET");
   const FormListByHn = (searchFormByHn) =>
@@ -74,12 +77,18 @@ export const useApiRequest = () => {
     }
   };
 
+  const DataFormById = (selectIdForm) =>
+    apiRequest(`/api/user/form-by-id/${selectIdForm}`, "GET");
+
   return {
     fetchForm,
     fetchChoice,
     SearchHn,
+    SearchVisit,
+    SearchVitalsign,
     FormList,
     DoctorCreateForm,
     FormListByHn,
+    DataFormById,
   };
 };

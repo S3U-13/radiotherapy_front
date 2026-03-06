@@ -20,7 +20,7 @@ import { Edit3 } from "@deemlol/next-icons";
 import { Select, SelectItem } from "@heroui/select";
 import { Checkbox, CheckboxGroup } from "@heroui/checkbox";
 
-export default function page({ openForm1, closeForm1, modalRef }) {
+export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
   const {
     modalRefSign,
     openSign01,
@@ -36,9 +36,10 @@ export default function page({ openForm1, closeForm1, modalRef }) {
     handleSaveSignature2,
     handleSaveSignature3,
     choice,
-    field,
-    setField,
-  } = useHook();
+    form,
+    pat_name,
+    pat_age,
+  } = useHook({ patFormData, closeForm1 });
 
   const prename = [
     { key: "1", label: "นาย" },
@@ -73,6 +74,7 @@ export default function page({ openForm1, closeForm1, modalRef }) {
 
               <ModalBody className="space-y-4 text-gray-800 ">
                 {/* ---------------- ข้อมูลผู้ป่วย ---------------- */}
+
                 <section className="light:border light:border-gray-200 rounded-2xl p-6 bg-white shadow-sm dark:bg-[#181818]">
                   <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2 mb-4 dark:text-white">
                     <span className="w-1 h-5 bg-neutral-600 rounded-full"></span>
@@ -86,6 +88,7 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                       classNames={{ label: "text-default-700" }}
                       className="col-span-1 md:col-span-3"
                       label="ชื่อ-สกุล ผู้ป่วย"
+                      value={pat_name}
                     />
                     <div className="flex items-center gap-2">
                       <Input
@@ -93,17 +96,23 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                         radius="sm"
                         label="อายุ"
                         classNames={{ label: "text-default-700" }}
+                        value={pat_age}
                       />
                       <span className="text-default-700">ปี</span>
                     </div>
-
-                    <Input
-                      size="sm"
-                      radius="sm"
-                      className="col-span-1 md:col-span-2"
-                      label="HN"
-                      classNames={{ label: "text-default-700" }}
-                    />
+                    <form.Field name="hn">
+                      {(field) => (
+                        <Input
+                          size="sm"
+                          radius="sm"
+                          className="col-span-1 md:col-span-2"
+                          label="HN"
+                          classNames={{ label: "text-default-700" }}
+                          value={field.state.value ?? ""}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        />
+                      )}
+                    </form.Field>
                     <DatePicker
                       size="sm"
                       radius="sm"
@@ -212,13 +221,13 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                           name="contrast_allergy"
                           // orientation="horizontal"
                           className="text-default-700"
-                          value={field.contrast_allergy}
-                          onValueChange={(val) =>
-                            setField((prev) => ({
-                              ...prev,
-                              contrast_allergy: val,
-                            }))
-                          }
+                          // value={field.contrast_allergy}
+                          // onValueChange={(val) =>
+                          //   setField((prev) => ({
+                          //     ...prev,
+                          //     contrast_allergy: val,
+                          //   }))
+                          // }
                         >
                           {choice
                             .filter((ch) => ch.option_group_id === 2)
@@ -255,13 +264,13 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                         <RadioGroup
                           // orientation="horizontal"
                           className="text-default-700"
-                          value={field.seafood_allergy}
-                          onValueChange={(val) =>
-                            setField((prev) => ({
-                              ...prev,
-                              seafood_allergy: val,
-                            }))
-                          }
+                          // value={field.seafood_allergy}
+                          // onValueChange={(val) =>
+                          //   setField((prev) => ({
+                          //     ...prev,
+                          //     seafood_allergy: val,
+                          //   }))
+                          // }
                         >
                           {choice
                             .filter((ch) => ch.option_group_id === 3)
@@ -300,13 +309,13 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                         <RadioGroup
                           // orientation="horizontal"
                           className="text-default-700"
-                          value={field.drug_allergy}
-                          onValueChange={(val) => {
-                            setField((prev) => ({
-                              ...prev,
-                              drug_allergy: val,
-                            }));
-                          }}
+                          // value={field.drug_allergy}
+                          // onValueChange={(val) => {
+                          //   setField((prev) => ({
+                          //     ...prev,
+                          //     drug_allergy: val,
+                          //   }));
+                          // }}
                         >
                           {choice
                             .filter((ch) => ch.option_group_id === 3)
@@ -406,13 +415,13 @@ export default function page({ openForm1, closeForm1, modalRef }) {
                       className="col-span-8"
                       orientation="horizontal"
                       classNames={{ base: "text-sm text-gray-700" }}
-                      value={field.consent}
-                      onValueChange={(val) => {
-                        setField((prev) => ({
-                          ...prev,
-                          consent: val,
-                        }));
-                      }}
+                      // value={field.consent}
+                      // onValueChange={(val) => {
+                      //   setField((prev) => ({
+                      //     ...prev,
+                      //     consent: val,
+                      //   }));
+                      // }}
                     >
                       {choice
                         .filter((ch) => ch.option_group_id === 4)

@@ -1,14 +1,16 @@
 "use client";
 import { addToast } from "@heroui/toast";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useApiRequest } from "@/hooks/useApi";
 
 export default function useHook() {
-  const { FormListByHn } = useApiRequest();
+  const { FormListByHn, DataFormById } = useApiRequest();
   const modalRef = useRef(null);
   const [modalForm1, setModalForm1] = useState(false);
   const [modalForm2, setModalForm2] = useState(false);
   const [modalForm3, setModalForm3] = useState(false);
+  const [selectIdForm, setSelectIdForm] = useState(null);
+  const [patFormData, setPatFormData] = useState(null);
 
   const statusStyle = {
     Pending: "bg-[#ffedd5] text-[#d97706]",
@@ -63,6 +65,31 @@ export default function useHook() {
     }
   };
 
+  const handleSelectIdForm = (id) => {
+    try {
+      setSelectIdForm(id);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (!selectIdForm) return;
+
+    if (modalForm1 || modalForm2 || modalForm3) {
+      const fetchData = async () => {
+        const data = await DataFormById(selectIdForm);
+        if (data) {
+          setPatFormData(data);
+        }
+      };
+
+      fetchData();
+    }
+  }, [modalForm1, modalForm2, modalForm3]);
+
+  console.log("data", patFormData);
+
   return {
     modalRef,
     modalForm1,
@@ -77,5 +104,7 @@ export default function useHook() {
     handleSearch,
     statusStyle,
     FormByFormId,
+    handleSelectIdForm,
+    patFormData,
   };
 }

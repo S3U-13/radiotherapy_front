@@ -46,6 +46,8 @@ export default function page() {
     handleSearch,
     statusStyle,
     FormByFormId,
+    handleSelectIdForm,
+    patFormData,
   } = useHook();
   return (
     <div className="w-full shadow-sm rounded-2xl p-6 bg-white dark:bg-[#131317]">
@@ -157,7 +159,10 @@ export default function page() {
                           key="edit"
                           className=" text-neutral-700 dark:text-white hover:bg-neutral-100 rounded-md px-3 py-1.5 font-medium"
                           startContent={<Edit3 size={16} />}
-                          onPress={() => FormByFormId[i.form_type_id](true)}
+                          onPress={() => {
+                            FormByFormId[i.form_type_id](true);
+                            handleSelectIdForm(i.id);
+                          }}
                         >
                           <span>Edit</span>
                         </DropdownItem>
@@ -178,6 +183,7 @@ export default function page() {
         </Table>
       </div>
       <ModalForm1
+        patFormData={patFormData}
         openForm1={modalForm1}
         modalRef={modalRef}
         closeForm1={() => setModalForm1(false)}
