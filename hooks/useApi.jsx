@@ -59,7 +59,7 @@ export const useApiRequest = () => {
   };
   const SearchVisit = (hn) => apiRequest(`/api/user/pat_visit/${hn}`);
   const SearchVitalsign = (visitId) =>
-    apiRequest(`/api/user/pat_visit/${visitId}`);
+    apiRequest(`/api/user/pat_vitalsign/${visitId}`);
 
   const FormList = () => apiRequest("/api/user/form-radio-therapy-list", "GET");
   const FormListByHn = (searchFormByHn) =>

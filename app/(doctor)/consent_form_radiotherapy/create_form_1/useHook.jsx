@@ -6,7 +6,8 @@ import { useApiRequest } from "@/hooks/useApi";
 import { addToast } from "@heroui/toast";
 
 export default function useHook({ closeForm1, selectForm }) {
-  const { SearchHn, DoctorCreateForm } = useApiRequest();
+  const { SearchHn, SearchVisit, SearchVitalsign, DoctorCreateForm } =
+    useApiRequest();
   const [hnInput, setHnInput] = useState("");
   const [pat, setPat] = useState(null);
   const modalRefSign = useRef(null);
@@ -16,6 +17,10 @@ export default function useHook({ closeForm1, selectForm }) {
   const [signature, setSignature] = useState(null);
   const [signature2, setSignature2] = useState(null);
   const [signature3, setSignature3] = useState(null);
+  const [visitList, setVisitList] = useState([]);
+  const [visitId, setVisitId] = useState("");
+  const [vitalsignList, setVitalSignList] = useState([]);
+  const [vitalsignId, setVitalsignId] = useState("");
 
   const openModal = () => {
     setOpenSign01((prev) => !prev);
@@ -84,10 +89,13 @@ export default function useHook({ closeForm1, selectForm }) {
     }
   };
 
+  //field
   const initialField = () => ({
     form_type_id: null,
     pat_name: "",
     hn: null,
+    visit_id: null,
+    vitalsign_id: null,
     pat_age: "",
   });
 
@@ -98,6 +106,8 @@ export default function useHook({ closeForm1, selectForm }) {
   const validationSchema = z.object({
     form_type_id: z.number().nullable(),
     hn: z.coerce.number().nullable(),
+    visit_id: z.coerce.number().nullable(),
+    vitalsign_id: z.coerce.number().nullable(),
   });
 
   const handleChange = async (e) => {
@@ -135,6 +145,10 @@ export default function useHook({ closeForm1, selectForm }) {
         });
         form.reset();
         setHnInput("");
+        setVisitList([]);
+        setVisitId([]);
+        setVitalSignList([]);
+        setVitalsignId("");
         closeForm1();
       } else if (!data) {
         addToast({
@@ -180,11 +194,96 @@ export default function useHook({ closeForm1, selectForm }) {
     },
   });
 
+  // set data and field value
   useEffect(() => {
     if (selectForm) {
       form.setFieldValue("form_type_id", selectForm);
     }
   }, [selectForm]);
+
+  const fetchVisit = async () => {
+    if (!hnInput) return;
+    const data = await SearchVisit(hnInput);
+    if (data) {
+      setVisitList(data);
+    } else {
+      setVisitList(null);
+    }
+  };
+
+  // service
+  const formatThaiDateTime = (isoString) => {
+    if (!isoString) return "";
+
+    const date = new Date(isoString);
+
+    // แปลงเป็นปี พ.ศ.
+    const buddhistYear = date.getFullYear() + 543;
+
+    // format วันที่ เวลา ภาษาไทย
+    return (
+      new Intl.DateTimeFormat("th-TH", {
+        timeZone: "Asia/Bangkok",
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      }).format(date) +
+      " น.".replace(`${date.getFullYear() + 543}`, buddhistYear)
+    );
+  };
+
+  const formatThaiDate = (isoString) => {
+    if (!isoString) return "";
+
+    const date = new Date(isoString);
+
+    // แปลงเป็นปี พ.ศ.
+    const buddhistYear = date.getFullYear() + 543;
+
+    // format วันที่ เวลา ภาษาไทย
+    return (
+      new Intl.DateTimeFormat("th-TH", {
+        timeZone: "Asia/Bangkok",
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      }).format(date) + "".replace(`${date.getFullYear() + 543}`, buddhistYear)
+    );
+  };
+
+  const handelSelectVisitId = async (id) => {
+    if (!id) return;
+    try {
+      setVisitId(id);
+      form.setFieldValue("visit_id", id);
+
+      const data = await SearchVitalsign(id);
+      if (data) {
+        setVitalSignList(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handelSelectVitalsignId = async (id) => {
+    if (!id) return;
+    try {
+      setVitalsignId(id);
+      form.setFieldValue("vitalsign_id", id);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    console.log("visit_id", form.getFieldValue("visit_id"));
+    console.log("visit_id", visitId);
+    console.log("vitalsign_list", vitalsignList);
+  }, [form, visitId, vitalsignList]);
 
   return {
     modalRefSign,
@@ -209,5 +308,14 @@ export default function useHook({ closeForm1, selectForm }) {
     handleChange,
     handleSubmit,
     isSubmitting,
+    visitList,
+    fetchVisit,
+    formatThaiDateTime,
+    formatThaiDate,
+    visitId,
+    handelSelectVisitId,
+    vitalsignList,
+    vitalsignId,
+    handelSelectVitalsignId,
   };
 }

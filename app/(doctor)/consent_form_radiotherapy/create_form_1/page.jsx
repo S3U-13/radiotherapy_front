@@ -13,13 +13,9 @@ import { Radio, RadioGroup } from "@heroui/radio";
 import React from "react";
 import useHook from "./useHook";
 import { Search } from "@deemlol/next-icons";
+import { Select, SelectItem } from "@heroui/select";
 
-export default function page({
-  openForm1,
-  closeForm1,
-  modalRef,
-  selectForm,
-}) {
+export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
   const {
     hnInput,
     setHnInput,
@@ -27,6 +23,15 @@ export default function page({
     form,
     handleSubmit,
     isSubmitting,
+    visitList,
+    fetchVisit,
+    formatThaiDateTime,
+    formatThaiDate,
+    visitId,
+    handelSelectVisitId,
+    vitalsignList,
+    vitalsignId,
+    handelSelectVitalsignId,
   } = useHook({ closeForm1, selectForm });
   return (
     <div>
@@ -67,24 +72,21 @@ export default function page({
                       <span className="w-1 h-5 bg-neutral-600 rounded-full"></span>
                       ข้อมูลผู้ป่วย
                     </h2>
-                    <div className="flex flex-col sm:flex-row justify-end items-center mb-4">
-                      <div className="w-1/4">
-                        <form.Field name="form_type_id">
-                          {(field) => (
-                            <Input
-                              size="sm"
-                              radius="sm"
-                              label="FORM ID :"
-                              value={field.state.value ?? ""}
-                              onChange={(e) =>
-                                field.handleChange(e.target.value)
-                              }
-                              type="hidden"
-                            />
-                          )}
-                        </form.Field>
-                      </div>
-
+                    <div className="w-1/4">
+                      <form.Field name="form_type_id">
+                        {(field) => (
+                          <Input
+                            size="sm"
+                            radius="sm"
+                            label="FORM ID :"
+                            value={field.state.value ?? ""}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                            type="hidden"
+                          />
+                        )}
+                      </form.Field>
+                    </div>
+                    <div className="flex flex-col sm:flex-row justify-between gap-2 items-center mb-2  bg-white p-4 rounded-md shadow-sm dark:bg-[#0E0E11]">
                       <div className="flex items-center sm:max-w-xs gap-2">
                         <Input
                           size="sm"
@@ -99,16 +101,62 @@ export default function page({
                         <Button
                           size="sm"
                           isIconOnly
-                          onPress={handleSearchHn}
+                          onPress={() => {
+                            handleSearchHn();
+                            fetchVisit();
+                          }}
                           className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
                         >
                           <Search size={18} />
                         </Button>
                       </div>
+                      <div className="flex items-center gap-4">
+                        {" "}
+                        {visitList.length > 0 ? (
+                          <Select
+                            label="Visit Date Time"
+                            size="sm"
+                            className="w-[280px]"
+                            selectedKeys={
+                              visitId ? new Set([String(visitId)]) : new Set()
+                            }
+                            onSelectionChange={(keys) => {
+                              const selectedValue = Array.from(keys)[0];
+                              handelSelectVisitId(selectedValue);
+                            }}
+                          >
+                            {visitList?.map((item) => (
+                              <SelectItem key={item.id}>
+                                {formatThaiDateTime(item.visitdatetime)}
+                              </SelectItem>
+                            ))}
+                          </Select>
+                        ) : null}
+                        {vitalsignList.length > 0 ? (
+                          <Select
+                            label="Vitalsign"
+                            size="sm"
+                            className="w-[280px]"
+                            selectedKeys={
+                              vitalsignId ? new Set([vitalsignId]) : new Set()
+                            }
+                            onSelectionChange={(keys) => {
+                              const selectedValue = Array.from(keys)[0];
+                              handelSelectVitalsignId(selectedValue);
+                            }}
+                          >
+                            {vitalsignList?.map((item) => (
+                              <SelectItem key={item.id}>
+                                {formatThaiDate(item.dodate)}
+                              </SelectItem>
+                            ))}
+                          </Select>
+                        ) : null}
+                      </div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-6 gap-3 border-t border-divider pt-4">
+                  <div className="grid grid-cols-6 gap-3 pt-4">
                     <form.Field name="pat_name">
                       {(field) => (
                         <Input
