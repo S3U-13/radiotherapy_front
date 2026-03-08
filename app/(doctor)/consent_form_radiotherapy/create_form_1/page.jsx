@@ -32,6 +32,7 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
     vitalsignList,
     vitalsignId,
     handelSelectVitalsignId,
+    vitalsignData,
   } = useHook({ closeForm1, selectForm });
   return (
     <div>
@@ -86,7 +87,7 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                         )}
                       </form.Field>
                     </div>
-                    <div className="flex flex-col sm:flex-row justify-between gap-2 items-center mb-2  bg-white p-4 rounded-md shadow-sm dark:bg-[#0E0E11]">
+                    <div className="flex flex-col sm:flex-row justify-start gap-2 items-center mb-2  bg-white p-4 rounded-md shadow-sm dark:bg-[#0E0E11]">
                       <div className="flex items-center sm:max-w-xs gap-2">
                         <Input
                           size="sm"
@@ -110,7 +111,7 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                           <Search size={18} />
                         </Button>
                       </div>
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-4 ml-4">
                         {" "}
                         {visitList.length > 0 ? (
                           <Select
@@ -147,7 +148,8 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                           >
                             {vitalsignList?.map((item) => (
                               <SelectItem key={item.id}>
-                                {formatThaiDate(item.dodate)}
+                                {`${formatThaiDate(item.dodate)}
+                                น้ำหนัก ${item.weight} กิโลกรัม`}
                               </SelectItem>
                             ))}
                           </Select>
@@ -212,6 +214,7 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                         radius="sm"
                         label="น้ำหนัก"
                         className="w-[120px]"
+                        value={vitalsignData}
                       />
                       <span className="text-gray-600 dark:text-default-400">
                         กิโลกรัม

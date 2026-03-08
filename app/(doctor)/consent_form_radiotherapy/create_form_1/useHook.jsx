@@ -21,6 +21,7 @@ export default function useHook({ closeForm1, selectForm }) {
   const [visitId, setVisitId] = useState("");
   const [vitalsignList, setVitalSignList] = useState([]);
   const [vitalsignId, setVitalsignId] = useState("");
+  const [vitalsignData, setVitalsignData] = useState([]);
 
   const openModal = () => {
     setOpenSign01((prev) => !prev);
@@ -274,6 +275,11 @@ export default function useHook({ closeForm1, selectForm }) {
     try {
       setVitalsignId(id);
       form.setFieldValue("vitalsign_id", id);
+
+      const selectedItem = vitalsignList.find((v) => v.id == id);
+      if (selectedItem) {
+        setVitalsignData(selectedItem.weight);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -317,5 +323,6 @@ export default function useHook({ closeForm1, selectForm }) {
     vitalsignList,
     vitalsignId,
     handelSelectVitalsignId,
+    vitalsignData,
   };
 }
