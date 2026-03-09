@@ -20,7 +20,13 @@ import { Edit3 } from "@deemlol/next-icons";
 import { Select, SelectItem } from "@heroui/select";
 import { Checkbox, CheckboxGroup } from "@heroui/checkbox";
 
-export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
+export default function page({
+  patFormData,
+  openForm1,
+  closeForm1,
+  modalRef,
+  selectIdForm,
+}) {
   const {
     modalRefSign,
     openSign01,
@@ -37,15 +43,22 @@ export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
     handleSaveSignature3,
     choice,
     form,
+    //pat data object
     pat_name,
     pat_age,
-  } = useHook({ patFormData, closeForm1 });
+    pat_weight,
+    // handleDisease
+    selectedDisease,
+    handleChangeDisease,
+    prename,
+    isSubmitting,
+  } = useHook({ patFormData, closeForm1, selectIdForm });
 
-  const prename = [
-    { key: "1", label: "นาย" },
-    { key: "2", label: "นาง" },
-    { key: "3", label: "นางสาว" },
-  ];
+  // const prename = [
+  //   { key: "1", label: "นาย" },
+  //   { key: "2", label: "นาง" },
+  //   { key: "3", label: "นางสาว" },
+  // ];
   return (
     <div>
       <Modal
@@ -63,7 +76,12 @@ export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
       >
         <ModalContent ref={modalRef}>
           {(closeForm1) => (
-            <>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                form.handleSubmit();
+              }}
+            >
               <ModalHeader className="flex flex-col items-center gap-1 text-center text-lg font-semibold text-gray-800 dark:text-white ">
                 <h1>หนังสืออธิบายและยินยอมให้ทำการจำลองการฉายรังสี</h1>
                 <h1>โดยใช้รังสีเอกซเรย์และสารทึบรังสี</h1>
@@ -81,6 +99,21 @@ export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
                     ข้อมูลผู้ป่วย
                   </h2>
 
+                  <form.Field name="form_type_id">
+                    {(field) => (
+                      <Input
+                        size="sm"
+                        radius="sm"
+                        className="col-span-1 md:col-span-2"
+                        label="Form Type ID"
+                        type="hidden"
+                        classNames={{ label: "text-default-700" }}
+                        value={field.state.value ?? ""}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                        readOnly
+                      />
+                    )}
+                  </form.Field>
                   <div className="grid grid-cols-1 md:grid-cols-6 gap-3 ">
                     <Input
                       size="sm"
@@ -89,6 +122,7 @@ export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
                       className="col-span-1 md:col-span-3"
                       label="ชื่อ-สกุล ผู้ป่วย"
                       value={pat_name}
+                      readOnly
                     />
                     <div className="flex items-center gap-2">
                       <Input
@@ -97,6 +131,7 @@ export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
                         label="อายุ"
                         classNames={{ label: "text-default-700" }}
                         value={pat_age}
+                        readOnly
                       />
                       <span className="text-default-700">ปี</span>
                     </div>
@@ -110,6 +145,7 @@ export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
                           classNames={{ label: "text-default-700" }}
                           value={field.state.value ?? ""}
                           onChange={(e) => field.handleChange(e.target.value)}
+                          readOnly
                         />
                       )}
                     </form.Field>
@@ -119,6 +155,7 @@ export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
                       className=" col-span-1 md:col-span-2"
                       label="วันที่"
                       classNames={{ label: "text-default-700" }}
+                      variant="bordered"
                     />
                     <div className="flex items-center gap-2 col-span-1  md:col-span-2">
                       <Input
@@ -126,7 +163,9 @@ export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
                         radius="sm"
                         label="น้ำหนัก"
                         className="w-full"
+                        value={pat_weight}
                         classNames={{ label: "text-default-700" }}
+                        readOnly
                       />
                       <span className="text-default-700">กิโลกรัม</span>
                     </div>
@@ -180,7 +219,11 @@ export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
                         1. ท่านมีโรคประจำตัวดังต่อไปนี้หรือไม่
                       </p>
                       <div className="mt-4 rounded-xl light:border light:border-gray-200 bg-[#f9f9f9] p-6 shadow-inner dark:bg-[#1f1e1e]">
-                        <CheckboxGroup className="text-sm text-default-700">
+                        <CheckboxGroup
+                          className="text-sm text-default-700"
+                          value={selectedDisease}
+                          onChange={handleChangeDisease}
+                        >
                           {choice
                             .filter((ch) => ch.option_group_id === 7)
                             .map((c) => (
@@ -197,18 +240,24 @@ export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
                       <p className="font-medium mb-2">
                         2. ท่านเคยได้รับการฉีดสารทึบรังสีมาก่อนหรือไม่
                       </p>
-                      <RadioGroup
-                        // orientation="horizontal"
-                        className="ml-4 text-default-700"
-                      >
-                        {choice
-                          .filter((ch) => ch.option_group_id === 2)
-                          .map((c) => (
-                            <Radio key={c.id} value={c.id}>
-                              {c.name}
-                            </Radio>
-                          ))}
-                      </RadioGroup>
+                      <form.Field name="contrast_history_id">
+                        {(field) => (
+                          <RadioGroup
+                            // orientation="horizontal"
+                            className="ml-4 text-default-700"
+                            value={field.state.value ?? null}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                          >
+                            {choice
+                              .filter((ch) => ch.option_group_id === 2)
+                              .map((c) => (
+                                <Radio key={c.id} value={String(c.id)}>
+                                  {c.name}
+                                </Radio>
+                              ))}
+                          </RadioGroup>
+                        )}
+                      </form.Field>
                     </div>
 
                     {/* ข้อ 3 */}
@@ -217,41 +266,49 @@ export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
                         3. ถ้าเคยตรวจ ท่านแพ้สารทึบรังสีหรือไม่
                       </p>
                       <div className="flex flex-wrap items-end gap-3 ml-4">
-                        <RadioGroup
-                          name="contrast_allergy"
-                          // orientation="horizontal"
-                          className="text-default-700"
-                          // value={field.contrast_allergy}
-                          // onValueChange={(val) =>
-                          //   setField((prev) => ({
-                          //     ...prev,
-                          //     contrast_allergy: val,
-                          //   }))
-                          // }
-                        >
-                          {choice
-                            .filter((ch) => ch.option_group_id === 2)
-                            .map((c) => (
-                              <div
-                                key={c.id}
-                                className="flex item-center gap-2"
-                              >
-                                {" "}
-                                <Radio value={String(c.id)}>{c.name}</Radio>
-                                {String(c.id) === 3 &&
-                                  field.contrast_allergy === 3 && (
-                                    <Input
-                                      name="contrast_allergy_detail"
-                                      size="sm"
-                                      radius="sm"
-                                      label="ระบุอาการ"
-                                      placeholder="เช่น ผื่นขึ้น, หายใจลำบาก"
-                                      className="max-w-[280px]"
-                                    />
-                                  )}
-                              </div>
-                            ))}
-                        </RadioGroup>
+                        <form.Field name="contrast_allergy_id">
+                          {(field) => (
+                            <RadioGroup
+                              // orientation="horizontal"
+                              className="text-default-700"
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                            >
+                              {choice
+                                .filter((ch) => ch.option_group_id === 2)
+                                .map((c) => (
+                                  <div
+                                    key={String(c.id)}
+                                    className="flex items-center gap-2"
+                                  >
+                                    <Radio value={String(c.id)}>{c.name}</Radio>
+                                    {String(c.id) === "3" &&
+                                      field.state.value === "3" && (
+                                        <form.Field name="contrast_allergy_symptom">
+                                          {(field) => (
+                                            <Input
+                                              size="sm"
+                                              radius="sm"
+                                              label="ระบุอาการ"
+                                              placeholder="เช่น ผื่นขึ้น, หายใจลำบาก"
+                                              className="max-w-[280px]"
+                                              value={field.state.value || ""}
+                                              onChange={(e) =>
+                                                field.handleChange(
+                                                  e.target.value,
+                                                )
+                                              }
+                                            />
+                                          )}
+                                        </form.Field>
+                                      )}
+                                  </div>
+                                ))}
+                            </RadioGroup>
+                          )}
+                        </form.Field>
                       </div>
                     </div>
 
@@ -261,42 +318,54 @@ export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
                         4. ท่านมีประวัติแพ้อาหารทะเลหรือไม่
                       </p>
                       <div className="flex flex-wrap items-end gap-3 ml-4">
-                        <RadioGroup
-                          // orientation="horizontal"
-                          className="text-default-700"
-                          // value={field.seafood_allergy}
-                          // onValueChange={(val) =>
-                          //   setField((prev) => ({
-                          //     ...prev,
-                          //     seafood_allergy: val,
-                          //   }))
-                          // }
-                        >
-                          {choice
-                            .filter((ch) => ch.option_group_id === 3)
-                            .map((c, index) =>
-                              index <= 1 ? (
-                                <div
-                                  key={c.id}
-                                  className="flex item-center gap-2"
-                                >
-                                  {" "}
-                                  <Radio value={String(c.id)}>{c.name}</Radio>
-                                  {String(c.id) === 6 &&
-                                    field.seafood_allergy === 6 && (
-                                      <Input
-                                        name="seafood_allergy_detail"
-                                        size="sm"
-                                        radius="sm"
-                                        label="ระบุอาการ"
-                                        placeholder="เช่น คัน, บวม, คลื่นไส้"
-                                        className="max-w-[280px]"
-                                      />
-                                    )}
-                                </div>
-                              ) : null,
-                            )}
-                        </RadioGroup>
+                        <form.Field name="seafood_allergy_id">
+                          {(field) => (
+                            <RadioGroup
+                              // orientation="horizontal"
+                              className="text-default-700"
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                            >
+                              {choice
+                                .filter((ch) => ch.option_group_id === 3)
+                                .map((c, index) =>
+                                  index <= 1 ? (
+                                    <div
+                                      key={String(c.id)}
+                                      className="flex item-center gap-2"
+                                    >
+                                      {" "}
+                                      <Radio value={String(c.id)}>
+                                        {c.name}
+                                      </Radio>
+                                      {String(c.id) === "6" &&
+                                        field.state.value === "6" && (
+                                          <form.Field name="seafood_allergy_symptom">
+                                            {(field) => (
+                                              <Input
+                                                size="sm"
+                                                radius="sm"
+                                                label="ระบุอาการ"
+                                                placeholder="เช่น คัน, บวม, คลื่นไส้"
+                                                className="max-w-[280px]"
+                                                value={field.state.value || ""}
+                                                onChange={(e) =>
+                                                  field.handleChange(
+                                                    e.target.value,
+                                                  )
+                                                }
+                                              />
+                                            )}
+                                          </form.Field>
+                                        )}
+                                    </div>
+                                  ) : null,
+                                )}
+                            </RadioGroup>
+                          )}
+                        </form.Field>
                       </div>
                     </div>
 
@@ -306,39 +375,50 @@ export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
                         5. ท่านมีประวัติการแพ้ยาอื่น ๆ หรือไม่
                       </p>
                       <div className="flex flex-wrap items-end gap-3 ml-4">
-                        <RadioGroup
-                          // orientation="horizontal"
-                          className="text-default-700"
-                          // value={field.drug_allergy}
-                          // onValueChange={(val) => {
-                          //   setField((prev) => ({
-                          //     ...prev,
-                          //     drug_allergy: val,
-                          //   }));
-                          // }}
-                        >
-                          {choice
-                            .filter((ch) => ch.option_group_id === 3)
-                            .map((c) => (
-                              <div
-                                key={c.id}
-                                className="flex item-center gap-2"
-                              >
-                                {" "}
-                                <Radio value={String(c.id)}>{c.name}</Radio>
-                                {String(c.id) === 6 &&
-                                  field.drug_allergy === 6 && (
-                                    <Input
-                                      size="sm"
-                                      radius="sm"
-                                      label="ระบุอาการ"
-                                      placeholder="เช่น ผื่น, หน้ามืด, หายใจลำบาก"
-                                      className="max-w-[280px]"
-                                    />
-                                  )}
-                              </div>
-                            ))}
-                        </RadioGroup>
+                        <form.Field name="drug_allergy_id">
+                          {(field) => (
+                            <RadioGroup
+                              // orientation="horizontal"
+                              className="text-default-700"
+                              value={field.state.value}
+                              onChange={(e) =>
+                                field.handleChange(e.target.value)
+                              }
+                            >
+                              {choice
+                                .filter((ch) => ch.option_group_id === 3)
+                                .map((c) => (
+                                  <div
+                                    key={String(c.id)}
+                                    className="flex item-center gap-2"
+                                  >
+                                    {" "}
+                                    <Radio value={String(c.id)}>{c.name}</Radio>
+                                    {String(c.id) === "6" &&
+                                      field.state.value === "6" && (
+                                        <form.Field name="drug">
+                                          {(field) => (
+                                            <Input
+                                              size="sm"
+                                              radius="sm"
+                                              label="ระบุอาการ"
+                                              placeholder="เช่น ผื่น, หน้ามืด, หายใจลำบาก"
+                                              className="max-w-[280px]"
+                                              value={field.state.value || ""}
+                                              onChange={(e) =>
+                                                field.handleChange(
+                                                  e.target.value,
+                                                )
+                                              }
+                                            />
+                                          )}
+                                        </form.Field>
+                                      )}
+                                  </div>
+                                ))}
+                            </RadioGroup>
+                          )}
+                        </form.Field>
                       </div>
                     </div>
 
@@ -367,37 +447,35 @@ export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
 
                   {/* กล่องเนื้อหาหลัก */}
                   <div className="grid grid-cols-8 gap-3 items-center rounded-xl bg-[#f9f9f9] light:border light:border-gray-200 shadow-sm p-6 dark:bg-[#1f1e1e]">
-                    <div className="grid grid-cols-1 md:flex items-center gap-3 col-span-8 md:col-span-3 ">
-                      <p className="text-sm text-default-700">ข้าพเจ้า</p>
-
-                      <Select
-                        label="คำนำหน้า"
-                        items={prename}
-                        size="sm"
-                        radius="sm"
-                        variant="flat"
-                      >
-                        {(item) => <SelectItem>{item.label}</SelectItem>}
-                      </Select>
-                    </div>
-
-                    <Input
-                      label="ชื่อ-นามสกุล"
-                      className="col-span-8 md:col-span-5 "
-                      size="sm"
-                      radius="sm"
-                      placeholder="ชื่อ-นามสกุล"
-                    />
-
-                    <Input
-                      label="ความเกี่ยวข้อง"
-                      className="col-span-8 md:col-span-3"
-                      size="sm"
-                      radius="sm"
-                      placeholder="ระบุความเกี่ยวข้อง"
-                    />
+                    <form.Field name="name">
+                      {(field) => (
+                        <Input
+                          label="ข้าพเจ้า ชื่อ-นามสกุล"
+                          className="col-span-8 md:col-span-5 "
+                          size="sm"
+                          radius="sm"
+                          placeholder="ชื่อ-นามสกุล"
+                          value={field.state.value ?? ""}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        />
+                      )}
+                    </form.Field>
+                    <form.Field name="relation">
+                      {(field) => (
+                        <Input
+                          label="ความเกี่ยวข้อง"
+                          className="col-span-8 md:col-span-3"
+                          size="sm"
+                          radius="sm"
+                          placeholder="ระบุความเกี่ยวข้อง"
+                          value={field.state.value ?? ""}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        />
+                      )}
+                    </form.Field>
 
                     <Input
+                      value={pat_name}
                       label="ชื่อ-นามสกุล"
                       className="col-span-8 md:col-span-5"
                       size="sm"
@@ -411,28 +489,27 @@ export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
                       โดยข้าพเจ้า
                     </p>
 
-                    <RadioGroup
-                      className="col-span-8"
-                      orientation="horizontal"
-                      classNames={{ base: "text-sm text-gray-700" }}
-                      // value={field.consent}
-                      // onValueChange={(val) => {
-                      //   setField((prev) => ({
-                      //     ...prev,
-                      //     consent: val,
-                      //   }));
-                      // }}
-                    >
-                      {choice
-                        .filter((ch) => ch.option_group_id === 4)
-                        .map((c, index) =>
-                          index <= 1 ? (
-                            <div key={c.id}>
-                              <Radio value={c.id}>{c.name}</Radio>
-                            </div>
-                          ) : null,
-                        )}
-                    </RadioGroup>
+                    <form.Field name="consent">
+                      {(field) => (
+                        <RadioGroup
+                          className="col-span-8"
+                          orientation="horizontal"
+                          classNames={{ base: "text-sm text-gray-700" }}
+                          value={field.state.value ?? ""}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        >
+                          {choice
+                            .filter((ch) => ch.option_group_id === 4)
+                            .map((c, index) =>
+                              index <= 1 ? (
+                                <div key={String(c.id)}>
+                                  <Radio value={String(c.id)}>{c.name}</Radio>
+                                </div>
+                              ) : null,
+                            )}
+                        </RadioGroup>
+                      )}
+                    </form.Field>
                   </div>
 
                   {/* ลายเซ็น */}
@@ -665,12 +742,14 @@ export default function page({ patFormData, openForm1, closeForm1, modalRef }) {
                 </Button>
                 <Button
                   className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
-                  onPress={closeForm1}
+                  // onPress={closeForm1}
+                  type="submit"
+                  isDisabled={isSubmitting}
                 >
-                  บันทึก
+                  {isSubmitting ? "กำลังบันทึก..." : "บันทึก"}
                 </Button>
               </ModalFooter>
-            </>
+            </form>
           )}
         </ModalContent>
       </Modal>

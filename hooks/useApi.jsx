@@ -17,6 +17,8 @@ export const useApiRequest = () => {
       console.error;
     }
   };
+
+  // service
   const calculateAge = (birthdate) => {
     if (!birthdate) return "";
 
@@ -34,6 +36,7 @@ export const useApiRequest = () => {
     return `${age}`;
   };
 
+  const prenameApi = () => apiRequest("/api/user/prename", "GET");
   const fetchForm = () => apiRequest("/api/user/form", "GET");
   const fetchChoice = () => apiRequest("/api/user/choice", "GET");
   const SearchHn = async (value, form, setPat) => {
@@ -76,11 +79,24 @@ export const useApiRequest = () => {
       console.error(error);
     }
   };
+  const PatFillOutForm = async (payload, id) => {
+    try {
+      const data = await apiRequest(
+        `/api/user/edit-form-radio-therapy/${id}`,
+        "PUT",
+        payload,
+      );
+      return data ?? null;
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const DataFormById = (selectIdForm) =>
     apiRequest(`/api/user/form-by-id/${selectIdForm}`, "GET");
 
   return {
+    prenameApi,
     fetchForm,
     fetchChoice,
     SearchHn,
@@ -90,5 +106,6 @@ export const useApiRequest = () => {
     DoctorCreateForm,
     FormListByHn,
     DataFormById,
+    PatFillOutForm,
   };
 };

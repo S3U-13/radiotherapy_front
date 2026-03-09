@@ -168,6 +168,7 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                           onChange={(e) => field.handleChange(e.target.value)}
                           className="col-span-3"
                           label="ชื่อ-สกุล ผู้ป่วย"
+                          readOnly
                         />
                       )}
                     </form.Field>
@@ -181,6 +182,7 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                             label="อายุ"
                             value={field.state.value || ""}
                             onChange={(e) => field.handleChange(e.target.value)}
+                            readOnly
                           />
                         )}
                       </form.Field>
@@ -198,6 +200,7 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                           label="HN"
                           value={field.state.value ?? ""}
                           onChange={(e) => field.handleChange(e.target.value)}
+                          readOnly
                         />
                       )}
                     </form.Field>
@@ -207,6 +210,7 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                       radius="sm"
                       className="col-span-2"
                       label="วันที่"
+                      variant="bordered"
                     />
                     <div className="flex items-center gap-2 col-span-2">
                       <Input
@@ -215,6 +219,7 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                         label="น้ำหนัก"
                         className="w-[120px]"
                         value={vitalsignData}
+                        readOnly
                       />
                       <span className="text-gray-600 dark:text-default-400">
                         กิโลกรัม

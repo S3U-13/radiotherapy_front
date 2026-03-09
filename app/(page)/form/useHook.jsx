@@ -106,5 +106,6 @@ export default function useHook() {
     FormByFormId,
     handleSelectIdForm,
     patFormData,
+    selectIdForm,
   };
 }
