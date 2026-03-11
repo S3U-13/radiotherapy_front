@@ -5,8 +5,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { useApiRequest } from "@/hooks/useApi";
 import { addToast } from "@heroui/toast";
 
-export default function useHook({ closeForm2, patFormData, selectIdForm }) {
-  const { fetchChoice } = useApiRequest();
+export default function useHook({
+  closeForm2,
+  patFormData,
+  selectIdForm,
+  fetchData,
+}) {
+  const { fetchChoice, PatFillOutForm } = useApiRequest();
   const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
   const modalRefSign = useRef(null);
   const [openSign01, setOpenSign01] = useState(false);
@@ -88,7 +93,10 @@ export default function useHook({ closeForm2, patFormData, selectIdForm }) {
       return;
     }
     try {
-      const data = await PatFillOutForm(value, selectIdForm);
+      const payload = {
+        ...value,
+      };
+      const data = await PatFillOutForm(payload, selectIdForm);
 
       if (data) {
         addToast({
@@ -100,6 +108,7 @@ export default function useHook({ closeForm2, patFormData, selectIdForm }) {
         });
         form.reset();
         closeForm2();
+        fetchData();
       } else if (!data) {
         addToast({
           title: "Fails",
@@ -190,5 +199,6 @@ export default function useHook({ closeForm2, patFormData, selectIdForm }) {
     choice,
     pat_name,
     form,
+    isSubmitting,
   };
 }

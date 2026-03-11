@@ -5,7 +5,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { useApiRequest } from "@/hooks/useApi";
 import { addToast } from "@heroui/toast";
 
-export default function useHook({ patFormData, closeForm1, selectIdForm }) {
+export default function useHook({
+  patFormData,
+  closeForm1,
+  selectIdForm,
+  fetchData,
+}) {
   const { fetchChoice, PatFillOutForm, prenameApi } = useApiRequest();
   const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
   const modalRefSign = useRef(null);
@@ -179,6 +184,7 @@ export default function useHook({ patFormData, closeForm1, selectIdForm }) {
         });
         form.reset();
         closeForm1();
+        fetchData();
       } else if (!data) {
         addToast({
           title: "Fails",

@@ -18,7 +18,14 @@ import Sign03 from "./signature03/page";
 import { Edit3 } from "@deemlol/next-icons";
 import { Checkbox, CheckboxGroup } from "@heroui/checkbox";
 
-export default function page({ openForm3, closeForm3, modalRef }) {
+export default function page({
+  openForm3,
+  closeForm3,
+  modalRef,
+  patFormData,
+  selectIdForm,
+  fetchData,
+}) {
   const {
     modalRefSign,
     openSign01,
@@ -34,7 +41,9 @@ export default function page({ openForm3, closeForm3, modalRef }) {
     handleSaveSignature2,
     handleSaveSignature3,
     choice,
-  } = useHook();
+    form,
+    pat_name,
+  } = useHook({ patFormData, closeForm3, selectIdForm, fetchData });
   return (
     <div>
       <Modal
@@ -52,7 +61,12 @@ export default function page({ openForm3, closeForm3, modalRef }) {
       >
         <ModalContent ref={modalRef}>
           {(closeForm3) => (
-            <>
+            <form
+              onClick={(e) => {
+                e.preventDefault();
+                form.handleSubmit();
+              }}
+            >
               <ModalHeader className="flex flex-col items-center gap-1 text-center text-lg font-semibold text-gray-800 dark:text-white">
                 <h1>ใบรับทราบข้อมูลเเละยินยอมรับการรักษาด้วยการใส่เเร่</h1>
                 <h1>โรงพยาบาลพระปกเกล้า</h1>
@@ -74,19 +88,32 @@ export default function page({ openForm3, closeForm3, modalRef }) {
                     />
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-6 gap-2 gap-y-3 border-t border-gray-200 dark:border-divider pt-4">
-                    <Input
-                      className="col-span-3"
-                      label="ข้าพเจ้า ชื่อ"
-                      size="sm"
-                      radius="sm"
-                    />
+                    <form.Field name="name">
+                      {(field) => (
+                        <Input
+                          className="col-span-3"
+                          label="ข้าพเจ้า ชื่อ"
+                          size="sm"
+                          radius="sm"
+                          value={field.state.value}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        />
+                      )}
+                    </form.Field>
+
                     <div className="flex items-center gap-2 col-span-3">
-                      <Input
-                        label="มีความสัมพันธ์เป็น"
-                        size="sm"
-                        radius="sm"
-                        className="max-w-xs"
-                      />
+                      <form.Field name="relation">
+                        {(field) => (
+                          <Input
+                            label="มีความสัมพันธ์เป็น"
+                            size="sm"
+                            radius="sm"
+                            className="max-w-xs"
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                          />
+                        )}
+                      </form.Field>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
                         เกี่ยวข้องกับผู้ป่วย
                       </p>
@@ -97,14 +124,23 @@ export default function page({ openForm3, closeForm3, modalRef }) {
                       label="ชื่อ"
                       size="sm"
                       radius="sm"
+                      readOnly
+                      value={pat_name}
                     />
                     <div className="col-span-4 flex items-center gap-2">
-                      <Input
-                        className="max-w-xs"
-                        label="เจ็บป่วยด้วยโรคมะเร็ง ปากมดลูก/มดลูก/"
-                        size="sm"
-                        radius="sm"
-                      />
+                      <form.Field name="disease">
+                        {(field) => (
+                          <Input
+                            className="max-w-xs"
+                            label="เจ็บป่วยด้วยโรคมะเร็ง ปากมดลูก/มดลูก/"
+                            size="sm"
+                            radius="sm"
+                            value={field.state.value}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                          />
+                        )}
+                      </form.Field>
+
                       <h1 className="text-sm text-gray-600 dark:text-gray-400">
                         จะต้องเข้าการรักษาด้วยการใส่น้ำเเร่
                       </h1>
@@ -345,13 +381,13 @@ export default function page({ openForm3, closeForm3, modalRef }) {
                   ปิด
                 </Button>
                 <Button
-                  onPress={closeForm3}
+                  type="button"
                   className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
                 >
                   บันทึก
                 </Button>
               </ModalFooter>
-            </>
+            </form>
           )}
         </ModalContent>
       </Modal>

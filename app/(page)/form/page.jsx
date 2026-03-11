@@ -49,6 +49,7 @@ export default function page() {
     handleSelectIdForm,
     patFormData,
     selectIdForm,
+    fetchData,
   } = useHook();
   return (
     <div className="w-full shadow-sm rounded-2xl p-6 bg-white dark:bg-[#131317]">
@@ -188,6 +189,7 @@ export default function page() {
         openForm1={modalForm1}
         modalRef={modalRef}
         selectIdForm={selectIdForm}
+        fetchData={fetchData}
         closeForm1={() => setModalForm1(false)}
       />
       <ModalForm2
@@ -195,6 +197,7 @@ export default function page() {
         openForm2={modalForm2}
         modalRef={modalRef}
         selectIdForm={selectIdForm}
+        fetchData={fetchData}
         closeForm2={() => setModalForm2(false)}
       />
       <ModalForm3
@@ -202,6 +205,7 @@ export default function page() {
         openForm3={modalForm3}
         modalRef={modalRef}
         selectIdForm={selectIdForm}
+        fetchData={fetchData}
         closeForm3={() => setModalForm3(false)}
       />
     </div>

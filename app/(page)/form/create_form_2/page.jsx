@@ -24,6 +24,7 @@ export default function page({
   modalRef,
   patFormData,
   selectIdForm,
+  fetchData,
 }) {
   const {
     modalRefSign,
@@ -42,7 +43,8 @@ export default function page({
     choice,
     pat_name,
     form,
-  } = useHook({ closeForm2, patFormData, selectIdForm });
+    isSubmitting,
+  } = useHook({ closeForm2, patFormData, selectIdForm, fetchData });
   return (
     <div>
       <Modal
@@ -60,7 +62,12 @@ export default function page({
       >
         <ModalContent ref={modalRef}>
           {(closeForm2) => (
-            <>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                form.handleSubmit();
+              }}
+            >
               {/* Header */}
               <ModalHeader className="flex flex-col items-center gap-1 text-center text-lg font-semibold text-gray-800 dark:text-white">
                 <h1>ใบรับทราบข้อมูลเเละยินยอมรับการรักษาด้วยการฉายรังสี</h1>
@@ -406,12 +413,13 @@ export default function page({
                 </Button>
                 <Button
                   className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
-                  onPress={closeForm2}
+                  type="submit"
+                  isDisabled={isSubmitting}
                 >
-                  บันทึก
+                  {isSubmitting ? "กำลังบันทึก..." : "บันทึก"}
                 </Button>
               </ModalFooter>
-            </>
+            </form>
           )}
         </ModalContent>
       </Modal>

@@ -88,6 +88,19 @@ export default function useHook() {
     }
   }, [modalForm1, modalForm2, modalForm3]);
 
+  const fetchData = async () => {
+    if (!searchFormByHn) return;
+    setFormPatList([]);
+    try {
+      const data = await FormListByHn(searchFormByHn);
+      if (data.length > 0) {
+        setFormPatList(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   console.log("data", patFormData);
 
   return {
@@ -107,5 +120,6 @@ export default function useHook() {
     handleSelectIdForm,
     patFormData,
     selectIdForm,
+    fetchData,
   };
 }

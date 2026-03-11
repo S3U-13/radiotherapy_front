@@ -26,6 +26,7 @@ export default function page({
   closeForm1,
   modalRef,
   selectIdForm,
+  fetchData,
 }) {
   const {
     modalRefSign,
@@ -52,7 +53,7 @@ export default function page({
     handleChangeDisease,
     prename,
     isSubmitting,
-  } = useHook({ patFormData, closeForm1, selectIdForm });
+  } = useHook({ patFormData, closeForm1, selectIdForm, fetchData });
 
   // const prename = [
   //   { key: "1", label: "นาย" },
