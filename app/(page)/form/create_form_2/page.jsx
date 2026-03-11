@@ -18,7 +18,13 @@ import Sign03 from "./signature03/page";
 import { Edit3 } from "@deemlol/next-icons";
 import { Checkbox, CheckboxGroup } from "@heroui/checkbox";
 
-export default function page({ openForm2, closeForm2, modalRef }) {
+export default function page({
+  openForm2,
+  closeForm2,
+  modalRef,
+  patFormData,
+  selectIdForm,
+}) {
   const {
     modalRefSign,
     openSign01,
@@ -34,7 +40,9 @@ export default function page({ openForm2, closeForm2, modalRef }) {
     handleSaveSignature2,
     handleSaveSignature3,
     choice,
-  } = useHook();
+    pat_name,
+    form,
+  } = useHook({ closeForm2, patFormData, selectIdForm });
   return (
     <div>
       <Modal
@@ -78,19 +86,33 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-6 gap-3 border-t border-gray-200 dark:border-divider pt-4">
-                    <Input
-                      className="col-span-3"
-                      label="ข้าพเจ้า ชื่อ"
-                      size="sm"
-                      radius="sm"
-                    />
+                    <form.Field name="name">
+                      {(field) => (
+                        <Input
+                          className="col-span-3"
+                          label="ข้าพเจ้า ชื่อ"
+                          size="sm"
+                          radius="sm"
+                          value={field.state.value || ""}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        />
+                      )}
+                    </form.Field>
+
                     <div className="flex items-center gap-2 col-span-3">
-                      <Input
-                        label="มีความสัมพันธ์เป็น"
-                        size="sm"
-                        radius="sm"
-                        className="max-w-xs"
-                      />
+                      <form.Field name="relation">
+                        {(field) => (
+                          <Input
+                            label="มีความสัมพันธ์เป็น"
+                            size="sm"
+                            radius="sm"
+                            className="max-w-xs"
+                            value={field.state.value || ""}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                          />
+                        )}
+                      </form.Field>
+
                       <span className="text-sm text-gray-600 dark:text-white">
                         เกี่ยวข้องกับผู้ป่วย
                       </span>
@@ -99,16 +121,25 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                     <Input
                       className="col-span-2"
                       label="ชื่อ"
+                      value={pat_name}
                       size="sm"
                       radius="sm"
+                      readOnly
                     />
                     <div className="col-span-4 flex items-center gap-2">
-                      <Input
-                        label="เจ็บป่วยด้วยโรค"
-                        size="sm"
-                        radius="sm"
-                        className="max-w-xs"
-                      />
+                      <form.Field name="disease">
+                        {(field) => (
+                          <Input
+                            label="เจ็บป่วยด้วยโรค"
+                            size="sm"
+                            radius="sm"
+                            className="max-w-xs"
+                            value={field.state.value || ""}
+                            onChange={(e) => field.handleChange(e.target.value)}
+                          />
+                        )}
+                      </form.Field>
+
                       <h1 className="col-span-6 text-center text-sm text-gray-600 dark:text-white">
                         จะต้องเข้ารักษาด้วยการฉายรังสี
                       </h1>
@@ -148,18 +179,30 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                     <span className="w-1 h-5 bg-neutral-600 rounded-full"></span>
                     การยินยอมเข้ารับการรักษา
                   </h2>
-
-                  <RadioGroup orientation="vertical" className="mt-3">
-                    {choice
-                      .filter((ch) => ch.option_group_id === 5)
-                      .map((c, index) => (
-                        <div key={c.id}>
-                          <Radio size="sm" className="pl-8" value={c.id}>
-                            <p className="text-sm pl-2">{c.name}</p>
-                          </Radio>
-                        </div>
-                      ))}
-                  </RadioGroup>
+                  <form.Field name="consent">
+                    {(field) => (
+                      <RadioGroup
+                        orientation="vertical"
+                        className="mt-3"
+                        value={field.state.value || ""}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      >
+                        {choice
+                          .filter((ch) => ch.option_group_id === 5)
+                          .map((c, index) => (
+                            <div key={c.id}>
+                              <Radio
+                                size="sm"
+                                className="pl-8"
+                                value={String(c.id)}
+                              >
+                                <p className="text-sm pl-2">{c.name}</p>
+                              </Radio>
+                            </div>
+                          ))}
+                      </RadioGroup>
+                    )}
+                  </form.Field>
                 </section>
 
                 {/* SECTION 4: ลายเซ็นและพยาน */}
@@ -254,15 +297,19 @@ export default function page({ openForm2, closeForm2, modalRef }) {
                         </Button>
                       </div>
 
+                      {/* <form.Field>
+                        {(field) => ( */}
                       <CheckboxGroup orientation="horizontal">
                         {choice
-                          .filter((ch) => ch.choice_type_id === "5")
+                          .filter((ch) => ch.choice_type_id === 5)
                           .map((c) => (
                             <Checkbox size="sm" key={c.id} value={c.id}>
                               <p className="text-sm">{c.choice_name}</p>
                             </Checkbox>
                           ))}
                       </CheckboxGroup>
+                      {/* )}
+                      </form.Field> */}
 
                       <Input
                         size="md"

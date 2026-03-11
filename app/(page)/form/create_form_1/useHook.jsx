@@ -318,7 +318,7 @@ export default function useHook({ patFormData, closeForm1, selectIdForm }) {
     : "";
 
   const pat_weight = patFormData?.data_pat?.pat
-    ? patFormData?.data_pat?.pat_vitalsign.weight
+    ? patFormData?.data_pat?.pat_vitalsign?.weight
     : "";
 
   return {
