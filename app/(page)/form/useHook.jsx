@@ -101,8 +101,6 @@ export default function useHook() {
     }
   };
 
-  console.log("data", patFormData);
-
   return {
     modalRef,
     modalForm1,

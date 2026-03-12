@@ -39,7 +39,7 @@ export default function page({ isOpen, onClose, modalRefSign, onSave }) {
                   ลงลายมือชื่อพยาบาล
                 </h2>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                  Patient Signature
+                  Nurse Signature
                 </p>
               </ModalHeader>
 
@@ -82,7 +82,7 @@ export default function page({ isOpen, onClose, modalRefSign, onSave }) {
 
                 {/* Label */}
                 <div className="text-center text-xs text-neutral-400 dark:text-neutral-500">
-                  ลงลายมือชื่อพยาบาล / Patient Signature
+                  ลงลายมือชื่อพยาบาล / Nurse Signature
                 </div>
 
                 {/* Description */}

@@ -44,6 +44,7 @@ export default function page({
     form,
     pat_name,
   } = useHook({ patFormData, closeForm3, selectIdForm, fetchData });
+
   return (
     <div>
       <Modal
@@ -62,7 +63,7 @@ export default function page({
         <ModalContent ref={modalRef}>
           {(closeForm3) => (
             <form
-              onClick={(e) => {
+              onSubmit={(e) => {
                 e.preventDefault();
                 form.handleSubmit();
               }}
@@ -182,6 +183,24 @@ export default function page({
                       ในผลอันไม่พึงประสงค์ที่อาจเกิดขึ้นจากการรักษาดังกล่าว
                     </p>
                   </div>
+
+                  <form.Field name="consent">
+                    {(field) => (
+                      <RadioGroup
+                        orientation="horizontal"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      >
+                        {choice
+                          .filter((ch) => ch.option_group_id === 5)
+                          .map((c) => (
+                            <Radio size="sm" key={c.id} value={String(c.id)}>
+                              <p className="text-sm">{c.name}</p>
+                            </Radio>
+                          ))}
+                      </RadioGroup>
+                    )}
+                  </form.Field>
                 </section>
 
                 {/* SECTION 4: ลายเซ็นและพยาน */}
@@ -193,7 +212,7 @@ export default function page({
 
                   <div className="space-y-4">
                     {/* ผู้ให้ข้อมูล */}
-                    <div className="p-6 rounded-xl light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-2">
+                    <div className="p-6 rounded-xl bg-[#f9f9f9] light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-2">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         ผู้ให้ข้อมูล แพทย์ / พยาบาล
                       </h3>
@@ -204,7 +223,7 @@ export default function page({
                     </div>
 
                     {/* ผู้รับข้อมูล */}
-                    <div className="p-6 rounded-xl light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-3">
+                    <div className="p-6 rounded-xl bg-[#f9f9f9] light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-3">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         ผู้ให้คำยินยอม
                       </h3>
@@ -247,7 +266,7 @@ export default function page({
                     </div>
 
                     {/* พยานฝ่ายผู้ป่วย */}
-                    <div className="p-6 rounded-xl light:border light:border-gray-200 dark:bg-[#1f1e1e] space-y-3">
+                    <div className="p-6 rounded-xl bg-[#f9f9f9] light:border light:border-gray-200 dark:bg-[#1f1e1e] space-y-3">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         พยานฝ่ายผู้ป่วย
                       </h3>
@@ -278,16 +297,6 @@ export default function page({
                         </Button>
                       </div>
 
-                      <CheckboxGroup orientation="horizontal">
-                        {choice
-                          .filter((ch) => ch.choice_type_id === "5")
-                          .map((c) => (
-                            <Checkbox size="sm" key={c.id} value={c.id}>
-                              <p className="text-sm">{c.choice_name}</p>
-                            </Checkbox>
-                          ))}
-                      </CheckboxGroup>
-
                       <Input
                         size="sm"
                         radius="sm"
@@ -296,10 +305,20 @@ export default function page({
                         className="max-w-sm"
                         type="text"
                       />
+
+                      <CheckboxGroup orientation="horizontal">
+                        {choice
+                          .filter((ch) => ch.option_group_id === 6)
+                          .map((c) => (
+                            <Checkbox size="sm" key={c.id} value={c.id}>
+                              <p className="text-sm">{c.name}</p>
+                            </Checkbox>
+                          ))}
+                      </CheckboxGroup>
                     </div>
 
                     {/* พยานฝ่ายเจ้าหน้าที่ */}
-                    <div className="p-6 rounded-xl light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-3">
+                    <div className="p-6 rounded-xl bg-[#f9f9f9] light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-3">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         พยานฝ่ายเจ้าหน้าที่
                       </h3>
@@ -381,7 +400,7 @@ export default function page({
                   ปิด
                 </Button>
                 <Button
-                  type="button"
+                  type="submit"
                   className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
                 >
                   บันทึก

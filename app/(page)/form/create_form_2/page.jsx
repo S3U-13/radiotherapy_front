@@ -221,7 +221,7 @@ export default function page({
 
                   <div className="space-y-4">
                     {/* ผู้ให้ข้อมูล */}
-                    <div className="p-6 rounded-xl light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-2">
+                    <div className="p-6 rounded-xl bg-[#f9f9f9] light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-2">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         ผู้ให้ข้อมูล แพทย์ / พยาบาล
                       </h3>
@@ -232,7 +232,7 @@ export default function page({
                     </div>
 
                     {/* ผู้รับข้อมูล */}
-                    <div className="p-6 rounded-xl light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-3">
+                    <div className="p-6 rounded-xl bg-[#f9f9f9] light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-3">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         ผู้รับข้อมูล ผู้ป่วย หรือ ผู้เเทนโดยชอบธรรมด้วยกฎหมาย
                       </h3>
@@ -273,7 +273,7 @@ export default function page({
                     </div>
 
                     {/* พยานฝ่ายผู้ป่วย */}
-                    <div className="p-6 rounded-xl light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-3">
+                    <div className="p-6 rounded-xl bg-[#f9f9f9] light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-3">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         พยานฝ่ายผู้ป่วย
                       </h3>
@@ -329,7 +329,7 @@ export default function page({
                     </div>
 
                     {/* พยานฝ่ายเจ้าหน้าที่ */}
-                    <div className="p-6 rounded-xl light:border light:border-gray-200  dark:bg-[#1f1e1e] space-y-3">
+                    <div className="p-6 rounded-xl bg-[#f9f9f9] light:border light:border-gray-200  dark:bg-[#1f1e1e] space-y-3">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
                         พยานฝ่ายเจ้าหน้าที่
                       </h3>
