@@ -29,12 +29,6 @@ export default function useHook({ closeForm1, selectForm }) {
     setOpenSign03((prev) => !prev);
   };
 
-  const handleSaveSignature = (dataUrl) => {
-    setSignature(dataUrl);
-    console.log("📜 ลายเซ็น:", dataUrl);
-    // 👉 สามารถ fetch ไป backend ได้ เช่น:
-    // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
-  };
   const handleSaveSignature2 = (dataUrl) => {
     setSignature2(dataUrl);
     console.log("📜 ลายเซ็น:", dataUrl);
@@ -98,6 +92,7 @@ export default function useHook({ closeForm1, selectForm }) {
     visit_id: null,
     vitalsign_id: null,
     pat_age: "",
+    doctor_sign: "",
   });
 
   const [field, setField] = useState(initialField());
@@ -109,6 +104,7 @@ export default function useHook({ closeForm1, selectForm }) {
     hn: z.coerce.number().nullable(),
     visit_id: z.coerce.number().nullable(),
     vitalsign_id: z.coerce.number().nullable(),
+    doctor_sign: z.string().optional(),
   });
 
   const handleChange = async (e) => {
@@ -285,6 +281,14 @@ export default function useHook({ closeForm1, selectForm }) {
     }
   };
 
+  const handleSaveSignature = (dataUrl) => {
+    setSignature(dataUrl);
+    form.setFieldValue("doctor_sign", dataUrl);
+    // console.log("📜 ลายเซ็น:", dataUrl);
+    // 👉 สามารถ fetch ไป backend ได้ เช่น:
+    // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
+  };
+
   useEffect(() => {
     console.log("visit_id", form.getFieldValue("visit_id"));
     console.log("visit_id", visitId);
@@ -324,5 +328,7 @@ export default function useHook({ closeForm1, selectForm }) {
     vitalsignId,
     handelSelectVitalsignId,
     vitalsignData,
+    handleSaveSignature,
+    signature,
   };
 }

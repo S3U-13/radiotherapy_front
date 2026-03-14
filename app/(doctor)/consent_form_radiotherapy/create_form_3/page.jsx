@@ -12,7 +12,8 @@ import {
 
 import React from "react";
 import useHook from "./useHook";
-import { Search } from "@deemlol/next-icons";
+import { Edit3, Search } from "@deemlol/next-icons";
+import Sign01 from "./signature01/page";
 
 export default function page({ openForm3, closeForm3, modalRef, selectForm }) {
   const {
@@ -22,6 +23,11 @@ export default function page({ openForm3, closeForm3, modalRef, selectForm }) {
     form,
     handleSubmit,
     isSubmitting,
+    modalRefSign,
+    openSign01,
+    setOpenSign01,
+    handleSaveSignature,
+    signature,
   } = useHook({ closeForm3, selectForm });
   return (
     <div>
@@ -52,6 +58,14 @@ export default function page({ openForm3, closeForm3, modalRef, selectForm }) {
               </ModalHeader>
 
               <ModalBody className="space-y-4 text-gray-700 dark:text-gray-300">
+                <Sign01
+                  modalRefSign={modalRefSign}
+                  isOpen={openSign01}
+                  onClose={() => {
+                    setOpenSign01(false);
+                  }}
+                  onSave={handleSaveSignature}
+                />
                 {/* 🩺 ส่วนข้อมูลผู้ยินยอม */}
 
                 <section className="light:border light:border-gray-200 rounded-2xl p-6 bg-white shadow-sm dark:bg-[#181818] space-y-4">
@@ -205,15 +219,40 @@ export default function page({ openForm3, closeForm3, modalRef, selectForm }) {
                     การลงชื่อและพยาน
                   </h2>
                   <div className="rounded-xl light:border light:border-gray-200 bg-[#f9f9f9] p-6 space-y-3 shadow-sm dark:bg-[#1f1e1e]">
-                    <span className="block font-medium text-gray-700 dark:text-white text-sm">
-                      ผู้ให้ข้อมูล แพทย์ / พยาบาล
+                    <span className="font-medium text-gray-700 dark:text-white text-sm">
+                      แพทย์
                     </span>
-                    <span className="block text-sm text-gray-600 dark:text-white">
-                      ลงชื่อ.........................
-                    </span>
-                    <span className="block text-sm text-gray-600 dark:text-white">
-                      (.............ชื่อ..............)
-                    </span>
+                    <div className="flex flex-wrap gap-3 items-center mt-2">
+                      <span className="text-sm flex items-center gap-2 text-default-700">
+                        ลงชื่อ{" "}
+                        {!signature ? (
+                          <span className="text-gray-400">
+                            .............................
+                          </span>
+                        ) : (
+                          <img
+                            src={signature}
+                            alt="signature1"
+                            className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
+                          />
+                        )}
+                      </span>
+                      <Button
+                        size="sm"
+                        isIconOnly
+                        className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
+                        variant="flat"
+                        onPress={() => setOpenSign01(true)}
+                      >
+                        <Edit3 className="size-5" />
+                      </Button>
+                    </div>
+                    <Input
+                      className="max-w-xs"
+                      size="sm"
+                      radius="sm"
+                      placeholder="ชื่อ-นามสกุล"
+                    />
                   </div>
                 </section>
               </ModalBody>

@@ -562,9 +562,19 @@ export default function page({
                       <span className="font-medium text-gray-700 dark:text-white text-sm">
                         แพทย์
                       </span>
-                      <span className="text-sm text-default-700">
-                        ลงชื่อ....................................
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-default-700">ลงชื่อ</span>{" "}
+                        <img
+                          className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white mt-2"
+                          src={
+                            patFormData?.data_form?.doctorsign
+                              ? patFormData?.data_form?.doctorsign?.docSign
+                              : null
+                          }
+                          alt=""
+                        />
+                      </div>
+
                       <span className="text-sm text-gray-500 dark:text-white">
                         (ชื่อแพทย์)
                       </span>
