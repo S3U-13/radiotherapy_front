@@ -12,13 +12,14 @@ import {
 import { Radio, RadioGroup } from "@heroui/radio";
 import React from "react";
 import useHook from "./useHook";
-import Sign01 from "./signature01/page";
-import Sign02 from "./signature02/page";
-import Sign03 from "./signature03/page";
+import Sign01 from "./patient_signature/page";
+import Sign02 from "./staff_signature/page";
+import Sign03 from "./witness_signature/page";
 
 import { Edit3 } from "@deemlol/next-icons";
 import { Select, SelectItem } from "@heroui/select";
 import { Checkbox, CheckboxGroup } from "@heroui/checkbox";
+import { Image } from "@heroui/image";
 
 export default function page({
   patFormData,
@@ -33,12 +34,15 @@ export default function page({
     openSign01,
     openSign02,
     openSign03,
+    openSign04,
     setOpenSign01,
     setOpenSign02,
     setOpenSign03,
+    setOpenSign04,
     signature,
     signature2,
     signature3,
+    nurseSignature,
     handleSaveSignature,
     handleSaveSignature2,
     handleSaveSignature3,
@@ -564,15 +568,21 @@ export default function page({
                       </span>
                       <div className="flex items-center gap-2">
                         <span className="text-sm text-default-700">ลงชื่อ</span>{" "}
-                        <img
-                          className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white mt-2"
-                          src={
-                            patFormData?.data_form?.doctorsign
-                              ? patFormData?.data_form?.doctorsign?.docSign
-                              : null
-                          }
-                          alt=""
-                        />
+                        {patFormData?.data_form?.doctorsign?.docSign ? (
+                          <Image
+                            className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
+                            src={
+                              patFormData?.data_form?.doctorsign
+                                ? patFormData?.data_form?.doctorsign?.docSign
+                                : null
+                            }
+                            alt=""
+                          />
+                        ) : (
+                          <span className="text-gray-400">
+                            ........................
+                          </span>
+                        )}
                       </div>
 
                       <span className="text-sm text-gray-500 dark:text-white">

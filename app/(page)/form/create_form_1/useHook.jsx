@@ -18,9 +18,11 @@ export default function useHook({
   const [openSign01, setOpenSign01] = useState(false);
   const [openSign02, setOpenSign02] = useState(false);
   const [openSign03, setOpenSign03] = useState(false);
+  const [openSign04, setOpenSign04] = useState(false);
   const [signature, setSignature] = useState(null);
   const [signature2, setSignature2] = useState(null);
   const [signature3, setSignature3] = useState(null);
+  const [nurseSignature, setNurseSignature] = useState(null);
   const [prename, setPrename] = useState([]);
 
   const openModal = () => {
@@ -31,18 +33,21 @@ export default function useHook({
 
   const handleSaveSignature = (dataUrl) => {
     setSignature(dataUrl);
+    form.setFieldValue("patient_sign", dataUrl);
     console.log("📜 ลายเซ็น:", dataUrl);
     // 👉 สามารถ fetch ไป backend ได้ เช่น:
     // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
   };
   const handleSaveSignature2 = (dataUrl) => {
     setSignature2(dataUrl);
+    form.setFieldValue("witness_sign", dataUrl);
     console.log("📜 ลายเซ็น:", dataUrl);
     // 👉 สามารถ fetch ไป backend ได้ เช่น:
     // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
   };
   const handleSaveSignature3 = (dataUrl) => {
     setSignature3(dataUrl);
+    form.setFieldValue("staff_sign", dataUrl);
     console.log("📜 ลายเซ็น:", dataUrl);
     // 👉 สามารถ fetch ไป backend ได้ เช่น:
     // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
@@ -85,9 +90,9 @@ export default function useHook({
     staff_position: "",
     staff_sign: "",
     staff_sign_date: null,
-    doctor_id: null,
-    doctor_sign: "",
-    doctor_sign_date: null,
+    // doctor_id: null,
+    // doctor_sign: "",
+    // doctor_sign_date: null,
   });
 
   // const [field, setField] = useState(Field());
@@ -118,9 +123,9 @@ export default function useHook({
     staff_id: z.number().nullable(),
     staff_sign: z.string().optional(),
     staff_sign_date: z.string().nullable(),
-    doctor_id: z.number().nullable(),
-    doctor_sign: z.string().optional(),
-    doctor_sign_date: z.string().nullable(),
+    // doctor_id: z.number().nullable(),
+    // doctor_sign: z.string().optional(),
+    // doctor_sign_date: z.string().nullable(),
   });
 
   //handle and payload
@@ -332,12 +337,16 @@ export default function useHook({
     openSign01,
     openSign02,
     openSign03,
+    openSign04,
     setOpenSign01,
     setOpenSign02,
     setOpenSign03,
+    setOpenSign04,
+    openSign04,
     signature,
     signature2,
     signature3,
+
     handleSaveSignature,
     handleSaveSignature2,
     handleSaveSignature3,
@@ -352,5 +361,7 @@ export default function useHook({
     handleChangeDisease,
     prename,
     isSubmitting,
+    nurseSignature,
+    setNurseSignature,
   };
 }
