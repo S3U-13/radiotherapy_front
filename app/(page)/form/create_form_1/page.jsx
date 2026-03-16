@@ -11,7 +11,7 @@ import {
 } from "@heroui/modal";
 import { Radio, RadioGroup } from "@heroui/radio";
 import React from "react";
-import useHook from "./useHook";
+import useHook from "./hook/useHook";
 import Sign01 from "./patient_signature/page";
 import Sign02 from "./staff_signature/page";
 import Sign03 from "./witness_signature/page";
@@ -21,6 +21,7 @@ import { Edit3 } from "@deemlol/next-icons";
 import { Select, SelectItem } from "@heroui/select";
 import { Checkbox, CheckboxGroup } from "@heroui/checkbox";
 import { Image } from "@heroui/image";
+import fieldAndHandleHook from "./hook/fieldAndHandleHook";
 
 export default function page({
   patFormData,
@@ -31,7 +32,11 @@ export default function page({
   fetchData,
 }) {
   const {
-    modalRefSign,
+    form,
+    selectedDisease,
+    setSelectedDisease,
+    handleChangeDisease,
+    isSubmitting,
     openSign01,
     openSign02,
     openSign03,
@@ -44,21 +49,38 @@ export default function page({
     signature2,
     signature3,
     nurseSignature,
+    setSignature,
+    setSignature2,
+    setSignature3,
+    setNurseSignature,
+    modalRefSign,
     handleSaveSignature,
     handleSaveSignature2,
     handleSaveSignature3,
+    handleSaveSignature4,
+  } = fieldAndHandleHook({
+    closeForm1,
+    selectIdForm,
+    fetchData,
+  });
+
+  const {
     choice,
-    form,
     //pat data object
     pat_name,
     pat_age,
     pat_weight,
     // handleDisease
-    selectedDisease,
-    handleChangeDisease,
     prename,
-    isSubmitting,
-  } = useHook({ patFormData, closeForm1, selectIdForm, fetchData });
+  } = useHook({
+    patFormData,
+    form,
+    setSelectedDisease,
+    setSignature,
+    setSignature2,
+    setSignature3,
+    setNurseSignature,
+  });
 
   // const prename = [
   //   { key: "1", label: "นาย" },
@@ -599,6 +621,44 @@ export default function page({
                       <div className="flex flex-wrap gap-3 items-center">
                         <span className="text-sm flex items-center gap-2 text-default-700 dark:text-white">
                           ลงชื่อ{" "}
+                          {!signature3 ? (
+                            <span className="text-gray-400">
+                              .............................
+                            </span>
+                          ) : (
+                            <img
+                              src={signature3}
+                              alt="signature3"
+                              className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
+                            />
+                          )}
+                        </span>
+                        <Button
+                          size="sm"
+                          isIconOnly
+                          className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
+                          variant="flat"
+                          onPress={() => setOpenSign03(true)}
+                        >
+                          <Edit3 className="size-5" />
+                        </Button>
+                      </div>
+                      <Input
+                        className="max-w-xs"
+                        size="sm"
+                        radius="sm"
+                        placeholder="ชื่อ-นามสกุล"
+                      />
+                    </div>
+
+                    {/* พยาน */}
+                    <div className="rounded-xl light:border light:border-gray-200 bg-[#f9f9f9] p-6 space-y-3 shadow-sm dark:bg-[#1f1e1e]">
+                      <span className="font-medium text-gray-700 dark:text-white text-sm">
+                        พยาน
+                      </span>
+                      <div className="flex flex-wrap gap-3 items-center">
+                        <span className="text-sm flex items-center gap-2 text-default-700">
+                          ลงชื่อ{" "}
                           {!signature2 ? (
                             <span className="text-gray-400">
                               .............................
@@ -606,7 +666,7 @@ export default function page({
                           ) : (
                             <img
                               src={signature2}
-                              alt="signature2"
+                              alt="signature"
                               className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
                             />
                           )}
@@ -637,14 +697,14 @@ export default function page({
                       <div className="flex flex-wrap gap-3 items-center">
                         <span className="text-sm flex items-center gap-2 text-default-700">
                           ลงชื่อ{" "}
-                          {!signature3 ? (
+                          {!nurseSignature ? (
                             <span className="text-gray-400">
                               .............................
                             </span>
                           ) : (
                             <img
-                              src={signature3}
-                              alt="signature3"
+                              src={nurseSignature}
+                              alt="nurse_signature"
                               className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
                             />
                           )}
@@ -654,7 +714,7 @@ export default function page({
                           isIconOnly
                           className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
                           variant="flat"
-                          onPress={() => setOpenSign03(true)}
+                          onPress={() => setOpenSign04(true)}
                         >
                           <Edit3 className="size-5" />
                         </Button>
@@ -755,6 +815,14 @@ export default function page({
                     setOpenSign03(false);
                   }}
                   onSave={handleSaveSignature3}
+                />
+                <Sign04
+                  modalRefSign={modalRefSign}
+                  isOpen={openSign04}
+                  onClose={() => {
+                    setOpenSign04(false);
+                  }}
+                  onSave={handleSaveSignature4}
                 />
               </ModalBody>
 
