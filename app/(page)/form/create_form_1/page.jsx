@@ -15,6 +15,7 @@ import useHook from "./useHook";
 import Sign01 from "./patient_signature/page";
 import Sign02 from "./staff_signature/page";
 import Sign03 from "./witness_signature/page";
+import Sign04 from "./nurse_signature/page";
 
 import { Edit3 } from "@deemlol/next-icons";
 import { Select, SelectItem } from "@heroui/select";
