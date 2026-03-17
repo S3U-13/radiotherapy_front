@@ -19,6 +19,8 @@ import Sign04 from "./nurse_signature/page";
 import { Edit3 } from "@deemlol/next-icons";
 import { Checkbox, CheckboxGroup } from "@heroui/checkbox";
 import fieldAndHandleHook from "./hook/fieldAndHandleHook";
+import { Select, SelectItem } from "@heroui/select";
+import { Image } from "@heroui/image";
 
 export default function page({
   openForm2,
@@ -58,6 +60,7 @@ export default function page({
     choice,
     pat_name,
     handleCloseModal,
+    relation,
   } = useHook({
     closeForm2,
     patFormData,
@@ -131,14 +134,25 @@ export default function page({
                     <div className="flex items-center gap-2 col-span-3">
                       <form.Field name="relation">
                         {(field) => (
-                          <Input
+                          <Select
                             label="มีความสัมพันธ์เป็น"
                             size="sm"
                             radius="sm"
                             className="max-w-xs"
-                            value={field.state.value || ""}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                          />
+                            selectedKeys={
+                              field.state.value ? [field.state.value] : []
+                            }
+                            onSelectionChange={(keys) => {
+                              const value = Array.from(keys)[0];
+                              field.handleChange(value);
+                            }}
+                          >
+                            {relation?.map((item) => (
+                              <SelectItem key={String(item.lookupid)}>
+                                {item.lookupname}
+                              </SelectItem>
+                            ))}
+                          </Select>
                         )}
                       </form.Field>
 
@@ -242,42 +256,34 @@ export default function page({
                   </h2>
 
                   <div className="space-y-4">
-                    {/* ผู้ให้ข้อมูล */}
+                    {/* แพทย์ */}
                     <div className="rounded-xl light:border light:border-gray-200 bg-[#f9f9f9] p-6 space-y-3 shadow-sm dark:bg-[#1f1e1e]">
                       <span className="font-medium text-gray-700 dark:text-white text-sm">
-                        ผู้ป่วย / ตัวแทนผู้ป่วย
+                        แพทย์
                       </span>
-                      <div className="flex flex-wrap gap-3 items-center">
-                        <span className="text-sm flex items-center gap-2 text-default-700">
-                          ลงชื่อ{" "}
-                          {!signature ? (
-                            <span className="text-gray-400">
-                              .............................
-                            </span>
-                          ) : (
-                            <img
-                              src={signature}
-                              alt="signature"
-                              className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
-                            />
-                          )}
-                        </span>
-                        <Button
-                          size="sm"
-                          isIconOnly
-                          className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
-                          variant="flat"
-                          onPress={() => setOpenSign01(true)}
-                        >
-                          <Edit3 className="size-5" />
-                        </Button>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-default-700">ลงชื่อ</span>{" "}
+                        {patFormData?.data_form?.doctorsign?.doctor_sign ? (
+                          <Image
+                            className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
+                            src={
+                              patFormData?.data_form?.doctorsign
+                                ? patFormData?.data_form?.doctorsign
+                                    ?.doctor_sign
+                                : null
+                            }
+                            alt=""
+                          />
+                        ) : (
+                          <span className="text-gray-400">
+                            ........................
+                          </span>
+                        )}
                       </div>
-                      <Input
-                        className="max-w-xs"
-                        size="sm"
-                        radius="sm"
-                        placeholder="ชื่อ-นามสกุล"
-                      />
+
+                      <span className="text-sm text-gray-500 dark:text-white">
+                        (ชื่อแพทย์)
+                      </span>
                     </div>
 
                     {/* ผู้รับข้อมูล */}
@@ -466,7 +472,6 @@ export default function page({
                     </div>
                   </div>
                 </section>
-  
 
                 <Sign01
                   modalRefSign={modalRefSign}

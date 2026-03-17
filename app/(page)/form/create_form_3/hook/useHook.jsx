@@ -14,19 +14,23 @@ export default function useHook({
   setSignature3,
   setNurseSignature,
 }) {
-  const { fetchChoice } = useApiRequest();
+  const { fetchChoice, Relation } = useApiRequest();
   const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
   const [openSign01, setOpenSign01] = useState(false);
   const [openSign02, setOpenSign02] = useState(false);
   const [openSign03, setOpenSign03] = useState(false);
   const [openSign04, setOpenSign04] = useState(false);
   const [choice, setChoice] = useState([]);
+  const [relation, setRelation] = useState([]);
 
   useEffect(() => {
     if (didFetch.current) return; // check flag ก่อน
     didFetch.current = true;
     fetchChoice()
       .then((data) => setChoice(data || []))
+      .catch(console.error);
+    Relation()
+      .then((data) => setRelation(data || []))
       .catch(console.error);
   });
 
@@ -48,7 +52,7 @@ export default function useHook({
     );
     form.setFieldValue(
       "relation",
-      patFormData?.data_form?.patient_contacts?.relation ?? "",
+      String(patFormData?.data_form?.patient_contacts?.relation) ?? "",
     );
     form.setFieldValue("disease", patFormData?.data_form?.form?.disease ?? "");
 
@@ -108,5 +112,6 @@ export default function useHook({
     choice,
     pat_name,
     handleCloseModal,
+    relation,
   };
 }

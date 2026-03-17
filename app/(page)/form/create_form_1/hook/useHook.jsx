@@ -101,6 +101,8 @@ export default function useHook({
       String(patFormData?.data_form?.patient_contacts?.relation) ?? "",
     );
 
+    console.log(patFormData?.data_form?.patient_contacts?.relation);
+
     //set sign
     const signMap = [
       {

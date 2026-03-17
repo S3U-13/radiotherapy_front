@@ -130,12 +130,6 @@ export default function page({
                     ข้อมูลผู้ป่วย
                   </h2>
 
-                  {relation?.map((item, index) => (
-                    <div key={index}>
-                      <span>{item?.lookupname}</span>
-                    </div>
-                  ))}
-
                   <form.Field name="form_type_id">
                     {(field) => (
                       <Input
@@ -505,8 +499,13 @@ export default function page({
                           size="sm"
                           radius="sm"
                           placeholder="ระบุความเกี่ยวข้อง"
-                          value={field.state.value ?? ""}
-                          onChange={(e) => field.handleChange(e.target.value)}
+                          selectedKeys={
+                            field.state.value ? [field.state.value] : []
+                          }
+                          onSelectionChange={(keys) => {
+                            const value = Array.from(keys)[0];
+                            field.handleChange(value);
+                          }}
                         >
                           {relation.map((item) => (
                             <SelectItem key={String(item.lookupid)}>

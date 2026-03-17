@@ -57,6 +57,7 @@ export default function page({
     choice,
     pat_name,
     handleCloseModal,
+    relation,
   } = useHook({
     closeForm3,
     patFormData,
@@ -234,20 +235,40 @@ export default function page({
 
                   <div className="space-y-4">
                     {/* ผู้ให้ข้อมูล */}
-                    <div className="p-6 rounded-xl bg-[#f9f9f9] light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-2">
-                      <h3 className="font-medium text-gray-800 dark:text-gray-100">
-                        ผู้ให้ข้อมูล แพทย์ / พยาบาล
-                      </h3>
-                      <p>
-                        ลงชื่อ....................................................
-                      </p>
-                      <p>(..............................................)</p>
+                    {/* แพทย์ */}
+                    <div className="rounded-xl light:border light:border-gray-200 bg-[#f9f9f9] p-6 space-y-3 shadow-sm dark:bg-[#1f1e1e]">
+                      <span className="font-medium text-gray-700 dark:text-white text-sm">
+                        แพทย์
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-default-700">ลงชื่อ</span>{" "}
+                        {patFormData?.data_form?.doctorsign?.doctor_sign ? (
+                          <Image
+                            className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
+                            src={
+                              patFormData?.data_form?.doctorsign
+                                ? patFormData?.data_form?.doctorsign
+                                    ?.doctor_sign
+                                : null
+                            }
+                            alt=""
+                          />
+                        ) : (
+                          <span className="text-gray-400">
+                            ........................
+                          </span>
+                        )}
+                      </div>
+
+                      <span className="text-sm text-gray-500 dark:text-white">
+                        (ชื่อแพทย์)
+                      </span>
                     </div>
 
                     {/* ผู้รับข้อมูล */}
                     <div className="p-6 rounded-xl bg-[#f9f9f9] light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-3">
                       <h3 className="font-medium text-gray-800 dark:text-gray-100">
-                        ผู้ให้คำยินยอม
+                        ผู้ให้คำยินยอม / ผู้ป่วย
                       </h3>
                       <div className="flex flex-wrap gap-3 items-center">
                         <span className="flex items-center gap-2">
