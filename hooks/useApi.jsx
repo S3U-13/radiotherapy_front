@@ -95,6 +95,8 @@ export const useApiRequest = () => {
   const DataFormById = (selectIdForm) =>
     apiRequest(`/api/user/form-by-id/${selectIdForm}`, "GET");
 
+  const Relation = () => apiRequest("/api/user/relation", "GET");
+
   return {
     prenameApi,
     fetchForm,
@@ -107,5 +109,6 @@ export const useApiRequest = () => {
     FormListByHn,
     DataFormById,
     PatFillOutForm,
+    Relation,
   };
 };

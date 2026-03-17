@@ -109,7 +109,7 @@ export default function page({ isOpen, onClose, modalRefSign, onSave }) {
                 <Button
                   size="sm"
                   className="bg-neutral-900 text-white hover:bg-neutral-800 
-                  dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-300"
+              dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-300"
                   onPress={handleSave}
                 >
                   บันทึกลายเซ็น

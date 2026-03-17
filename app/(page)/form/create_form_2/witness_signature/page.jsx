@@ -39,7 +39,7 @@ export default function page({ isOpen, onClose, modalRefSign, onSave }) {
                   ลงลายมือชื่อพยาบาล
                 </h2>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">
-                  Patient Signature
+                  Nurse Signature
                 </p>
               </ModalHeader>
 
@@ -82,7 +82,7 @@ export default function page({ isOpen, onClose, modalRefSign, onSave }) {
 
                 {/* Label */}
                 <div className="text-center text-xs text-neutral-400 dark:text-neutral-500">
-                  ลงลายมือชื่อพยาบาล / Patient Signature
+                  ลงลายมือชื่อพยาบาล / Nurse Signature
                 </div>
 
                 {/* Description */}
@@ -108,7 +108,7 @@ export default function page({ isOpen, onClose, modalRefSign, onSave }) {
                 <Button
                   size="sm"
                   className="bg-neutral-900 text-white hover:bg-neutral-800 
-                             dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-300"
+                      dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-300"
                   onPress={handleSave}
                 >
                   บันทึกลายเซ็น

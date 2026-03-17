@@ -1,60 +1,22 @@
 "use client";
+import React, { useRef, useState } from "react";
 import * as z from "zod";
 import { useForm } from "@tanstack/react-form";
-import React, { useEffect, useRef, useState } from "react";
-import { useApiRequest } from "@/hooks/useApi";
 import { addToast } from "@heroui/toast";
+import { useApiRequest } from "@/hooks/useApi";
 
-export default function useHook({
-  patFormData,
+export default function fieldAndHandleHook({
   closeForm3,
   selectIdForm,
   fetchData,
 }) {
-  const { fetchChoice, PatFillOutForm } = useApiRequest();
-  const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
+  const { PatFillOutForm } = useApiRequest();
   const modalRefSign = useRef(null);
-  const [openSign01, setOpenSign01] = useState(false);
-  const [openSign02, setOpenSign02] = useState(false);
-  const [openSign03, setOpenSign03] = useState(false);
+
   const [signature, setSignature] = useState(null);
   const [signature2, setSignature2] = useState(null);
   const [signature3, setSignature3] = useState(null);
-  const [choice, setChoice] = useState([]);
-
-  const openModal = () => {
-    setOpenSign01((prev) => !prev);
-    setOpenSign02((prev) => !prev);
-    setOpenSign03((prev) => !prev);
-  };
-
-  const handleSaveSignature = (dataUrl) => {
-    setSignature(dataUrl);
-    console.log("📜 ลายเซ็น:", dataUrl);
-    // 👉 สามารถ fetch ไป backend ได้ เช่น:
-    // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
-  };
-  const handleSaveSignature2 = (dataUrl) => {
-    setSignature2(dataUrl);
-    console.log("📜 ลายเซ็น:", dataUrl);
-    // 👉 สามารถ fetch ไป backend ได้ เช่น:
-    // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
-  };
-  const handleSaveSignature3 = (dataUrl) => {
-    setSignature3(dataUrl);
-    console.log("📜 ลายเซ็น:", dataUrl);
-    // 👉 สามารถ fetch ไป backend ได้ เช่น:
-    // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
-  };
-
-  useEffect(() => {
-    if (didFetch.current) return; // check flag ก่อน
-    didFetch.current = true;
-    fetchChoice()
-      .then((data) => setChoice(data || []))
-      .catch(console.error);
-  });
-
+  const [nurseSignature, setNurseSignature] = useState(null);
   const Field = () => ({
     form_type_id: null,
     hn: null,
@@ -63,6 +25,18 @@ export default function useHook({
     consent: null,
     name: "",
     relation: "",
+    patient_sign: "",
+    patient_sign_date: null,
+    witness_name: "",
+    witness_sign: "",
+    witness_sign_date: null,
+    staff_id: null,
+    staff_position: "",
+    staff_sign: "",
+    staff_sign_date: null,
+    nurse_id: null,
+    nurse_sign: "",
+    nurse_sign_date: null,
   });
 
   const defaultValues = Field();
@@ -75,6 +49,17 @@ export default function useHook({
     consent: z.string().nullable(),
     name: z.string().optional(),
     relation: z.string().optional(),
+    patient_sign: z.string().optional(),
+    patient_sign_date: z.string().nullable(),
+    witness_sign_name: z.string().optional(),
+    witness_sign: z.string().optional(),
+    witness_sign_date: z.string().nullable(),
+    staff_id: z.number().nullable(),
+    staff_sign: z.string().optional(),
+    staff_sign_date: z.string().nullable(),
+    nurse_id: z.number().nullable(),
+    nurse_sign: z.string().optional(),
+    nurse_sign_date: z.string().nullable(),
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -108,6 +93,10 @@ export default function useHook({
         form.reset();
         closeForm3();
         fetchData();
+        setSignature(null);
+        setSignature2(null);
+        setSignature3(null);
+        setNurseSignature(null);
       } else if (!data) {
         addToast({
           title: "Fails",
@@ -154,49 +143,49 @@ export default function useHook({
     },
   });
 
-  useEffect(() => {
-    if (!patFormData) return;
-
-    form.setFieldValue("hn", patFormData?.data_pat?.pat?.hn ?? null);
-    form.setFieldValue(
-      "form_type_id",
-      patFormData?.data_form?.form?.form_type_id ?? null,
-    );
-    form.setFieldValue(
-      "consent",
-      String(patFormData?.data_form?.form?.consent) ?? null,
-    );
-    form.setFieldValue(
-      "name",
-      patFormData?.data_form?.patient_contacts?.name ?? "",
-    );
-    form.setFieldValue(
-      "relation",
-      patFormData?.data_form?.patient_contacts?.relation ?? "",
-    );
-    form.setFieldValue("disease", patFormData?.data_form?.form?.disease ?? "");
-  }, [patFormData]);
-
-  const pat_name = patFormData?.data_pat?.pat
-    ? `${patFormData?.data_pat?.pat?.prename}${patFormData?.data_pat?.pat?.firstname} ${patFormData?.data_pat?.pat?.lastname}`
-    : "";
-
+  const handleSaveSignature = (dataUrl) => {
+    setSignature(dataUrl);
+    form.setFieldValue("patient_sign", dataUrl);
+    // console.log("📜 ลายเซ็น:", dataUrl);
+    // 👉 สามารถ fetch ไป backend ได้ เช่น:
+    // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
+  };
+  const handleSaveSignature2 = (dataUrl) => {
+    setSignature2(dataUrl);
+    form.setFieldValue("witness_sign", dataUrl);
+    // console.log("📜 ลายเซ็น:", dataUrl);
+    // 👉 สามารถ fetch ไป backend ได้ เช่น:
+    // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
+  };
+  const handleSaveSignature3 = (dataUrl) => {
+    setSignature3(dataUrl);
+    form.setFieldValue("staff_sign", dataUrl);
+    // console.log("📜 ลายเซ็น:", dataUrl);
+    // 👉 สามารถ fetch ไป backend ได้ เช่น:
+    // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
+  };
+  const handleSaveSignature4 = (dataUrl) => {
+    setNurseSignature(dataUrl);
+    form.setFieldValue("nurse_sign", dataUrl);
+    // console.log("📜 ลายเซ็น:", dataUrl);
+    // 👉 สามารถ fetch ไป backend ได้ เช่น:
+    // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
+  };
   return {
-    modalRefSign,
-    openSign01,
-    openSign02,
-    openSign03,
-    setOpenSign01,
-    setOpenSign02,
-    setOpenSign03,
+    form,
+    isSubmitting,
     signature,
     signature2,
     signature3,
+    nurseSignature,
+    setSignature,
+    setSignature2,
+    setSignature3,
+    setNurseSignature,
+    modalRefSign,
     handleSaveSignature,
     handleSaveSignature2,
     handleSaveSignature3,
-    choice,
-    form,
-    pat_name,
+    handleSaveSignature4,
   };
 }

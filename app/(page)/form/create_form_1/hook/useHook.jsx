@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useApiRequest } from "@/hooks/useApi";
 
 export default function useHook({
+  closeForm1,
   patFormData,
   form,
   setSelectedDisease,
@@ -12,10 +13,15 @@ export default function useHook({
   setSignature3,
   setNurseSignature,
 }) {
-  const { fetchChoice, prenameApi } = useApiRequest();
+  const { fetchChoice, prenameApi, Relation } = useApiRequest();
   const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
   const [choice, setChoice] = useState([]);
   const [prename, setPrename] = useState([]);
+  const [relation, setRelation] = useState([]);
+  const [openSign01, setOpenSign01] = useState(false);
+  const [openSign02, setOpenSign02] = useState(false);
+  const [openSign03, setOpenSign03] = useState(false);
+  const [openSign04, setOpenSign04] = useState(false);
 
   useEffect(() => {
     if (didFetch.current) return; // check flag ก่อน
@@ -26,7 +32,10 @@ export default function useHook({
     prenameApi()
       .then((data) => setPrename(data || []))
       .catch(console.error);
-  }, [fetchChoice, prenameApi]);
+    Relation()
+      .then((data) => setRelation(data || []))
+      .catch(console.error);
+  }, [fetchChoice, prenameApi, Relation]);
 
   // set field value
   useEffect(() => {
@@ -89,15 +98,39 @@ export default function useHook({
     );
     form.setFieldValue(
       "relation",
-      patFormData?.data_form?.patient_contacts?.relation ?? "",
+      String(patFormData?.data_form?.patient_contacts?.relation) ?? "",
     );
-    // if (condition) {
-      
-    // }
-    // setSignature();
-    // setSignature2();
-    // setSignature3();
-    // setNurseSignature();
+
+    //set sign
+    const signMap = [
+      {
+        value: patFormData?.data_form?.patientsign?.patient_sign,
+        setState: setSignature,
+        field: "patient_sign",
+      },
+      {
+        value: patFormData?.data_form?.witnesssign?.witness_sign,
+        setState: setSignature2,
+        field: "witness_sign",
+      },
+      {
+        value: patFormData?.data_form?.staffsign?.staff_sign,
+        setState: setSignature3,
+        field: "staff_sign",
+      },
+      {
+        value: patFormData?.data_form?.nursesign?.nurse_sign,
+        setState: setNurseSignature,
+        field: "nurse_sign",
+      },
+    ];
+
+    signMap.forEach(({ value, setState, field }) => {
+      if (value) {
+        setState(value);
+        form.setFieldValue(field, value);
+      }
+    });
   }, [patFormData]);
 
   // service
@@ -131,6 +164,15 @@ export default function useHook({
     ? patFormData?.data_pat?.pat_vitalsign?.weight
     : "";
 
+  const handleCloseModal = () => {
+    closeForm1();
+    form.reset();
+    setSignature(null);
+    setSignature2(null);
+    setSignature3(null);
+    setNurseSignature(null);
+  };
+
   return {
     choice,
     //pat data and object
@@ -139,5 +181,15 @@ export default function useHook({
     pat_weight,
     //handleDisease
     prename,
+    handleCloseModal,
+    openSign01,
+    openSign02,
+    openSign03,
+    openSign04,
+    setOpenSign01,
+    setOpenSign02,
+    setOpenSign03,
+    setOpenSign04,
+    relation,
   };
 }

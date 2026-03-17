@@ -6,13 +6,12 @@ import { addToast } from "@heroui/toast";
 import { useApiRequest } from "@/hooks/useApi";
 
 export default function fieldAndHandleHook({
-  closeForm1,
+  closeForm2,
   selectIdForm,
   fetchData,
 }) {
   const { PatFillOutForm } = useApiRequest();
   const modalRefSign = useRef(null);
-
   const [signature, setSignature] = useState(null);
   const [signature2, setSignature2] = useState(null);
   const [signature3, setSignature3] = useState(null);
@@ -25,15 +24,6 @@ export default function fieldAndHandleHook({
     consent: null,
     name: "",
     relation: "",
-    //array in future
-    conditions: [],
-    contrast_allergy_id: null,
-    contrast_allergy_symptom: "",
-    contrast_history_id: null,
-    drug_allergy_id: null,
-    drug: "",
-    seafood_allergy_id: null,
-    seafood_allergy_symptom: "",
     patient_sign: "",
     patient_sign_date: null,
     witness_name: "",
@@ -48,8 +38,6 @@ export default function fieldAndHandleHook({
     nurse_sign_date: null,
   });
 
-  // const [field, setField] = useState(Field());
-
   const defaultValues = Field();
 
   const validationSchema = z.object({
@@ -60,14 +48,6 @@ export default function fieldAndHandleHook({
     consent: z.string().nullable(),
     name: z.string().optional(),
     relation: z.string().optional(),
-    //
-    contrast_history_id: z.string().nullable(),
-    contrast_allergy_id: z.string().nullable(),
-    contrast_allergy_symptom: z.string().optional(),
-    seafood_allergy_id: z.string().nullable(),
-    seafood_allergy_symptom: z.string().optional(),
-    drug_allergy_id: z.string().nullable(),
-    drug: z.string().optional(),
     patient_sign: z.string().optional(),
     patient_sign_date: z.string().nullable(),
     witness_sign_name: z.string().optional(),
@@ -80,33 +60,6 @@ export default function fieldAndHandleHook({
     nurse_sign: z.string().optional(),
     nurse_sign_date: z.string().nullable(),
   });
-
-  //handle and payload
-  const [selectedDisease, setSelectedDisease] = useState([]);
-
-  const handleChangeDisease = (vals) => {
-    const updatedSelected = vals.map(Number);
-    setSelectedDisease(updatedSelected);
-
-    const diseaseField = selectedDisease;
-    Object.entries(diseaseField).forEach(([key, value]) => {
-      form.setFieldValue(key, value ?? null);
-    });
-  };
-
-  const buildDiseasePayload = (selectedDisease) => {
-    if (!selectedDisease?.length) return [];
-
-    return selectedDisease.map((id) => {
-      const numId = Number(id);
-
-      const payload = {
-        condition_id: numId,
-      };
-
-      return payload;
-    });
-  };
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const handleSubmit = async (value) => {
@@ -123,13 +76,9 @@ export default function fieldAndHandleHook({
       return;
     }
     try {
-      const diseasePayload = buildDiseasePayload(selectedDisease, value);
-
       const payload = {
         ...value,
-        congenital_diseases: diseasePayload,
       };
-
       const data = await PatFillOutForm(payload, selectIdForm);
 
       if (data) {
@@ -141,9 +90,8 @@ export default function fieldAndHandleHook({
           radius: "lg",
         });
         form.reset();
-        closeForm1();
+        closeForm2();
         fetchData();
-        setSelectedDisease([]);
         setSignature(null);
         setSignature2(null);
         setSignature3(null);
@@ -224,9 +172,6 @@ export default function fieldAndHandleHook({
   };
   return {
     form,
-    selectedDisease,
-    setSelectedDisease,
-    handleChangeDisease,
     isSubmitting,
     signature,
     signature2,

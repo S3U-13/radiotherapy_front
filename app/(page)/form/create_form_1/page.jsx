@@ -37,14 +37,6 @@ export default function page({
     setSelectedDisease,
     handleChangeDisease,
     isSubmitting,
-    openSign01,
-    openSign02,
-    openSign03,
-    openSign04,
-    setOpenSign01,
-    setOpenSign02,
-    setOpenSign03,
-    setOpenSign04,
     signature,
     signature2,
     signature3,
@@ -72,7 +64,18 @@ export default function page({
     pat_weight,
     // handleDisease
     prename,
+    openSign01,
+    openSign02,
+    openSign03,
+    openSign04,
+    setOpenSign01,
+    setOpenSign02,
+    setOpenSign03,
+    setOpenSign04,
+    handleCloseModal,
+    relation,
   } = useHook({
+    closeForm1,
     patFormData,
     form,
     setSelectedDisease,
@@ -92,7 +95,7 @@ export default function page({
       <Modal
         size="5xl"
         isOpen={openForm1}
-        onOpenChange={closeForm1}
+        onOpenChange={handleCloseModal}
         classNames={{
           body: "max-h-[calc(80vh-145px)] overflow-y-scroll py-6 bg-[#f1f1f1] dark:bg-[#1f1e1e]",
           header: "border-b border-divider py-6 bg-[#e6e6e6] dark:bg-[#181818]",
@@ -126,6 +129,12 @@ export default function page({
                     <span className="w-1 h-5 bg-neutral-600 rounded-full"></span>
                     ข้อมูลผู้ป่วย
                   </h2>
+
+                  {relation?.map((item, index) => (
+                    <div key={index}>
+                      <span>{item?.lookupname}</span>
+                    </div>
+                  ))}
 
                   <form.Field name="form_type_id">
                     {(field) => (
@@ -490,7 +499,7 @@ export default function page({
                     </form.Field>
                     <form.Field name="relation">
                       {(field) => (
-                        <Input
+                        <Select
                           label="ความเกี่ยวข้อง"
                           className="col-span-8 md:col-span-3"
                           size="sm"
@@ -498,7 +507,13 @@ export default function page({
                           placeholder="ระบุความเกี่ยวข้อง"
                           value={field.state.value ?? ""}
                           onChange={(e) => field.handleChange(e.target.value)}
-                        />
+                        >
+                          {relation.map((item) => (
+                            <SelectItem key={String(item.lookupid)}>
+                              {item?.lookupname}
+                            </SelectItem>
+                          ))}
+                        </Select>
                       )}
                     </form.Field>
 
@@ -591,12 +606,13 @@ export default function page({
                       </span>
                       <div className="flex items-center gap-2">
                         <span className="text-sm text-default-700">ลงชื่อ</span>{" "}
-                        {patFormData?.data_form?.doctorsign?.docSign ? (
+                        {patFormData?.data_form?.doctorsign?.doctor_sign ? (
                           <Image
                             className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
                             src={
                               patFormData?.data_form?.doctorsign
-                                ? patFormData?.data_form?.doctorsign?.docSign
+                                ? patFormData?.data_form?.doctorsign
+                                    ?.doctor_sign
                                 : null
                             }
                             alt=""
@@ -792,6 +808,7 @@ export default function page({
                     />
                   </div>
                 </section>
+
                 <Sign01
                   modalRefSign={modalRefSign}
                   isOpen={openSign01}
@@ -827,7 +844,11 @@ export default function page({
               </ModalBody>
 
               <ModalFooter>
-                <Button variant="flat" color="default" onPress={closeForm1}>
+                <Button
+                  variant="flat"
+                  color="default"
+                  onPress={handleCloseModal}
+                >
                   ปิด
                 </Button>
                 <Button

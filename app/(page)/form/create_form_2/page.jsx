@@ -11,12 +11,14 @@ import {
 } from "@heroui/modal";
 import { Radio, RadioGroup } from "@heroui/radio";
 import React from "react";
-import useHook from "./useHook";
-import Sign01 from "./signature01/page";
-import Sign02 from "./signature02/page";
-import Sign03 from "./signature03/page";
+import useHook from "./hook/useHook";
+import Sign01 from "./patient_signature/page";
+import Sign02 from "./staff_signature/page";
+import Sign03 from "./witness_signature/page";
+import Sign04 from "./nurse_signature/page";
 import { Edit3 } from "@deemlol/next-icons";
 import { Checkbox, CheckboxGroup } from "@heroui/checkbox";
+import fieldAndHandleHook from "./hook/fieldAndHandleHook";
 
 export default function page({
   openForm2,
@@ -27,30 +29,50 @@ export default function page({
   fetchData,
 }) {
   const {
-    modalRefSign,
-    openSign01,
-    openSign02,
-    openSign03,
-    setOpenSign01,
-    setOpenSign02,
-    setOpenSign03,
+    form,
+    isSubmitting,
     signature,
     signature2,
     signature3,
+    nurseSignature,
+    setSignature,
+    setSignature2,
+    setSignature3,
+    setNurseSignature,
+    modalRefSign,
     handleSaveSignature,
     handleSaveSignature2,
     handleSaveSignature3,
+    handleSaveSignature4,
+  } = fieldAndHandleHook({ closeForm2, selectIdForm, fetchData });
+
+  const {
+    openSign01,
+    openSign02,
+    openSign03,
+    openSign04,
+    setOpenSign01,
+    setOpenSign02,
+    setOpenSign03,
+    setOpenSign04,
     choice,
     pat_name,
+    handleCloseModal,
+  } = useHook({
+    closeForm2,
+    patFormData,
     form,
-    isSubmitting,
-  } = useHook({ closeForm2, patFormData, selectIdForm, fetchData });
+    setSignature,
+    setSignature2,
+    setSignature3,
+    setNurseSignature,
+  });
   return (
     <div>
       <Modal
         size="5xl"
         isOpen={openForm2}
-        onOpenChange={closeForm2}
+        onOpenChange={handleCloseModal}
         classNames={{
           body: "max-h-[calc(80vh-145px)] overflow-y-scroll py-6 bg-[#f1f1f1] dark:bg-[#1f1e1e]",
           header: "border-b border-divider py-6 bg-[#e6e6e6] dark:bg-[#181818]",
@@ -221,14 +243,41 @@ export default function page({
 
                   <div className="space-y-4">
                     {/* ผู้ให้ข้อมูล */}
-                    <div className="p-6 rounded-xl bg-[#f9f9f9] light:border light:border-gray-200   dark:bg-[#1f1e1e] space-y-2">
-                      <h3 className="font-medium text-gray-800 dark:text-gray-100">
-                        ผู้ให้ข้อมูล แพทย์ / พยาบาล
-                      </h3>
-                      <p>
-                        ลงชื่อ....................................................
-                      </p>
-                      <p>(..............................................)</p>
+                    <div className="rounded-xl light:border light:border-gray-200 bg-[#f9f9f9] p-6 space-y-3 shadow-sm dark:bg-[#1f1e1e]">
+                      <span className="font-medium text-gray-700 dark:text-white text-sm">
+                        ผู้ป่วย / ตัวแทนผู้ป่วย
+                      </span>
+                      <div className="flex flex-wrap gap-3 items-center">
+                        <span className="text-sm flex items-center gap-2 text-default-700">
+                          ลงชื่อ{" "}
+                          {!signature ? (
+                            <span className="text-gray-400">
+                              .............................
+                            </span>
+                          ) : (
+                            <img
+                              src={signature}
+                              alt="signature"
+                              className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
+                            />
+                          )}
+                        </span>
+                        <Button
+                          size="sm"
+                          isIconOnly
+                          className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
+                          variant="flat"
+                          onPress={() => setOpenSign01(true)}
+                        >
+                          <Edit3 className="size-5" />
+                        </Button>
+                      </div>
+                      <Input
+                        className="max-w-xs"
+                        size="sm"
+                        radius="sm"
+                        placeholder="ชื่อ-นามสกุล"
+                      />
                     </div>
 
                     {/* ผู้รับข้อมูล */}
@@ -377,8 +426,47 @@ export default function page({
                         />
                       </div>
                     </div>
+
+                    {/* พยาบาล */}
+                    <div className="rounded-xl light:border light:border-gray-200 bg-[#f9f9f9] p-6 space-y-3 shadow-sm dark:bg-[#1f1e1e]">
+                      <span className="font-medium text-gray-700 dark:text-white text-sm">
+                        พยาบาล
+                      </span>
+                      <div className="flex flex-wrap gap-3 items-center">
+                        <span className="text-sm flex items-center gap-2 text-default-700">
+                          ลงชื่อ{" "}
+                          {!nurseSignature ? (
+                            <span className="text-gray-400">
+                              .............................
+                            </span>
+                          ) : (
+                            <img
+                              src={nurseSignature}
+                              alt="nurse_signature"
+                              className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
+                            />
+                          )}
+                        </span>
+                        <Button
+                          size="sm"
+                          isIconOnly
+                          className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
+                          variant="flat"
+                          onPress={() => setOpenSign04(true)}
+                        >
+                          <Edit3 className="size-5" />
+                        </Button>
+                      </div>
+                      <Input
+                        className="max-w-xs"
+                        size="sm"
+                        radius="sm"
+                        placeholder="ชื่อ-นามสกุล"
+                      />
+                    </div>
                   </div>
                 </section>
+  
 
                 <Sign01
                   modalRefSign={modalRefSign}
@@ -404,11 +492,23 @@ export default function page({
                   }}
                   onSave={handleSaveSignature3}
                 />
+                <Sign04
+                  modalRefSign={modalRefSign}
+                  isOpen={openSign04}
+                  onClose={() => {
+                    setOpenSign04(false);
+                  }}
+                  onSave={handleSaveSignature4}
+                />
               </ModalBody>
 
               {/* Footer */}
               <ModalFooter className="dark:bg-[#181818] rounded-b-2xl flex justify-end gap-3 py-4">
-                <Button variant="flat" color="default" onPress={closeForm2}>
+                <Button
+                  variant="flat"
+                  color="default"
+                  onPress={handleCloseModal}
+                >
                   ปิด
                 </Button>
                 <Button

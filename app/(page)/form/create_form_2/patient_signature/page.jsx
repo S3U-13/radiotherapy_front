@@ -8,12 +8,13 @@ import {
   ModalHeader,
 } from "@heroui/modal";
 import React from "react";
-import SignatureCanvas from "react-signature-canvas";
 import useHook from "./useHook";
+import SignatureCanvas from "react-signature-canvas";
 
 export default function page({ isOpen, onClose, modalRefSign, onSave }) {
   const { sigRef, signatureData, setSignatureData, handleClear, handleSave } =
     useHook({ onSave, isOpen, onClose });
+
   return (
     <div>
       <Modal
@@ -36,7 +37,7 @@ export default function page({ isOpen, onClose, modalRefSign, onSave }) {
             <>
               <ModalHeader className="flex flex-col gap-1">
                 <h2 className="text-base font-semibold text-neutral-800 dark:text-neutral-100">
-                  ลงลายมือชื่อนักรังสีแพทย์
+                  ลงลายมือชื่อผู้ป่วย
                 </h2>
                 <p className="text-xs text-neutral-500 dark:text-neutral-400">
                   Patient Signature
@@ -82,7 +83,7 @@ export default function page({ isOpen, onClose, modalRefSign, onSave }) {
 
                 {/* Label */}
                 <div className="text-center text-xs text-neutral-400 dark:text-neutral-500">
-                  ลงลายมือชื่อนักรังสีแพทย์ / Patient Signature
+                  ลงลายมือชื่อผู้ป่วย / Patient Signature
                 </div>
 
                 {/* Description */}
@@ -108,7 +109,7 @@ export default function page({ isOpen, onClose, modalRefSign, onSave }) {
                 <Button
                   size="sm"
                   className="bg-neutral-900 text-white hover:bg-neutral-800 
-                       dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-300"
+              dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-300"
                   onPress={handleSave}
                 >
                   บันทึกลายเซ็น
