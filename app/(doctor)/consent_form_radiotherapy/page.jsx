@@ -32,6 +32,7 @@ import { Pagination } from "@heroui/pagination";
 import ModalForm1 from "./create_form_1/page";
 import ModalForm2 from "./create_form_2/page";
 import ModalForm3 from "./create_form_3/page";
+import ViewForm from "./view/page";
 import useHook from "./useHook";
 import { Input } from "@heroui/input";
 import { Edit3 } from "lucide-react";
@@ -53,7 +54,16 @@ export default function Page() {
     FormByFormId,
     FormList,
     setFormList,
-    // mockData,
+    //modalView by type id
+    modalViewForm,
+    setModalViewForm,
+    //set state form id and form type id
+    formId,
+    setFormId,
+    formTypeId,
+    setFormTypeId,
+    //handle open view
+    handleOpenView,
   } = useHook();
 
   return (
@@ -93,6 +103,14 @@ export default function Page() {
             .catch(console.error);
           setSelectForm("");
         }}
+      />
+      <ViewForm
+        isOpen={modalViewForm}
+        onClose={() => setModalViewForm(false)}
+        formId={formId}
+        setFormId={setFormId}
+        formTypeId={formTypeId}
+        setFormTypeId={setFormTypeId}
       />
       {/* 🔥 HEADER */}
       <div className="flex justify-between items-center">
@@ -310,6 +328,7 @@ export default function Page() {
                       radius="lg"
                       variant="flat"
                       className="bg-neutral-900 text-white"
+                      onPress={() => handleOpenView(i?.id, i?.form_type_id)}
                     >
                       View
                     </Button>

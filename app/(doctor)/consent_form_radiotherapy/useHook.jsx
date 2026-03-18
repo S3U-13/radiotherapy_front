@@ -10,6 +10,12 @@ export default function useHook() {
   const [modalForm2, setModalForm2] = useState(false);
   const [modalForm3, setModalForm3] = useState(false);
 
+  //modal view
+  const [modalViewForm, setModalViewForm] = useState(false);
+  // set state form id and form type id
+  const [formId, setFormId] = useState(null);
+  const [formTypeId, setFormTypeId] = useState(null);
+
   const [form, setForm] = useState([]);
   const [formList, setFormList] = useState([]);
 
@@ -47,6 +53,19 @@ export default function useHook() {
     3: setModalForm3,
   };
 
+  //handle select form id and form type id
+
+  const handleOpenView = (form_id, form_type_id) => {
+    if (!form_id || !form_type_id) return;
+    try {
+      setModalViewForm(true);
+      setFormId(form_id);
+      setFormTypeId(form_type_id);
+    } catch (error) {
+      console.error();
+    }
+  };
+
   return {
     modalRef,
     modalForm1,
@@ -64,5 +83,15 @@ export default function useHook() {
     FormList,
     setFormList,
     // mockData,
+    //modalView by type id
+    modalViewForm,
+    setModalViewForm,
+    //set state form id and form type id
+    formId,
+    setFormId,
+    formTypeId,
+    setFormTypeId,
+    //handle open view
+    handleOpenView,
   };
 }

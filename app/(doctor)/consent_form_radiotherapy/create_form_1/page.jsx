@@ -40,7 +40,7 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
     handleSaveSignature,
     signature,
   } = useHook({ closeForm1, selectForm });
-  console.log(visitId);
+
   return (
     <div>
       <Modal
