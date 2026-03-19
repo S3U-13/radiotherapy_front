@@ -8,6 +8,7 @@ import {
   ModalHeader,
 } from "@heroui/modal";
 import React from "react";
+import useHook from "./useHook";
 
 export default function page({
   isOpen,
@@ -17,6 +18,7 @@ export default function page({
   formTypeId,
   setFormTypeId,
 }) {
+  const {} = useHook({ onClose, formId, setFormId, formTypeId, setFormTypeId });
   return (
     <div>
       <Modal
