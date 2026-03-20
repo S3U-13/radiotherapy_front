@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { useApiRequest } from "../../../hooks/useApi";
+import { useApiRequest } from "@/hooks/useApi";
+import { formComponentMap } from "@/components/form-config/formComponentMap";
 
 export default function useHook() {
   const { fetchForm, FormList } = useApiRequest();
@@ -55,14 +56,16 @@ export default function useHook() {
 
   //handle select form id and form type id
 
-  const handleOpenView = (form_id, form_type_id) => {
+  const handleOpenView = async (form_id, form_type_id) => {
     if (!form_id || !form_type_id) return;
     try {
-      setModalViewForm(true);
+      await formComponentMap[form_type_id]?.();
+
       setFormId(form_id);
       setFormTypeId(form_type_id);
+      setModalViewForm(true);
     } catch (error) {
-      console.error();
+      console.error(error);
     }
   };
 

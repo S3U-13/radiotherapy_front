@@ -48,11 +48,11 @@ export default function useHook({
     );
     form.setFieldValue(
       "name",
-      patFormData?.data_form?.patient_contacts?.name ?? "",
+      patFormData?.data_form?.patient_contact?.name ?? "",
     );
     form.setFieldValue(
       "relation",
-      String(patFormData?.data_form?.patient_contacts?.relation) ?? "",
+      String(patFormData?.data_form?.patient_contact?.relation) ?? "",
     );
     form.setFieldValue("disease", patFormData?.data_form?.form?.disease ?? "");
 

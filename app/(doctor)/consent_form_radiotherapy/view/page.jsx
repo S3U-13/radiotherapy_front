@@ -7,8 +7,10 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@heroui/modal";
-import React from "react";
+import React, { useEffect } from "react";
 import useHook from "./useHook";
+import { formTypeHeaderMap } from "@/components/form-config/formTypeHeaderMap";
+import FormRenderer from "@/components/renderer/FormViewRenderer";
 
 export default function page({
   isOpen,
@@ -18,7 +20,15 @@ export default function page({
   formTypeId,
   setFormTypeId,
 }) {
-  const {} = useHook({ onClose, formId, setFormId, formTypeId, setFormTypeId });
+  const { choice, patient, patientContact, formDataObj } = useHook({
+    onClose,
+    formId,
+    setFormId,
+    setFormTypeId,
+  });
+
+  const header = formTypeHeaderMap[formTypeId];
+
   return (
     <div>
       <Modal
@@ -36,24 +46,20 @@ export default function page({
       >
         <ModalContent>
           {(onClose) => (
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                form.handleSubmit();
-              }}
-            >
+            <>
               <ModalHeader className="flex flex-col items-center gap-1 text-center text-lg font-semibold text-gray-800 dark:text-white">
-                <h1>หนังสืออธิบายและยินยอมให้ทำการจำลองการฉายรังสี</h1>
-                <h1>โดยใช้รังสีเอกซเรย์และสารทึบรังสี</h1>
-                <h1 className="text-xs text-gray-600 dark:text-white">
-                  หน่วยงานรังสีรักษา โรงพยาบาลพระปกเกล้า
-                </h1>
+                {header ? header : null}
               </ModalHeader>
 
               <ModalBody className="space-y-6 text-gray-800">
-                <div>
-                  form id: {formId} form type id: {formTypeId}
-                </div>
+                form id: {formId} form type id: {formTypeId}
+                <FormRenderer
+                  formTypeId={formTypeId}
+                  choice={choice}
+                  pat={patient}
+                  pat_contact={patientContact}
+                  form_data={formDataObj}
+                />
               </ModalBody>
 
               <ModalFooter>
@@ -69,7 +75,7 @@ export default function page({
                   {isSubmitting ? "กำลังบันทึก..." : "บันทึก"}
                 </Button> */}
               </ModalFooter>
-            </form>
+            </>
           )}
         </ModalContent>
       </Modal>
