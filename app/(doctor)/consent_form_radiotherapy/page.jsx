@@ -35,7 +35,8 @@ import ModalForm3 from "./create_form_3/page";
 import ViewForm from "./view/page";
 import useHook from "./useHook";
 import { Input } from "@heroui/input";
-import { Edit3 } from "lucide-react";
+import { Select, SelectItem } from "@heroui/select";
+import { includes } from "zod";
 
 export default function Page() {
   const {
@@ -64,19 +65,96 @@ export default function Page() {
     setFormTypeId,
     //handle open view
     handleOpenView,
+    loadData,
+    totalPages,
+    totalForm,
+    countFormInPage,
+    page,
+    setPage,
+    search,
+    setSearch,
+    limit,
+    setLimit,
+    limitData,
+    formatThaiDateTime,
+    status,
+    setStatus,
+    visibleColumns,
+    setVisibleColumns,
+    filteredColumns,
   } = useHook();
 
+  const renderCell = (item, key) => {
+    switch (key) {
+      case "id":
+        return item.id;
+
+      case "hn":
+        return item.hn;
+
+      case "name":
+        return item.name;
+
+      case "form_type":
+        return item.form_type;
+
+      case "status":
+        return (
+          <span
+            className={`px-6 py-2 text-xs rounded-full font-medium ${
+              statusStyle[item?.status] || "bg-gray-100 text-gray-600"
+            }`}
+          >
+            {item.status}
+          </span>
+        );
+
+      case "createdAt":
+        return (
+          <div className="flex items-center justify-center gap-2">
+            <span className="text-sm text-neutral-700 dark:text-neutral-300">
+              {formatThaiDateTime(item?.createdAt)}
+            </span>
+
+            <div className="flex items-center gap-1">
+              {item.isNew && (
+                <span
+                  className="px-2 py-0.5 text-[10px] font-semibold rounded-full 
+            bg-emerald-100 text-emerald-700 
+            dark:bg-emerald-900/40 dark:text-emerald-300
+            animate-pulse"
+                >
+                  NEW
+                </span>
+              )}
+
+              {item.isUpdated && (
+                <span
+                  className="px-2 py-0.5 text-[10px] font-semibold rounded-full 
+            bg-amber-100 text-amber-700 
+            dark:bg-amber-900/40 dark:text-amber-300"
+                >
+                  UPDATED
+                </span>
+              )}
+            </div>
+          </div>
+        );
+
+      default:
+        return "-";
+    }
+  };
+
   return (
-    <div className="p-6 space-y-5 bg-white shadow-md rounded-xl dark:bg-[#131317]">
+    <div className="p-6 space-y-4 bg-white shadow-md rounded-xl dark:bg-[#131317]">
       <ModalForm1
         openForm1={modalForm1}
         selectForm={selectForm}
         modalRef={modalRef}
         closeForm1={() => {
           setModalForm1(false);
-          FormList()
-            .then((data) => setFormList(data || []))
-            .catch(console.error);
+          loadData();
           setSelectForm("");
         }}
       />
@@ -86,9 +164,7 @@ export default function Page() {
         modalRef={modalRef}
         closeForm2={() => {
           setModalForm2(false);
-          FormList()
-            .then((data) => setFormList(data || []))
-            .catch(console.error);
+          loadData();
           setSelectForm("");
         }}
       />
@@ -98,9 +174,7 @@ export default function Page() {
         modalRef={modalRef}
         closeForm3={() => {
           setModalForm3(false);
-          FormList()
-            .then((data) => setFormList(data || []))
-            .catch(console.error);
+          loadData();
           setSelectForm("");
         }}
       />
@@ -207,17 +281,31 @@ export default function Page() {
             placeholder="Search..."
             startContent={<Search size={18} />}
             className="w-64"
+            value={search ?? ""}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
           />
 
           <Dropdown>
             <DropdownTrigger>
               <Button size="sm" variant="flat" endContent={<ChevronDown />}>
-                Status
+                {status || "Status"}
               </Button>
             </DropdownTrigger>
-            <DropdownMenu>
-              <DropdownItem key="all">All</DropdownItem>
-              <DropdownItem key="save">Save</DropdownItem>
+
+            <DropdownMenu
+              selectionMode="single"
+              selectedKeys={status ? new Set([status]) : new Set([])}
+              onSelectionChange={(keys) => {
+                const value = Array.from(keys)[0] || "";
+                setStatus(value);
+              }}
+            >
+              <DropdownItem key="">All</DropdownItem>
+              <DropdownItem key="Pending">Pending</DropdownItem>
+              <DropdownItem key="Saved">Saved</DropdownItem>
               <DropdownItem key="success">Success</DropdownItem>
               <DropdownItem key="cancel">Cancel</DropdownItem>
             </DropdownMenu>
@@ -229,100 +317,79 @@ export default function Page() {
                 Columns
               </Button>
             </DropdownTrigger>
-            <DropdownMenu>
+            <DropdownMenu
+              selectionMode="multiple"
+              selectedKeys={visibleColumns}
+              onSelectionChange={setVisibleColumns}
+            >
               <DropdownItem key="id">ID</DropdownItem>
               <DropdownItem key="hn">HN</DropdownItem>
-              <DropdownItem key="status">Status</DropdownItem>
+              <DropdownItem key="name">NAME</DropdownItem>
+              <DropdownItem key="form_type">FORM TYPE</DropdownItem>
+              <DropdownItem key="status">STATUS</DropdownItem>
+              <DropdownItem key="createdAt">CREATED AT</DropdownItem>
             </DropdownMenu>
           </Dropdown>
+
+          {/* <Button size="sm" variant="flat">
+            Export
+          </Button> */}
         </div>
 
         {/* RIGHT */}
         <div className="flex gap-2">
-          <Button size="sm" variant="flat">
-            Export
-          </Button>
+          <Select
+            className="w-18"
+            size="sm"
+            selectedKeys={[String(limit)]}
+            onSelectionChange={(keys) => {
+              const value = Array.from(keys)[0];
+              setLimit(Number(value));
+            }}
+          >
+            {limitData.map((i) => (
+              <SelectItem key={i.key}>{i.key}</SelectItem>
+            ))}
+          </Select>
         </div>
       </div>
 
       {/* 🔥 TABLE CARD */}
-      <div className=" bg-white overflow-hidden  ">
+      <div className=" bg-white overflow-hidden">
         <Table
           aria-label="Consent Table"
           radius="none"
           classNames={{
-            wrapper:
-              " bg-white dark:bg-[#0E0E11] max-h-[calc(80vh-200px)] overflow-y-scroll",
+            wrapper: " bg-white dark:bg-[#0E0E11] max-h-[570px]",
             tr: "hover:bg-neutral-50 dark:hover:bg-[#18181B]",
             th: "bg-neutral-100 dark:bg-[#18181B]",
           }}
         >
           <TableHeader>
-            <TableColumn>ID</TableColumn>
-            <TableColumn>HN</TableColumn>
-            <TableColumn>NAME</TableColumn>
-            <TableColumn>FORM TYPE</TableColumn>
-            <TableColumn className="text-center">STATUS</TableColumn>
+            {filteredColumns.map((col) => (
+              <TableColumn
+                className={
+                  ["status", "createdAt"].includes(col.key) ? "text-center" : ""
+                }
+                key={col.key}
+              >
+                {col.label}
+              </TableColumn>
+            ))}
+
             <TableColumn className="text-center">ACTION</TableColumn>
           </TableHeader>
 
           <TableBody emptyContent="ไม่พบข้อมูล">
             {formList?.map((i) => (
               <TableRow key={i.id} className="hover:bg-neutral-100 rounded-xl">
-                <TableCell>{i.id}</TableCell>
-                <TableCell>{i.hn}</TableCell>
-                <TableCell>{i?.name}</TableCell>
-                <TableCell>{i?.form_type}</TableCell>
-
-                {/* 🔥 Status Badge */}
-                <TableCell className="text-center">
-                  <span
-                    className={`
-                               px-6 py-2 text-xs rounded-full font-medium
-                              ${statusStyle[i?.status] || "bg-gray-100 text-gray-600"}
-                             `}
-                  >
-                    {i.status}
-                  </span>
-                </TableCell>
+                {filteredColumns.map((col) => (
+                  <TableCell key={col.key}>{renderCell(i, col.key)}</TableCell>
+                ))}
 
                 {/* 🔥 Action */}
                 <TableCell>
                   <div className="flex justify-center gap-2">
-                    {/* <Dropdown placement="bottom-center">
-                      <DropdownTrigger>
-                        <Button
-                          size="sm"
-                          variant="light"
-                          isIconOnly
-                          className="text-neutral-500 hover:text-neutral-800"
-                        >
-                          <MoreHorizontal size={18} />
-                        </Button>
-                      </DropdownTrigger>
-
-                      <DropdownMenu
-                        aria-label="Actions"
-                        className="shadow-md rounded-lg"
-                        variant="faded"
-                      >
-                        <DropdownItem
-                          key="view"
-                          className=" text-neutral-700 hover:bg-neutral-100 rounded-md px-3 py-1.5"
-                          startContent={<Eye size={16} />}
-                        >
-                          <span>View</span>
-                        </DropdownItem>
-
-                        <DropdownItem
-                          key="edit"
-                          className=" text-neutral-700 hover:bg-neutral-100 rounded-md px-3 py-1.5 font-medium"
-                          startContent={<Edit3 size={16} />}
-                        >
-                          <span>Edit</span>
-                        </DropdownItem>
-                      </DropdownMenu>
-                    </Dropdown> */}
                     <Button
                       size="sm"
                       radius="lg"
@@ -362,11 +429,11 @@ export default function Page() {
           <div className="text-sm text-neutral-500 dark:text-neutral-400">
             Showing{" "}
             <span className="font-medium text-neutral-800 dark:text-neutral-200">
-              1 - 10
+              {countFormInPage}
             </span>{" "}
             of{" "}
             <span className="font-medium text-neutral-800 dark:text-neutral-200">
-              100
+              {totalForm}
             </span>
           </div>
 
@@ -374,11 +441,12 @@ export default function Page() {
           <Pagination
             isCompact
             showControls
-            initialPage={1}
-            total={10}
+            page={page} // ✅ ใช้ตัวนี้
+            total={totalPages}
+            onChange={(p) => setPage(p)} // ✅ ไม่ต้อง loadData
             classNames={{
               wrapper: "gap-1",
-              item: "bg-transparent text-neutral-600  dark:text-neutral-300 rounded-lg",
+              item: "bg-transparent text-neutral-600 dark:text-neutral-300 rounded-lg",
               cursor:
                 "bg-neutral-900 text-white dark:bg-neutral-800 dark:text-white font-medium rounded-lg",
             }}

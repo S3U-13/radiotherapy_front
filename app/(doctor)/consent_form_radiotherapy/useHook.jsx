@@ -17,29 +17,51 @@ export default function useHook() {
   const [formId, setFormId] = useState(null);
   const [formTypeId, setFormTypeId] = useState(null);
 
+  //query form list
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState("10");
+  const [search, setSearch] = useState("" || "");
+  const [debounceSearch, setDebounceSearch] = useState("" || "");
+  //form
   const [form, setForm] = useState([]);
   const [formList, setFormList] = useState([]);
+  // pagination
+  const [pagination, setPagination] = useState({});
 
   const [selectForm, setSelectForm] = useState("");
-  const openForm1 = () => {
-    setModalForm1((prev) => !prev);
+  const [status, setStatus] = useState("");
+
+  const loadData = async () => {
+    try {
+      const res = await FormList(page, limit, debounceSearch, status);
+      setFormList(res.data || []);
+      setPagination(res.pagination || {});
+    } catch (err) {
+      console.error(err);
+    }
   };
-  const openForm2 = () => {
-    setModalForm2((prev) => !prev);
-  };
-  const openForm3 = () => {
-    setModalForm3((prev) => !prev);
-  };
+
   useEffect(() => {
     if (didFetch.current) return; // check flag ก่อน
     didFetch.current = true;
     fetchForm()
       .then((data) => setForm(data || []))
       .catch(console.error);
-    FormList()
-      .then((data) => setFormList(data || []))
-      .catch(console.error);
-  }, [fetchForm, FormList]);
+
+    loadData();
+  }, [fetchForm]);
+  //page
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebounceSearch(search);
+    }, 500); // 0.5 วิ
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    loadData();
+  }, [page, limit, debounceSearch, status]); // ✅ สำคัญ
 
   const statusStyle = {
     Pending: "bg-[#ffedd5] text-[#d97706]",
@@ -69,6 +91,45 @@ export default function useHook() {
     }
   };
 
+  //page
+  const totalPages = pagination.totalPages;
+  const totalForm = pagination.total;
+  const countFormInPage = `${pagination.from} - ${pagination.to}`;
+
+  const limitData = [
+    { id: 1, key: "10" },
+    { id: 2, key: "25" },
+    { id: 3, key: "50" },
+  ];
+
+  const [visibleColumns, setVisibleColumns] = useState(
+    new Set(["id", "hn", "name", "form_type", "status", "createdAt"]),
+  );
+
+  const columns = [
+    { key: "id", label: "ID" },
+    { key: "hn", label: "HN" },
+    { key: "name", label: "NAME" },
+    { key: "form_type", label: "FORM TYPE" },
+    { key: "status", label: "STATUS" },
+    { key: "createdAt", label: "CREATED AT" },
+  ];
+
+  const filteredColumns = columns.filter((col) => visibleColumns.has(col.key));
+
+  const formatThaiDateTime = (date) => {
+    const d = new Date(date);
+
+    const day = String(d.getDate()).padStart(2, "0");
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const year = d.getFullYear() + 543;
+
+    const hours = String(d.getHours()).padStart(2, "0");
+    const minute = String(d.getMinutes()).padStart(2, "0");
+
+    return `${day}-${month}-${year} ${hours}:${minute} น.`;
+  };
+
   return {
     modalRef,
     modalForm1,
@@ -96,5 +157,22 @@ export default function useHook() {
     setFormTypeId,
     //handle open view
     handleOpenView,
+    loadData,
+    totalPages,
+    totalForm,
+    countFormInPage,
+    page,
+    setPage,
+    search,
+    setSearch,
+    limit,
+    setLimit,
+    limitData,
+    formatThaiDateTime,
+    status,
+    setStatus,
+    visibleColumns,
+    setVisibleColumns,
+    filteredColumns,
   };
 }

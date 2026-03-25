@@ -64,7 +64,11 @@ export const useApiRequest = () => {
   const SearchVitalsign = (visitId) =>
     apiRequest(`/api/user/pat_vitalsign/${visitId}`);
 
-  const FormList = () => apiRequest("/api/user/form-radio-therapy-list", "GET");
+  const FormList = (page, limit, debounceSearch, status) =>
+    apiRequest(
+      `/api/user/form-radio-therapy-list?page=${page}&limit=${limit}&search=${debounceSearch}&status=${status}`,
+      "GET",
+    );
   const FormListByHn = (searchFormByHn) =>
     apiRequest(`/api/user/form-radio-therapy-list/${searchFormByHn}`, "GET");
   const DoctorCreateForm = async (value) => {
