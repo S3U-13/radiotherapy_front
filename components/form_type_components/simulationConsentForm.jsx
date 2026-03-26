@@ -10,9 +10,10 @@ export default function SimulationConsentForm({
   const choice_disease = choice.filter((c) => c.option_group_id === 7);
   const choice_contrast = choice.filter((c) => c.option_group_id === 2);
 
-  const select_choice_disease = form_data.congenital_disease.map(
+  const select_choice_disease = form_data.congenital_disease?.map(
     (i) => i.condition_id,
-  );
+  ) || [];
+
   const contrastHistoryIds = form_data?.contrast_history_id
     ? [form_data.contrast_history_id]
     : [];
@@ -22,73 +23,194 @@ export default function SimulationConsentForm({
   const contrastAllergyId = form_data?.contrast_allergy_id;
 
   return (
-    <div>
-      <section>
-        <div>
-          <p>ชื่อ-สกุล ผู้ป่วย {pat.name}</p>
-          <p>อายุ {pat.age}</p>
-          <p>HN {pat.hn}</p>
-          <p>น้ำหนัก {pat.weight}</p>
+    <div className="w-full max-w-5xl mx-auto bg-white dark:bg-zinc-900 rounded-3xl shadow-sm border border-gray-100 dark:border-zinc-800/50 p-6 sm:p-10 md:p-14 text-gray-800 dark:text-zinc-200">
+
+      {/* Title Header */}
+
+
+      {/* Patient Information Section */}
+      <section className="mb-12">
+        <h2 className="text-lg font-semibold text-[#111827] dark:text-zinc-100 mb-4 flex items-center gap-2">
+          <span className="w-1.5 h-6 bg-[#111827] dark:bg-zinc-300 rounded-full inline-block"></span>
+          ข้อมูลผู้ป่วย (Patient Information)
+        </h2>
+        <div className="bg-gray-50 dark:bg-zinc-800/40 rounded-2xl p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 border border-gray-100 dark:border-zinc-800/50">
+          <div>
+            <p className="text-xs text-gray-500 dark:text-zinc-400 uppercase tracking-wider font-medium mb-1">
+              ชื่อ-สกุล (Name)
+            </p>
+            <p className="text-lg font-semibold text-[#111827] dark:text-zinc-100">
+              {pat?.name || "-"}
+            </p>
+          </div>
+          <div>
+            <p className="text-xs text-gray-500 dark:text-zinc-400 uppercase tracking-wider font-medium mb-1">
+              อายุ (Age)
+            </p>
+            <p className="text-lg font-semibold text-[#111827] dark:text-zinc-100">
+              {pat?.age || "-"} ปี
+            </p>
+          </div>
+          <div>
+            <p className="text-xs text-gray-500 dark:text-zinc-400 uppercase tracking-wider font-medium mb-1">
+              HN
+            </p>
+            <p className="text-lg font-semibold text-[#111827] dark:text-zinc-100">
+              {pat?.hn || "-"}
+            </p>
+          </div>
+          <div>
+            <p className="text-xs text-gray-500 dark:text-zinc-400 uppercase tracking-wider font-medium mb-1">
+              น้ำหนัก (Weight)
+            </p>
+            <p className="text-lg font-semibold text-[#111827] dark:text-zinc-100">
+              {pat?.weight || "-"} กก.
+            </p>
+          </div>
         </div>
       </section>
-      <section>
-        <p>1.ท่านมีโรคประจำตัวดังต่อไปนี้หรือไม่</p>
-        <div className="grid grid-cols-2 px-4">
-          {choice_disease.map((item) => (
-            <p key={item.id}>
-              {" "}
-              {item.name}{" "}
-              {select_choice_disease.includes(item.id)
-                ? "☑ มี ☐ ไม่มี"
-                : "☐ มี ☑ ไม่มี"}
+
+      {/* Medical History Section */}
+      <section className="mb-12">
+        <h2 className="text-lg font-semibold text-[#111827] dark:text-zinc-100 mb-6 flex items-center gap-2">
+          <span className="w-1.5 h-6 bg-[#111827] dark:bg-zinc-300 rounded-full inline-block"></span>
+          ประวัติทางการแพทย์และการคัดกรอง (Medical History)
+        </h2>
+
+        <div className="space-y-8 px-2">
+          {/* Question 1 */}
+          <div>
+            <p className="font-medium text-[#111827] dark:text-zinc-100 mb-4 text-base">
+              1. ท่านมีโรคประจำตัวดังต่อไปนี้หรือไม่
             </p>
-          ))}
-        </div>
-        <div className="flex gap-2 items-center">
-          {" "}
-          <p>2.ท่านเคยได้รับการฉีดสารทึบรังสีมาก่อนหรือไม่</p>
-          {choice_contrast.map((item) => (
-            <p key={item.id}>
-              {" "}
-              {contrastHistoryIds.includes(item.id) ? "☑" : "☐"}
-              {item.name}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-4 gap-x-6 pl-4 sm:pl-6 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl p-6">
+              {choice_disease.map((item) => (
+                <div key={item.id} className="flex flex-col gap-1.5">
+                  <span className="text-sm font-medium text-gray-800 dark:text-zinc-300">{item.name}</span>
+                  <div className="flex gap-4 text-sm text-gray-600 dark:text-zinc-400">
+                    {select_choice_disease.includes(item.id) ? (
+                      <>
+                        <span className="flex items-center gap-1.5 text-[#111827] dark:text-zinc-100 font-medium">
+                          <span className="text-lg leading-none">☑</span> มี
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <span className="text-lg leading-none text-gray-300 dark:text-zinc-600">☐</span> ไม่มี
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="flex items-center gap-1.5">
+                          <span className="text-lg leading-none text-gray-300 dark:text-zinc-600">☐</span> มี
+                        </span>
+                        <span className="flex items-center gap-1.5 text-[#111827] dark:text-zinc-100 font-medium">
+                          <span className="text-lg leading-none">☑</span> ไม่มี
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Question 2 */}
+          <div>
+            <p className="font-medium text-[#111827] dark:text-zinc-100 mb-3 text-base">
+              2. ท่านเคยได้รับการฉีดสารทึบรังสีมาก่อนหรือไม่
             </p>
-          ))}
-        </div>
-        <div className="flex gap-2 items-center">
-          {" "}
-          <p>3.ถ้าเคยตรวจท่านเเพ้สารทึบรังสีหรือไม่</p>
-          {choice_contrast.map((item) => (
-            <p key={item.id}>
-              {" "}
-              {contrastAllergyIds.includes(item.id) ? "☑" : "☐"}
-              {item.name}
-              {[3, 5].includes(contrastAllergyId)
-                ? form_data.contrast_allergy_symptom
-                : ""}
+            <div className="flex flex-wrap gap-6 pl-4 sm:pl-6">
+              {choice_contrast.map((item) => (
+                <div key={item.id} className="flex items-center gap-2">
+                  <span className={`text-xl leading-none ${contrastHistoryIds.includes(item.id) ? "text-[#111827] dark:text-zinc-100" : "text-gray-300 dark:text-zinc-600"}`}>
+                    {contrastHistoryIds.includes(item.id) ? "☑" : "☐"}
+                  </span>
+                  <span className={`text-sm ${contrastHistoryIds.includes(item.id) ? "text-[#111827] dark:text-zinc-100 font-medium" : "text-gray-600 dark:text-zinc-400"}`}>
+                    {item.name}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Question 3 */}
+          <div>
+            <p className="font-medium text-[#111827] dark:text-zinc-100 mb-3 text-base">
+              3. ถ้าเคยตรวจ ท่านเเพ้สารทึบรังสีหรือไม่
             </p>
-          ))}
+            <div className="flex flex-col sm:flex-row flex-wrap gap-4 sm:gap-6 pl-4 sm:pl-6">
+              {choice_contrast.map((item) => (
+                <div key={item.id} className="flex items-center gap-2">
+                  <span className={`text-xl leading-none ${contrastAllergyIds.includes(item.id) ? "text-[#111827] dark:text-zinc-100" : "text-gray-300 dark:text-zinc-600"}`}>
+                    {contrastAllergyIds.includes(item.id) ? "☑" : "☐"}
+                  </span>
+                  <span className={`text-sm ${contrastAllergyIds.includes(item.id) ? "text-[#111827] dark:text-zinc-100 font-medium" : "text-gray-600 dark:text-zinc-400"}`}>
+                    {item.name}
+                  </span>
+                  {contrastAllergyIds.includes(item.id) && [3, 5].includes(contrastAllergyId) && form_data.contrast_allergy_symptom && (
+                    <span className="ml-2 text-sm text-red-600 dark:text-red-400 font-medium underline underline-offset-4 decoration-red-200">
+                      (อาการ: {form_data.contrast_allergy_symptom})
+                    </span>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
-      <section>
-        <p>ข้าพเจ้า {pat_contact.name} ผู้ป่วย/ตัวเเทนผู้ป่วย</p>
-        <p>โดยเกี่ยวข้องเป็น {pat_contact.relation} ของผู้ป่วย</p>
-        <p>
-          ชื่อ {pat.name} ได้รับทราบคำอธิบายข้างต้น
-          รวมทั้งผลเเทรกซ้อนที่อาจจะเกิดขึ้นจากการตรวจดังกล่าว โดยข้าพเจ้า
-        </p>
-        <div>
-          <p>
-            {form_data.consent === 9 ? "☑ ยินยอมให้ตรวจ" : "☐ ยินยอมให้ตรวจ"}
+
+      {/* Consent Section */}
+      <section className="mt-8 border-t border-gray-200 dark:border-zinc-800 pt-10">
+        <h2 className="text-lg font-semibold text-[#111827] dark:text-zinc-100 mb-6 flex items-center gap-2">
+          <span className="w-1.5 h-6 bg-[#111827] dark:bg-zinc-300 rounded-full inline-block"></span>
+          การแสดงเจตนายินยอม (Declaration of Consent)
+        </h2>
+
+        <div className="bg-gray-50 dark:bg-zinc-800/40 rounded-2xl p-6 sm:p-8 border border-gray-100 dark:border-zinc-800/50">
+          <p className="text-base leading-relaxed text-gray-700 dark:text-zinc-300 mb-6 text-justify indent-8">
+            ข้าพเจ้า <span className="font-semibold text-[#111827] dark:text-zinc-100 border-b border-gray-400 px-2">{pat_contact?.name || "-"}</span> สถานะเป็นผู้เกี่ยวข้องคือ <span className="font-semibold text-[#111827] dark:text-zinc-100 border-b border-gray-400 px-2">{pat_contact?.relation || "-"}</span> ของผู้ป่วย
+            ชื่อ <span className="font-semibold text-[#111827] dark:text-zinc-100 border-b border-gray-400 px-2">{pat?.name || "-"}</span> ได้รับทราบคำอธิบายข้างต้น
+            รวมทั้งรับทราบถึงผลเเทรกซ้อนที่อาจจะเกิดขึ้นจากการตรวจดังกล่าวโดยละเอียดแล้ว ข้าพเจ้าจึง...
           </p>
-          <p>
-            {form_data.consent === 10
-              ? "☑ ไม่ยินยอมให้ทำการตรวจ"
-              : "☐ ไม่ยินยอมให้ทำการตรวจ"}
+
+          <div className="flex flex-col sm:flex-row gap-6 mb-8 justify-center bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 p-6 rounded-xl">
+            <div className={`flex items-center gap-3 px-4 py-2 rounded-lg ${form_data.consent === 9 ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800' : ''}`}>
+              <span className={`text-2xl leading-none ${form_data.consent === 9 ? "text-green-600 dark:text-green-400" : "text-gray-300 dark:text-zinc-600"}`}>
+                {form_data.consent === 9 ? "☑" : "☐"}
+              </span>
+              <span className={`text-base ${form_data.consent === 9 ? "text-green-700 dark:text-green-300 font-semibold" : "text-gray-600 dark:text-zinc-400"}`}>
+                ยินยอมให้ทำการตรวจ
+              </span>
+            </div>
+
+            <div className={`flex items-center gap-3 px-4 py-2 rounded-lg ${form_data.consent === 10 ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' : ''}`}>
+              <span className={`text-2xl leading-none ${form_data.consent === 10 ? "text-red-600 dark:text-red-400" : "text-gray-300 dark:text-zinc-600"}`}>
+                {form_data.consent === 10 ? "☑" : "☐"}
+              </span>
+              <span className={`text-base ${form_data.consent === 10 ? "text-red-700 dark:text-red-300 font-semibold" : "text-gray-600 dark:text-zinc-400"}`}>
+                ไม่ยินยอมให้ทำการตรวจ
+              </span>
+            </div>
+          </div>
+
+          <p className="text-base text-gray-700 dark:text-zinc-300 mb-8 text-center">
+            จึงได้ลงลายมือชื่อไว้เป็นหลักฐานสำคัญ
           </p>
-          <p>จึงได้ลงลายมือชื่อไว้เป็นหลักฐาน</p>
+
+          {/* Signature Placeholder */}
+          <div className="flex justify-center mt-12 pb-4">
+            <div className="flex flex-col items-center">
+              <div className="w-64 border-b border-gray-400 dark:border-zinc-500 mb-3"></div>
+              <p className="text-sm text-gray-500 dark:text-zinc-400 mb-1">
+                ( {pat_contact?.name || ".................................................."} )
+              </p>
+              <p className="text-xs text-gray-400 dark:text-zinc-500 tracking-wider">
+                ผู้ให้ความยินยอม / Representatives
+              </p>
+            </div>
+          </div>
         </div>
       </section>
+
     </div>
   );
 }
