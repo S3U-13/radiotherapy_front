@@ -5,8 +5,11 @@ export const useApiRequest = () => {
     const headers = {
       "Content-Type": "application/json",
     };
-
-    const options = { method, headers };
+    const options = {
+      method,
+      headers,
+      credentials: "include", // ส่ง cookie HttpOnly อัตโนมัติ
+    };
     if (body && method !== "GET") options.body = JSON.stringify(body);
 
     try {

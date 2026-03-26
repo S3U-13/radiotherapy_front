@@ -15,8 +15,6 @@ export default function useHook({ closeForm1, selectForm }) {
   const [openSign02, setOpenSign02] = useState(false);
   const [openSign03, setOpenSign03] = useState(false);
   const [signature, setSignature] = useState(null);
-  const [signature2, setSignature2] = useState(null);
-  const [signature3, setSignature3] = useState(null);
   const [visitList, setVisitList] = useState([]);
   const [visitId, setVisitId] = useState("");
   const [vitalsignList, setVitalSignList] = useState([]);
@@ -29,18 +27,6 @@ export default function useHook({ closeForm1, selectForm }) {
     setOpenSign03((prev) => !prev);
   };
 
-  const handleSaveSignature2 = (dataUrl) => {
-    setSignature2(dataUrl);
-    console.log("📜 ลายเซ็น:", dataUrl);
-    // 👉 สามารถ fetch ไป backend ได้ เช่น:
-    // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
-  };
-  const handleSaveSignature3 = (dataUrl) => {
-    setSignature3(dataUrl);
-    console.log("📜 ลายเซ็น:", dataUrl);
-    // 👉 สามารถ fetch ไป backend ได้ เช่น:
-    // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
-  };
   const handleSearchHn = async () => {
     if (!hnInput) {
       addToast({
@@ -146,6 +132,7 @@ export default function useHook({ closeForm1, selectForm }) {
         setVisitId([]);
         setVitalSignList([]);
         setVitalsignId("");
+        setSignature(null);
         closeForm1();
       } else if (!data) {
         addToast({
@@ -304,11 +291,7 @@ export default function useHook({ closeForm1, selectForm }) {
     setOpenSign02,
     setOpenSign03,
     signature,
-    signature2,
-    signature3,
     handleSaveSignature,
-    handleSaveSignature2,
-    handleSaveSignature3,
     hnInput,
     setHnInput,
     handleSearchHn,

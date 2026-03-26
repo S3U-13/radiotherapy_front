@@ -120,7 +120,7 @@ export default function Page() {
               {item.isNew && (
                 <span
                   className="px-2 py-0.5 text-[10px] font-semibold rounded-full 
-            bg-emerald-100 text-emerald-700 
+            bg-[#DCF7E8] text-[#17CB9B] 
             dark:bg-emerald-900/40 dark:text-emerald-300
             animate-pulse"
                 >
@@ -131,8 +131,8 @@ export default function Page() {
               {item.isUpdated && (
                 <span
                   className="px-2 py-0.5 text-[10px] font-semibold rounded-full 
-            bg-amber-100 text-amber-700 
-            dark:bg-amber-900/40 dark:text-amber-300"
+            bg-[#FEF2DE] text-[#F7A524] 
+            dark:bg-[amber-900/40] dark:text-amber-300 "
                 >
                   UPDATED
                 </span>

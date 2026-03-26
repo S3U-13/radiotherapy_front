@@ -50,6 +50,7 @@ export default function page() {
     patFormData,
     selectIdForm,
     fetchData,
+    formatThaiDateTime,
   } = useHook();
   return (
     <div className="w-full shadow-sm rounded-2xl p-6 bg-white dark:bg-[#131317]">
@@ -117,7 +118,9 @@ export default function page() {
                 <TableCell>{i.hn}</TableCell>
                 <TableCell>{i.name}</TableCell>
                 <TableCell>{i.form_type}</TableCell>
-                <TableCell className="text-center">{i.created_at}</TableCell>
+                <TableCell className="text-center">
+                  {formatThaiDateTime(i?.createdAt)}
+                </TableCell>
                 {/* 🔥 Status Badge */}
                 <TableCell className="text-center">
                   <span

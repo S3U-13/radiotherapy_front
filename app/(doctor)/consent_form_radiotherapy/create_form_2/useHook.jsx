@@ -14,32 +14,11 @@ export default function useHook({ closeForm2, selectForm }) {
   const [openSign02, setOpenSign02] = useState(false);
   const [openSign03, setOpenSign03] = useState(false);
   const [signature, setSignature] = useState(null);
-  const [signature2, setSignature2] = useState(null);
-  const [signature3, setSignature3] = useState(null);
 
   const openModal = () => {
     setOpenSign01((prev) => !prev);
     setOpenSign02((prev) => !prev);
     setOpenSign03((prev) => !prev);
-  };
-
-  const handleSaveSignature = (dataUrl) => {
-    setSignature(dataUrl);
-    console.log("📜 ลายเซ็น:", dataUrl);
-    // 👉 สามารถ fetch ไป backend ได้ เช่น:
-    // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
-  };
-  const handleSaveSignature2 = (dataUrl) => {
-    setSignature2(dataUrl);
-    console.log("📜 ลายเซ็น:", dataUrl);
-    // 👉 สามารถ fetch ไป backend ได้ เช่น:
-    // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
-  };
-  const handleSaveSignature3 = (dataUrl) => {
-    setSignature3(dataUrl);
-    console.log("📜 ลายเซ็น:", dataUrl);
-    // 👉 สามารถ fetch ไป backend ได้ เช่น:
-    // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
   };
 
   const handleSearchHn = async () => {
@@ -90,6 +69,7 @@ export default function useHook({ closeForm2, selectForm }) {
     pat_name: "",
     hn: null,
     pat_age: "",
+    doctor_sign: "",
   });
 
   const [field, setField] = useState(initialField());
@@ -99,6 +79,7 @@ export default function useHook({ closeForm2, selectForm }) {
   const validationSchema = z.object({
     form_type_id: z.number().nullable(),
     hn: z.coerce.number().nullable(),
+    doctor_sign: z.string().optional(),
   });
 
   const handleChange = async (e) => {
@@ -136,6 +117,7 @@ export default function useHook({ closeForm2, selectForm }) {
         });
         form.reset();
         setHnInput("");
+        setSignature(null);
         closeForm2();
       } else if (!data) {
         addToast({
@@ -181,6 +163,14 @@ export default function useHook({ closeForm2, selectForm }) {
     },
   });
 
+  const handleSaveSignature = (dataUrl) => {
+    setSignature(dataUrl);
+    form.setFieldValue("doctor_sign", dataUrl);
+    // console.log("📜 ลายเซ็น:", dataUrl);
+    // 👉 สามารถ fetch ไป backend ได้ เช่น:
+    // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
+  };
+
   useEffect(() => {
     if (selectForm) {
       form.setFieldValue("form_type_id", selectForm);
@@ -196,11 +186,7 @@ export default function useHook({ closeForm2, selectForm }) {
     setOpenSign02,
     setOpenSign03,
     signature,
-    signature2,
-    signature3,
     handleSaveSignature,
-    handleSaveSignature2,
-    handleSaveSignature3,
     hnInput,
     setHnInput,
     handleSearchHn,
