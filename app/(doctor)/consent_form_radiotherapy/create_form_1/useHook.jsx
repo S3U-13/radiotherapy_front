@@ -4,8 +4,10 @@ import { useForm } from "@tanstack/react-form";
 import React, { useEffect, useRef, useState } from "react";
 import { useApiRequest } from "@/hooks/useApi";
 import { addToast } from "@heroui/toast";
+import { useAuth } from "@/context/AuthContext";
 
 export default function useHook({ closeForm1, selectForm }) {
+  const { user } = useAuth();
   const { SearchHn, SearchVisit, SearchVitalsign, DoctorCreateForm } =
     useApiRequest();
   const [hnInput, setHnInput] = useState("");
@@ -313,5 +315,6 @@ export default function useHook({ closeForm1, selectForm }) {
     vitalsignData,
     handleSaveSignature,
     signature,
+    user,
   };
 }

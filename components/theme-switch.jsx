@@ -66,7 +66,7 @@ export const ThemeSwitch = ({ className, classNames }) => {
           <SunFilledIcon
             onClick={() => setTheme("dark")}
             className={clsx(
-              "cursor-pointer p-1 rounded transition",
+              "cursor-pointer p-1 rounded-full transition",
               isSelected
                 ? "bg-white border border-divider shadow-sm rounded-full"
                 : "opacity-50 hover:opacity-100",
@@ -77,7 +77,7 @@ export const ThemeSwitch = ({ className, classNames }) => {
           <MoonFilledIcon
             onClick={() => setTheme("light")}
             className={clsx(
-              "cursor-pointer p-1 rounded transition",
+              "cursor-pointer p-1 rounded-full transition",
               !isSelected
                 ? "bg-[#19191d] dark:border dark:border-divider shadow-sm rounded-full"
                 : "opacity-50 hover:opacity-100",

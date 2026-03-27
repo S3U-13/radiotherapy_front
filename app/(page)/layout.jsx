@@ -2,13 +2,16 @@
 import React from "react";
 import Sidebar from "@/components/sidebar";
 import Navbar from "@/components/navbar";
+import { AuthProvider } from "@/context/AuthContext";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 export default function Layout({ children }) {
   return (
-    <div className="">
-      {/* max-h-[calc(100vh-20px)] overflow-y-scroll */}
-      <Content>{children}</Content>
-    </div>
+    <AuthProvider>
+      <ProtectedRoute role={["staff", "nurse"]}>
+        <Content>{children}</Content>
+      </ProtectedRoute>
+    </AuthProvider>
   );
 }
 

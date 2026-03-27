@@ -2,6 +2,7 @@
 import { addToast } from "@heroui/toast";
 import React, { useEffect, useRef, useState } from "react";
 import { useApiRequest } from "@/hooks/useApi";
+import { formComponentMap } from "@/components/form-config/formComponentMap";
 
 export default function useHook() {
   const { FormListByHn, DataFormById } = useApiRequest();
@@ -11,6 +12,11 @@ export default function useHook() {
   const [modalForm3, setModalForm3] = useState(false);
   const [selectIdForm, setSelectIdForm] = useState(null);
   const [patFormData, setPatFormData] = useState(null);
+
+  const [modalViewForm, setModalViewForm] = useState(false);
+  // set state form id and form type id
+  const [formId, setFormId] = useState(null);
+  const [formTypeId, setFormTypeId] = useState(null);
 
   const statusStyle = {
     Pending: "bg-[#ffedd5] text-[#d97706]",
@@ -100,6 +106,20 @@ export default function useHook() {
       console.error(error);
     }
   };
+
+  const handleOpenView = async (form_id, form_type_id) => {
+    if (!form_id || !form_type_id) return;
+    try {
+      await formComponentMap[form_type_id]?.();
+
+      setFormId(form_id);
+      setFormTypeId(form_type_id);
+      setModalViewForm(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const formatThaiDateTime = (date) => {
     const d = new Date(date);
 
@@ -132,5 +152,12 @@ export default function useHook() {
     selectIdForm,
     fetchData,
     formatThaiDateTime,
+    formId,
+    setFormId,
+    formTypeId,
+    setFormTypeId,
+    modalViewForm,
+    setModalViewForm,
+    handleOpenView,
   };
 }

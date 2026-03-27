@@ -104,6 +104,10 @@ export const useApiRequest = () => {
 
   const Relation = () => apiRequest("/api/user/relation", "GET");
 
+  // auth
+  const meApi = async () => apiRequest("/api/me", "GET");
+  const logoutApi = async () => apiRequest("/api/logout", "POST");
+
   return {
     prenameApi,
     fetchForm,
@@ -117,5 +121,7 @@ export const useApiRequest = () => {
     DataFormById,
     PatFillOutForm,
     Relation,
+    meApi,
+    logoutApi,
   };
 };

@@ -1,13 +1,11 @@
 import "@/styles/globals.css";
-import { Metadata, Viewport } from "next";
-import { Link } from "@heroui/link";
 import clsx from "clsx";
 
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
-import { Navbar } from "@/components/navbar";
+import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata = {
   title: {
@@ -37,11 +35,13 @@ export default function RootLayout({ children }) {
           fontSans.variable,
         )}
       >
-        <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
-          <div className="">
-            <main>{children}</main>
-          </div>
-        </Providers>
+        <AuthProvider>
+          <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
+            <div className="">
+              <main>{children}</main>
+            </div>
+          </Providers>
+        </AuthProvider>
       </body>
     </html>
   );

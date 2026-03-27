@@ -17,11 +17,7 @@ export default function Logo() {
   return (
     <Image
       alt="PPK logo"
-      src={
-        theme === "dark"
-          ? "/images/logolong84white.png"
-          : "/images/logolong84.png"
-      }
+      src={theme === "dark" ? "/images/logowhite.png" : "/images/logo.png"}
       width={150}
     />
   );

@@ -360,7 +360,7 @@ export default function page({
                               }
                             >
                               {choice
-                                .filter((ch) => ch.option_group_id === 3)
+                                .filter((ch) => ch.option_group_id === 1)
                                 .map((c, index) =>
                                   index <= 1 ? (
                                     <div
@@ -371,8 +371,8 @@ export default function page({
                                       <Radio value={String(c.id)}>
                                         {c.name}
                                       </Radio>
-                                      {String(c.id) === "6" &&
-                                        field.state.value === "6" && (
+                                      {String(c.id) === "1" &&
+                                        field.state.value === "1" && (
                                           <form.Field name="seafood_allergy_symptom">
                                             {(field) => (
                                               <Input

@@ -39,6 +39,7 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
     setOpenSign01,
     handleSaveSignature,
     signature,
+    user,
   } = useHook({ closeForm1, selectForm });
 
   return (
@@ -309,12 +310,10 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                         <Edit3 className="size-5" />
                       </Button>
                     </div>
-                    <Input
-                      className="max-w-xs"
-                      size="sm"
-                      radius="sm"
-                      placeholder="ชื่อ-นามสกุล"
-                    />
+
+                    <p className="text-left text-sm text-default-700 p-1">
+                      ({user?.person_name})
+                    </p>
                   </div>
                 </section>
               </ModalBody>

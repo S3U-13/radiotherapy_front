@@ -52,8 +52,8 @@ export default function page({
               </ModalHeader>
 
               <ModalBody className="space-y-6 text-gray-800">
-                form id: {formId} form type id: {formTypeId}
                 <FormRenderer
+                  formId={formId}
                   formTypeId={formTypeId}
                   choice={choice}
                   pat={patient}

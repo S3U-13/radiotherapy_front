@@ -30,6 +30,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@heroui/dropdown";
+import ViewForm from "../../(doctor)/consent_form_radiotherapy/view/page";
 
 export default function page() {
   const {
@@ -51,7 +52,15 @@ export default function page() {
     selectIdForm,
     fetchData,
     formatThaiDateTime,
+    formId,
+    setFormId,
+    formTypeId,
+    setFormTypeId,
+    modalViewForm,
+    setModalViewForm,
+    handleOpenView,
   } = useHook();
+
   return (
     <div className="w-full shadow-sm rounded-2xl p-6 bg-white dark:bg-[#131317]">
       {/* Title */}
@@ -156,6 +165,7 @@ export default function page() {
                           key="view"
                           className=" text-neutral-700 dark:text-white hover:bg-neutral-100 rounded-md px-3 py-1.5"
                           startContent={<Eye size={16} />}
+                          onPress={() => handleOpenView(i?.id, i?.form_type_id)}
                         >
                           <span>View</span>
                         </DropdownItem>
@@ -210,6 +220,14 @@ export default function page() {
         selectIdForm={selectIdForm}
         fetchData={fetchData}
         closeForm3={() => setModalForm3(false)}
+      />
+      <ViewForm
+        isOpen={modalViewForm}
+        onClose={() => setModalViewForm(false)}
+        formId={formId}
+        setFormId={setFormId}
+        formTypeId={formTypeId}
+        setFormTypeId={setFormTypeId}
       />
     </div>
   );
