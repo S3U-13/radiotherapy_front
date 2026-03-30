@@ -29,16 +29,16 @@ export default function useHook() {
 
     try {
       const res = await loginAPI(field.username, field.password);
-      console.log("LOGIN RES:", res);
+      // console.log("LOGIN RES:", res);
 
       if (res?.data?.message === "Login success") {
-        console.log("LOGIN OK");
+        // console.log("LOGIN OK");
 
         const user = await me();
-        console.log("USER FROM ME:", user); // 🔥 ตัวชี้ชะตา
+        // console.log("USER FROM ME:", user); // 🔥 ตัวชี้ชะตา
 
         if (user) {
-          console.log("USER ROLE:", user.role);
+          // console.log("USER ROLE:", user.role);
 
           if (["staff", "nurse"].includes(user.role)) {
             router.push("/form");

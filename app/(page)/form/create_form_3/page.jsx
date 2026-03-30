@@ -19,6 +19,7 @@ import Sign04 from "./nurse_signature/page";
 import { Edit3 } from "@deemlol/next-icons";
 import { Checkbox, CheckboxGroup } from "@heroui/checkbox";
 import fieldAndHandleHook from "./hook/fieldAndHandleHook";
+import { Image } from "@heroui/image";
 
 export default function page({
   openForm3,
@@ -278,7 +279,7 @@ export default function page({
                               .............................
                             </span>
                           ) : (
-                            <img
+                            <Image
                               src={signature}
                               alt="signature"
                               className="border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm w-[200px] h-[55px] object-contain bg-white"
@@ -322,7 +323,7 @@ export default function page({
                               .............................
                             </span>
                           ) : (
-                            <img
+                            <Image
                               src={signature2}
                               alt="signature2"
                               className="border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm w-[200px] h-[55px] object-contain bg-white"
@@ -374,7 +375,7 @@ export default function page({
                               .............................
                             </span>
                           ) : (
-                            <img
+                            <Image
                               src={signature3}
                               alt="signature3"
                               className="border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm w-[200px] h-[55px] object-contain bg-white"
@@ -422,7 +423,7 @@ export default function page({
                               .............................
                             </span>
                           ) : (
-                            <img
+                            <Image
                               src={nurseSignature}
                               alt="nurse_signature"
                               className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
