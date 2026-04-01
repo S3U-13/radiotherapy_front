@@ -1,5 +1,5 @@
 "use client";
-import { BarChart2 } from "@deemlol/next-icons";
+import { BarChart2, Menu } from "@deemlol/next-icons";
 import React, { useEffect, useState } from "react";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { ChevronDown, Edit2 } from "lucide-react";
@@ -33,9 +33,12 @@ export default function Sidebar() {
     },
     {
       id: 3,
-      name: "Consent Form",
-      path: "/form",
-      icon: <BarChart2 size={22} className="text-default-700" />,
+      name: "Menu",
+      children: [
+        { id: 1, name: "Manage Staff", path: "/manage_staff" },
+        { id: 2, name: "Consent Form", path: "/form" },
+      ],
+      icon: <Menu size={22} className="text-default-700" />,
       role: ["staff", "nurse"],
     },
   ];
@@ -72,7 +75,9 @@ export default function Sidebar() {
                 size="lg"
                 radius="lg"
                 className={`w-full justify-start ${
-                  pathname === item.path ? "bg-white shadow-sm font-medium dark:bg-[#18181B] dark:hover:bg-default-100" : ""
+                  pathname === item.path
+                    ? "bg-white shadow-sm font-medium dark:bg-[#18181B] dark:hover:bg-default-100"
+                    : ""
                 }`}
                 startContent={item.icon}
               >

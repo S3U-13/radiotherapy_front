@@ -344,7 +344,7 @@ export default function SimulationConsentForm({
                 <div className="w-64 border-b border-gray-400 dark:border-zinc-500 mb-3"></div>
                 <p className="text-sm text-gray-500 dark:text-zinc-400 mb-1">
                   ({" "}
-                  {pat_contact?.name ||
+                  {form_data?.doctor_name ||
                     ".................................................."}{" "}
                   )
                 </p>

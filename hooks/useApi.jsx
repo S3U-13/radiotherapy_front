@@ -108,6 +108,27 @@ export const useApiRequest = () => {
   const meApi = async () => apiRequest("/api/me", "GET");
   const logoutApi = async () => apiRequest("/api/logout", "POST");
 
+  const staffList = () => apiRequest("/api/user/manage-staff-index", "GET");
+
+  const fetchDataUsers = (page, limit, debounceSearch) =>
+    apiRequest(
+      `/api/user/get-user-manage-staff?page=${page}&limit=${limit}&search=${debounceSearch}`,
+      "GET",
+    );
+
+  const addOrDeleteStaff = async (payload) => {
+    try {
+      const data = await apiRequest(
+        "/api/user/add-or-delete-manage-staff",
+        "PUT",
+        payload,
+      );
+      return data ?? null;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return {
     prenameApi,
     fetchForm,
@@ -123,5 +144,8 @@ export const useApiRequest = () => {
     Relation,
     meApi,
     logoutApi,
+    staffList,
+    fetchDataUsers,
+    addOrDeleteStaff,
   };
 };

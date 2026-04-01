@@ -84,6 +84,7 @@ export default function useHook({ formId }) {
     staff_sign: formData?.data_form?.staffsign?.staff_sign ?? null,
     nurse_sign: formData?.data_form?.nursesign?.nurse_sign ?? null,
     doctor_sign: formData?.data_form?.doctorsign?.doctor_sign ?? null,
+    doctor_name: formData?.data_form?.doctorsign?.doctor_name ?? null,
   };
 
   return {
