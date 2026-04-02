@@ -16,7 +16,8 @@ import { Input } from "@heroui/input";
 import Logo from "@/components/logo";
 import { usePathname } from "next/navigation";
 import { Badge } from "@heroui/badge";
-import Link from "next/link";
+import { Link } from "@heroui/link";
+
 import { useAuth } from "@/context/AuthContext";
 
 export const SearchIcon = () => {
@@ -55,7 +56,9 @@ export default function Navbar() {
     if (path.startsWith("/dashboard")) return "Dashboard";
     if (path.startsWith("/consent_form_radiotherapy"))
       return "Consent Form Radiotherapy";
-    if (path.startsWith("/form")) return "Consent Form ";
+    if (path.startsWith("/form")) return "Consent Form";
+    if (path.startsWith("/signature")) return "My Signature";
+    if (path.startsWith("/message")) return "Message";
     return "Page";
   };
 
@@ -203,8 +206,16 @@ export default function Navbar() {
               <p className="font-semibold">Signed in as name</p>
               <p className="font-semibold">{user?.person_name}</p>
             </DropdownItem>
-            <DropdownItem key="settings">My Settings</DropdownItem>
-            <DropdownItem key="team_settings">Team Settings</DropdownItem>
+            <DropdownItem key="signature">
+              <Link size="sm" color="foreground" href="/signature">
+                My Signature
+              </Link>
+            </DropdownItem>
+            <DropdownItem key="message">
+              <Link size="sm" color="foreground" href="/message">
+                Message
+              </Link>
+            </DropdownItem>
             <DropdownItem key="analytics">Analytics</DropdownItem>
             <DropdownItem key="system">System</DropdownItem>
             <DropdownItem key="configurations">Configurations</DropdownItem>

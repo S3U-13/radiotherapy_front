@@ -4,30 +4,16 @@ import { useForm } from "@tanstack/react-form";
 import React, { useEffect, useRef, useState } from "react";
 import { useApiRequest } from "@/hooks/useApi";
 import { addToast } from "@heroui/toast";
-import { useAuth } from "@/context/AuthContext";
 
-export default function useHook({ closeForm1, selectForm }) {
-  const { user } = useAuth();
-  const { SearchHn, SearchVisit, SearchVitalsign, DoctorCreateForm } =
-    useApiRequest();
-  const [hnInput, setHnInput] = useState("");
-  const [pat, setPat] = useState(null);
+export default function useHook({ closeForm3, selectForm }) {
+  const { SearchHn, DoctorCreateForm } = useApiRequest();
   const modalRefSign = useRef(null);
   const [openSign01, setOpenSign01] = useState(false);
   const [openSign02, setOpenSign02] = useState(false);
   const [openSign03, setOpenSign03] = useState(false);
   const [signature, setSignature] = useState(null);
-  const [visitList, setVisitList] = useState([]);
-  const [visitId, setVisitId] = useState("");
-  const [vitalsignList, setVitalSignList] = useState([]);
-  const [vitalsignId, setVitalsignId] = useState("");
-  const [vitalsignData, setVitalsignData] = useState([]);
-
-  const openModal = () => {
-    setOpenSign01((prev) => !prev);
-    setOpenSign02((prev) => !prev);
-    setOpenSign03((prev) => !prev);
-  };
+  const [hnInput, setHnInput] = useState("");
+  const [pat, setPat] = useState(null);
 
   const handleSearchHn = async () => {
     if (!hnInput) {
@@ -72,13 +58,10 @@ export default function useHook({ closeForm1, selectForm }) {
     }
   };
 
-  //field
   const initialField = () => ({
     form_type_id: null,
     pat_name: "",
     hn: null,
-    visit_id: null,
-    vitalsign_id: null,
     pat_age: "",
     doctor_sign: "",
   });
@@ -90,8 +73,6 @@ export default function useHook({ closeForm1, selectForm }) {
   const validationSchema = z.object({
     form_type_id: z.number().nullable(),
     hn: z.coerce.number().nullable(),
-    visit_id: z.coerce.number().nullable(),
-    vitalsign_id: z.coerce.number().nullable(),
     doctor_sign: z.string().optional(),
   });
 
@@ -130,12 +111,8 @@ export default function useHook({ closeForm1, selectForm }) {
         });
         form.reset();
         setHnInput("");
-        setVisitList([]);
-        setVisitId([]);
-        setVitalSignList([]);
-        setVitalsignId("");
         setSignature(null);
-        closeForm1();
+        closeForm3();
       } else if (!data) {
         addToast({
           title: "Fails",
@@ -180,96 +157,6 @@ export default function useHook({ closeForm1, selectForm }) {
     },
   });
 
-  // set data and field value
-  useEffect(() => {
-    if (selectForm) {
-      form.setFieldValue("form_type_id", selectForm);
-    }
-  }, [selectForm]);
-
-  const fetchVisit = async () => {
-    if (!hnInput) return;
-    const data = await SearchVisit(hnInput);
-    if (data) {
-      setVisitList(data);
-    } else {
-      setVisitList(null);
-    }
-  };
-
-  // service
-  const formatThaiDateTime = (isoString) => {
-    if (!isoString) return "";
-
-    const date = new Date(isoString);
-
-    // แปลงเป็นปี พ.ศ.
-    const buddhistYear = date.getFullYear() + 543;
-
-    // format วันที่ เวลา ภาษาไทย
-    return (
-      new Intl.DateTimeFormat("th-TH", {
-        timeZone: "Asia/Bangkok",
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false,
-      }).format(date) +
-      " น.".replace(`${date.getFullYear() + 543}`, buddhistYear)
-    );
-  };
-
-  const formatThaiDate = (isoString) => {
-    if (!isoString) return "";
-
-    const date = new Date(isoString);
-
-    // แปลงเป็นปี พ.ศ.
-    const buddhistYear = date.getFullYear() + 543;
-
-    // format วันที่ เวลา ภาษาไทย
-    return (
-      new Intl.DateTimeFormat("th-TH", {
-        timeZone: "Asia/Bangkok",
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      }).format(date) + "".replace(`${date.getFullYear() + 543}`, buddhistYear)
-    );
-  };
-
-  const handelSelectVisitId = async (id) => {
-    if (!id) return;
-    try {
-      setVisitId(id);
-      form.setFieldValue("visit_id", id);
-
-      const data = await SearchVitalsign(id);
-      if (data) {
-        setVitalSignList(data);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handelSelectVitalsignId = async (id) => {
-    if (!id) return;
-    try {
-      setVitalsignId(id);
-      form.setFieldValue("vitalsign_id", id);
-
-      const selectedItem = vitalsignList.find((v) => v.id == id);
-      if (selectedItem) {
-        setVitalsignData(selectedItem.weight ?? "");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const handleSaveSignature = (dataUrl) => {
     setSignature(dataUrl);
     form.setFieldValue("doctor_sign", dataUrl);
@@ -279,10 +166,10 @@ export default function useHook({ closeForm1, selectForm }) {
   };
 
   useEffect(() => {
-    console.log("visit_id", form.getFieldValue("visit_id"));
-    console.log("visit_id", visitId);
-    console.log("vitalsign_list", vitalsignList);
-  }, [form, visitId, vitalsignList]);
+    if (selectForm) {
+      form.setFieldValue("form_type_id", selectForm);
+    }
+  }, [selectForm]);
 
   return {
     modalRefSign,
@@ -297,24 +184,8 @@ export default function useHook({ closeForm1, selectForm }) {
     hnInput,
     setHnInput,
     handleSearchHn,
-    field,
-    setField,
     form,
-    handleChange,
     handleSubmit,
     isSubmitting,
-    visitList,
-    fetchVisit,
-    formatThaiDateTime,
-    formatThaiDate,
-    visitId,
-    handelSelectVisitId,
-    vitalsignList,
-    vitalsignId,
-    handelSelectVitalsignId,
-    vitalsignData,
-    handleSaveSignature,
-    signature,
-    user,
   };
 }

@@ -107,7 +107,7 @@ export default function page() {
             <Input
               size="md"
               radius="md"
-              placeholder="กรอกชื่อ-นามสกุล ...."
+              placeholder="ค้นหาข้อมูล....."
               variant="flat"
               className="lg:min-w-[280px]"
               value={search}

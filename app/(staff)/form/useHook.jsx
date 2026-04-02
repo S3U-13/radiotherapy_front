@@ -5,11 +5,15 @@ import { useApiRequest } from "@/hooks/useApi";
 import { formComponentMap } from "@/components/form-config/formComponentMap";
 
 export default function useHook() {
-  const { FormListByHn, DataFormById } = useApiRequest();
+  const { fetchForm, FormList, FormListByHn, DataFormById } = useApiRequest();
+  const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
   const modalRef = useRef(null);
   const [modalForm1, setModalForm1] = useState(false);
   const [modalForm2, setModalForm2] = useState(false);
   const [modalForm3, setModalForm3] = useState(false);
+  const [modalEditForm1, setModalEditForm1] = useState(false);
+  const [modalEditForm2, setModalEditForm2] = useState(false);
+  const [modalEditForm3, setModalEditForm3] = useState(false);
   const [selectIdForm, setSelectIdForm] = useState(null);
   const [patFormData, setPatFormData] = useState(null);
 
@@ -17,6 +21,73 @@ export default function useHook() {
   // set state form id and form type id
   const [formId, setFormId] = useState(null);
   const [formTypeId, setFormTypeId] = useState(null);
+
+  //query form list
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState("10");
+  const [search, setSearch] = useState("" || "");
+  const [debounceSearch, setDebounceSearch] = useState("" || "");
+  //form
+  const [form, setForm] = useState([]);
+  const [formList, setFormList] = useState([]);
+  // pagination
+  const [pagination, setPagination] = useState({});
+
+  const [selectForm, setSelectForm] = useState("");
+  const [status, setStatus] = useState("");
+
+  const loadData = async () => {
+    try {
+      const res = await FormList(page, limit, debounceSearch, status);
+      setFormList(res.data || []);
+      setPagination(res.pagination || {});
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    if (didFetch.current) return; // check flag ก่อน
+    didFetch.current = true;
+    fetchForm()
+      .then((data) => setForm(data || []))
+      .catch(console.error);
+
+    loadData();
+  }, [fetchForm]);
+  //page
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebounceSearch(search);
+    }, 500); // 0.5 วิ
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    loadData();
+  }, [page, limit, debounceSearch, status]); // ✅ สำคัญ
+
+  const limitData = [
+    { id: 1, key: "10" },
+    { id: 2, key: "25" },
+    { id: 3, key: "50" },
+  ];
+
+  const [visibleColumns, setVisibleColumns] = useState(
+    new Set(["id", "hn", "name", "form_type", "status", "createdAt"]),
+  );
+
+  const columns = [
+    { key: "id", label: "ID" },
+    { key: "hn", label: "HN" },
+    { key: "name", label: "NAME" },
+    { key: "form_type", label: "FORM TYPE" },
+    { key: "status", label: "STATUS" },
+    { key: "createdAt", label: "CREATED AT" },
+  ];
+
+  const filteredColumns = columns.filter((col) => visibleColumns.has(col.key));
 
   const statusStyle = {
     Pending: "bg-[#ffedd5] text-[#d97706]",
@@ -26,9 +97,9 @@ export default function useHook() {
   };
 
   const FormByFormId = {
-    1: setModalForm1,
-    2: setModalForm2,
-    3: setModalForm3,
+    1: setModalEditForm1,
+    2: setModalEditForm2,
+    3: setModalEditForm3,
   };
 
   // ค้น หา form ตาม HN
@@ -82,7 +153,7 @@ export default function useHook() {
   useEffect(() => {
     if (!selectIdForm) return;
 
-    if (modalForm1 || modalForm2 || modalForm3) {
+    if (modalEditForm1 || modalEditForm2 || modalEditForm3) {
       const fetchData = async () => {
         const data = await DataFormById(selectIdForm);
         if (data) {
@@ -92,7 +163,7 @@ export default function useHook() {
 
       fetchData();
     }
-  }, [modalForm1, modalForm2, modalForm3]);
+  }, [modalEditForm1, modalEditForm2, modalEditForm3]);
 
   const fetchData = async () => {
     if (!searchFormByHn) return;
@@ -133,14 +204,19 @@ export default function useHook() {
     return `${day}-${month}-${year} ${hours}:${minute} น.`;
   };
 
+  //page
+  const totalPages = pagination.totalPages;
+  const totalForm = pagination.total;
+  const countFormInPage = `${pagination.from} - ${pagination.to}`;
+
   return {
     modalRef,
-    modalForm1,
-    setModalForm1,
-    modalForm2,
-    setModalForm2,
-    modalForm3,
-    setModalForm3,
+    modalEditForm1,
+    setModalEditForm1,
+    modalEditForm2,
+    setModalEditForm2,
+    modalEditForm3,
+    setModalEditForm3,
     formPatList,
     searchFormByHn,
     setSearchFormByHn,
@@ -151,7 +227,13 @@ export default function useHook() {
     patFormData,
     selectIdForm,
     fetchData,
-    formatThaiDateTime,
+    //
+    selectForm,
+    setSelectForm,
+    //form
+    form,
+    formList,
+
     formId,
     setFormId,
     formTypeId,
@@ -159,5 +241,30 @@ export default function useHook() {
     modalViewForm,
     setModalViewForm,
     handleOpenView,
+
+    loadData,
+    totalPages,
+    totalForm,
+    countFormInPage,
+    page,
+    setPage,
+    search,
+    setSearch,
+    limit,
+    setLimit,
+    limitData,
+    formatThaiDateTime,
+    status,
+    setStatus,
+    visibleColumns,
+    setVisibleColumns,
+    filteredColumns,
+
+    modalForm1,
+    setModalForm1,
+    modalForm2,
+    setModalForm2,
+    modalForm3,
+    setModalForm3,
   };
 }

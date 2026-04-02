@@ -21,7 +21,7 @@ export default function Home() {
       <div className="absolute inset-0 z-0 bg-gradient-to-t from-[#fafafa] via-transparent to-[#fafafa] dark:from-[#0a0a0a] dark:to-[#0a0a0a] pointer-events-none opacity-80"></div>
 
       {/* Floating Theme Switcher */}
-      <div className="fixed bottom-6 left-4 -translate-y-1/2 z-50">
+      <div className="fixed bottom-14 left-4 translate-y-1/2 z-50">
         <ThemeSwitch />
       </div>
 

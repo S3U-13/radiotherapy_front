@@ -20,6 +20,7 @@ import { Edit3 } from "@deemlol/next-icons";
 import { Checkbox, CheckboxGroup } from "@heroui/checkbox";
 import fieldAndHandleHook from "./hook/fieldAndHandleHook";
 import { Image } from "@heroui/image";
+import { Select, SelectItem } from "@heroui/select";
 
 export default function page({
   openForm3,
@@ -129,14 +130,25 @@ export default function page({
                     <div className="flex items-center gap-2 col-span-3">
                       <form.Field name="relation">
                         {(field) => (
-                          <Input
+                          <Select
                             label="มีความสัมพันธ์เป็น"
                             size="sm"
                             radius="sm"
                             className="max-w-xs"
-                            value={field.state.value}
-                            onChange={(e) => field.handleChange(e.target.value)}
-                          />
+                            selectedKeys={
+                              field.state.value ? [field.state.value] : []
+                            }
+                            onSelectionChange={(keys) => {
+                              const value = Array.from(keys)[0];
+                              field.handleChange(value);
+                            }}
+                          >
+                            {relation?.map((item) => (
+                              <SelectItem key={String(item.lookupid)}>
+                                {item.lookupname}
+                              </SelectItem>
+                            ))}
+                          </Select>
                         )}
                       </form.Field>
                       <p className="text-sm text-gray-600 dark:text-gray-400">

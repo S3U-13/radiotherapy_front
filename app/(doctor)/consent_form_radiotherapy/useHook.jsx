@@ -155,6 +155,7 @@ export default function useHook() {
     setFormId,
     formTypeId,
     setFormTypeId,
+
     //handle open view
     handleOpenView,
     loadData,

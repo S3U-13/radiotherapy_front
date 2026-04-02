@@ -157,7 +157,7 @@ export default function Sidebar() {
       </div>
 
       {/* ThemeSwitch */}
-      <div className="absolute bottom-16 left-4">
+      <div className="absolute bottom-4 left-4">
         <ThemeSwitch />
       </div>
     </div>
