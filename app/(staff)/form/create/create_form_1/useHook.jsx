@@ -247,7 +247,7 @@ export default function useHook({ closeForm1, selectForm }) {
       form.setFieldValue("visit_id", id);
 
       const data = await SearchVitalsign(id);
-      console.log(data);
+
       if (data) {
         setVitalSignList(data);
       }
@@ -286,6 +286,7 @@ export default function useHook({ closeForm1, selectForm }) {
   }, [form, visitId, vitalsignList]);
 
   return {
+    pat,
     modalRefSign,
     openSign01,
     openSign02,

@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@heroui/button";
+import { Input } from "@heroui/input";
 import { Copy, Edit, UserPen } from "lucide-react";
 import {
   Modal,
@@ -12,21 +13,56 @@ import {
 import SignatureCanvas from "react-signature-canvas";
 import useHook from "./useHook";
 import { useAuth } from "@/context/AuthContext";
+import { useApiRequest } from "@/hooks/useApi";
 
 export default function SignaturePage() {
   const { user } = useAuth();
+  const { getSignature } = useApiRequest();
   const [isOpen, setIsOpen] = useState(false);
   const [savedSignature, setSavedSignature] = useState(null);
+  const [savedNote, setSavedNote] = useState("");
   const [savedDateTime, setSavedDateTime] = useState("");
 
   const full_name = user?.person_name;
   const position = user?.position;
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "-";
+    const dateObj = new Date(dateString);
+    if (isNaN(dateObj.getTime())) return dateString; // Fallback if already formatted
+    const formatted = dateObj.toLocaleString("th-TH", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+    return formatted;
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getSignature();
+        if (data && data.signature) {
+          setSavedSignature(data.signature);
+          setSavedNote(data.note || "");
+          setSavedDateTime(formatDate(data.signature_date));
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, []);
+
   const handleOpen = () => setIsOpen(true);
   const handleClose = () => setIsOpen(false);
 
-  const handleSaveSignature = (dataUrl) => {
+  const handleSaveSignature = (dataUrl, note) => {
     setSavedSignature(dataUrl);
+    setSavedNote(note);
 
     // Set edit datetime
     const now = new Date();
@@ -42,7 +78,7 @@ export default function SignaturePage() {
   };
 
   return (
-    <div className="w-full h-full shadow-sm rounded-2xl p-6 md:p-8 bg-white dark:bg-[#131317] flex flex-col lg:flex-row gap-8 xl:gap-10 border border-transparent dark:border-neutral-800/50">
+    <div className="w-full h-full shadow-sm rounded-2xl p-6 md:p-6 bg-white dark:bg-[#131317] flex flex-col lg:flex-row gap-8 xl:gap-10 border border-transparent dark:border-neutral-800/50">
       {/* ---------------- Left Section: Display Data ---------------- */}
       <div className="lg:w-[40%] w-full flex flex-col">
         {/* Title */}
@@ -82,6 +118,15 @@ export default function SignaturePage() {
             </span>
             <span className="text-lg font-medium text-neutral-800 dark:text-neutral-200">
               {savedDateTime ? savedDateTime : "-"}
+            </span>
+          </div>
+
+          <div className="flex flex-col gap-1 border-b border-gray-100 dark:border-neutral-800/50 pb-4 mt-2">
+            <span className="text-sm text-neutral-500 dark:text-neutral-400">
+              โน้ตลายเซ็น (Note)
+            </span>
+            <span className="text-lg font-medium text-neutral-800 dark:text-neutral-200">
+              {savedNote ? savedNote : "-"}
             </span>
           </div>
 
@@ -182,16 +227,26 @@ export default function SignaturePage() {
         isOpen={isOpen}
         onClose={handleClose}
         onSave={handleSaveSignature}
+        initialSignature={savedSignature}
+        initialNote={savedNote}
       />
     </div>
   );
 }
 
-function SignatureModal({ isOpen, onClose, onSave }) {
-  const { sigRef, handleClear, handleSave } = useHook({
+function SignatureModal({
+  isOpen,
+  onClose,
+  onSave,
+  initialSignature,
+  initialNote,
+}) {
+  const { sigRef, handleClear, handleSave, note, setNote } = useHook({
     onSave,
     isOpen,
     onClose,
+    initialSignature,
+    initialNote,
   });
 
   return (
@@ -275,8 +330,24 @@ function SignatureModal({ isOpen, onClose, onSave }) {
                 ลงลายมือชื่อ / Signature
               </div>
 
+              {/* Note Input */}
+              <div className="flex flex-col gap-2 mt-4 px-1">
+                <span className="text-sm font-medium text-neutral-800 dark:text-neutral-200">
+                  โน้ตลายเซ็น (Optional)
+                </span>
+                <Input
+                  placeholder="เช่น ใช้สำหรับเอกสารทั่วไป"
+                  value={note}
+                  onChange={(e) => setNote(e.target.value)}
+                  classNames={{
+                    inputWrapper:
+                      "bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 shadow-sm",
+                  }}
+                />
+              </div>
+
               {/* Description */}
-              <p className="text-xs leading-relaxed text-neutral-500 dark:text-neutral-400 text-center px-4">
+              <p className="text-xs leading-relaxed text-neutral-500 dark:text-neutral-400 text-center px-4 mt-2">
                 โปรดลงลายมือชื่อของท่านภายในพื้นที่ที่กำหนด เพื่อยืนยันตัวตน
                 ระบบจะทำการบันทึกลายเซ็นของท่านในการใช้งานต่างๆ ต่อไป
               </p>

@@ -1,14 +1,39 @@
 "use client";
 import { addToast } from "@heroui/toast";
 import React, { useEffect, useRef, useState } from "react";
+import { useApiRequest } from "@/hooks/useApi";
+import { useAuth } from "@/context/AuthContext";
 
-export default function useHook({ onSave, isOpen, onClose }) {
+export default function useHook({
+  onSave,
+  isOpen,
+  onClose,
+  initialSignature,
+  initialNote,
+}) {
+  const { userAddSignature } = useApiRequest();
+  const { user } = useAuth();
   const sigRef = useRef(null);
   const [signatureData, setSignatureData] = useState(null);
+  const [note, setNote] = useState("");
+
+  useEffect(() => {
+    if (isOpen) {
+      setNote(initialNote || "");
+      if (initialSignature && sigRef.current && sigRef.current.fromDataURL) {
+        setTimeout(() => {
+          if (sigRef.current && sigRef.current.fromDataURL) {
+            sigRef.current.fromDataURL(initialSignature);
+          }
+        }, 50);
+      }
+    }
+  }, [isOpen, initialSignature, initialNote]);
 
   const handleClear = () => {
     sigRef.current.clear();
     setSignatureData(null);
+    setNote("");
   };
 
   useEffect(() => {
@@ -29,11 +54,11 @@ export default function useHook({ onSave, isOpen, onClose }) {
     ctx.scale(ratio, ratio);
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    
+
     // Check dark mode
     const isDark = document.documentElement.classList.contains("dark");
     ctx.strokeStyle = isDark ? "#fff" : "#000";
-    
+
     ctx.imageSmoothingEnabled = false;
 
     let isDrawing = false;
@@ -89,7 +114,7 @@ export default function useHook({ onSave, isOpen, onClose }) {
     };
   }, [isOpen]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!sigRef.current) return;
 
     const canvas = sigRef.current.getCanvas();
@@ -146,7 +171,7 @@ export default function useHook({ onSave, isOpen, onClose }) {
         0,
         0,
         cropWidth,
-        cropHeight
+        cropHeight,
       );
 
     const finalCanvas = document.createElement("canvas");
@@ -159,15 +184,53 @@ export default function useHook({ onSave, isOpen, onClose }) {
 
     const dataUrl = finalCanvas.toDataURL("image/png", 1.0);
 
-    setSignatureData(dataUrl);
-    if (onSave) onSave(dataUrl);
-    onClose();
+    let payload = {
+      signature: dataUrl,
+      note: note,
+    };
+
+    if (user?.role === "doctor") {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      const hours = String(now.getHours()).padStart(2, "0");
+      const minutes = String(now.getMinutes()).padStart(2, "0");
+      const seconds = String(now.getSeconds()).padStart(2, "0");
+
+      const currentDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      payload.editdatetime = currentDateTime;
+    }
+
+    const result = await userAddSignature(payload);
+
+    if (result.message === "เพิ่ม/แก้ไขลายเซ็นสำเร็จ") {
+      setSignatureData(dataUrl);
+      if (onSave) onSave(dataUrl, note);
+      onClose();
+      addToast({
+        title: "สำเร็จ",
+        description: "บันทึกลายเซ็นเรียบร้อยแล้ว",
+        color: "success",
+        variant: "flat",
+      });
+    } else {
+      addToast({
+        title: "ผิดพลาด",
+        description: "ไม่สามารถบันทึกลายเซ็นได้ โปรดลองอีกครั้ง",
+        color: "danger",
+        variant: "flat",
+      });
+    }
   };
+
   return {
     sigRef,
     signatureData,
     setSignatureData,
     handleClear,
     handleSave,
+    note,
+    setNote,
   };
 }

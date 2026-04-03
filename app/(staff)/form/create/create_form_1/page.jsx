@@ -40,8 +40,10 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
     handleSaveSignature,
     signature,
     user,
+    pat,
   } = useHook({ closeForm1, selectForm });
 
+  console.log(pat);
   return (
     <div>
       <Modal
@@ -129,7 +131,7 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                       </div>
                       <div className="flex items-center gap-4 ml-4">
                         {" "}
-                        {visitList.length > 0 ? (
+                        {visitList?.length > 0 ? (
                           <Select
                             label="Visit Date Time"
                             size="sm"

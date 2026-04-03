@@ -13,9 +13,10 @@ export default function useHook({
   setSignature3,
   setNurseSignature,
 }) {
-  const { fetchChoice, prenameApi, Relation } = useApiRequest();
+  const { fetchChoice, prenameApi, Relation, fetchDoctor } = useApiRequest();
   const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
   const [choice, setChoice] = useState([]);
+  const [doctor, setDoctor] = useState([]);
   const [prename, setPrename] = useState([]);
   const [relation, setRelation] = useState([]);
   const [openSign01, setOpenSign01] = useState(false);
@@ -35,7 +36,10 @@ export default function useHook({
     Relation()
       .then((data) => setRelation(data || []))
       .catch(console.error);
-  }, [fetchChoice, prenameApi, Relation]);
+    fetchDoctor()
+      .then((data) => setDoctor(data.doctorFormatted || []))
+      .catch(console.error);
+  }, [fetchChoice, prenameApi, Relation, fetchDoctor]);
 
   // set field value
   useEffect(() => {
@@ -191,5 +195,6 @@ export default function useHook({
     setOpenSign03,
     setOpenSign04,
     relation,
+    doctor,
   };
 }

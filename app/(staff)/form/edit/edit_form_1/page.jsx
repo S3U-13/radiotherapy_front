@@ -74,6 +74,7 @@ export default function page({
     setOpenSign04,
     handleCloseModal,
     relation,
+    doctor,
   } = useHook({
     closeForm1,
     patFormData,
@@ -617,9 +618,30 @@ export default function page({
                             alt=""
                           />
                         ) : (
-                          <span className="text-gray-400">
-                            ........................
-                          </span>
+                          <form.Field name="relation">
+                            {(field) => (
+                              <Select
+                                label="ความเกี่ยวข้อง"
+                                className="col-span-8 md:col-span-3"
+                                size="sm"
+                                radius="sm"
+                                placeholder="ระบุความเกี่ยวข้อง"
+                                selectedKeys={
+                                  field.state.value ? [field.state.value] : []
+                                }
+                                onSelectionChange={(keys) => {
+                                  const value = Array.from(keys)[0];
+                                  field.handleChange(value);
+                                }}
+                              >
+                                {doctor?.map((item) => (
+                                  <SelectItem key={String(item.doctorid)}>
+                                    {item?.name}
+                                  </SelectItem>
+                                ))}
+                              </Select>
+                            )}
+                          </form.Field>
                         )}
                       </div>
 

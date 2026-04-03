@@ -129,6 +129,26 @@ export const useApiRequest = () => {
     }
   };
 
+  // signature
+  const getSignature = () => apiRequest("/api/user/get-signature", "GET");
+
+  const userAddSignature = async (value) => {
+    try {
+      const data = await apiRequest(
+        "/api/user/user-add-or-edit-signature",
+        "PUT",
+        value,
+      );
+      return data ?? null;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // fetch doctor
+  const fetchDoctor = () =>
+    apiRequest("/api/user/doctors-group-radio-therapy", "GET");
+
   return {
     prenameApi,
     fetchForm,
@@ -147,5 +167,11 @@ export const useApiRequest = () => {
     staffList,
     fetchDataUsers,
     addOrDeleteStaff,
+    // signature
+    getSignature,
+    userAddSignature,
+
+    // fetch
+    fetchDoctor,
   };
 };

@@ -207,12 +207,22 @@ export default function Navbar() {
               <p className="font-semibold">{user?.person_name}</p>
             </DropdownItem>
             <DropdownItem key="signature">
-              <Link size="sm" color="foreground" href="/signature">
+              <Link
+                size="sm"
+                className="w-full"
+                color="foreground"
+                href="/signature"
+              >
                 My Signature
               </Link>
             </DropdownItem>
             <DropdownItem key="message">
-              <Link size="sm" color="foreground" href="/message">
+              <Link
+                size="sm"
+                className="w-full"
+                color="foreground"
+                href="/message"
+              >
                 Message
               </Link>
             </DropdownItem>
