@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useApiRequest } from "@/hooks/useApi";
+import { useAuth } from "@/context/AuthContext";
 
 export default function useHook({
   closeForm1,
@@ -13,10 +14,12 @@ export default function useHook({
   setSignature3,
   setNurseSignature,
 }) {
+  const { user } = useAuth();
   const { fetchChoice, prenameApi, Relation, fetchDoctor } = useApiRequest();
   const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
   const [choice, setChoice] = useState([]);
   const [doctor, setDoctor] = useState([]);
+  const [staff, setStaff] = useState([]);
   const [prename, setPrename] = useState([]);
   const [relation, setRelation] = useState([]);
   const [openSign01, setOpenSign01] = useState(false);
@@ -196,5 +199,6 @@ export default function useHook({
     setOpenSign04,
     relation,
     doctor,
+    user,
   };
 }

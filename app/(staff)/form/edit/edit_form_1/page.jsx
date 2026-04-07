@@ -75,6 +75,7 @@ export default function page({
     handleCloseModal,
     relation,
     doctor,
+    user,
   } = useHook({
     closeForm1,
     patFormData,
@@ -618,36 +619,29 @@ export default function page({
                             alt=""
                           />
                         ) : (
-                          <form.Field name="relation">
-                            {(field) => (
-                              <Select
-                                label="ความเกี่ยวข้อง"
-                                className="col-span-8 md:col-span-3"
-                                size="sm"
-                                radius="sm"
-                                placeholder="ระบุความเกี่ยวข้อง"
-                                selectedKeys={
-                                  field.state.value ? [field.state.value] : []
-                                }
-                                onSelectionChange={(keys) => {
-                                  const value = Array.from(keys)[0];
-                                  field.handleChange(value);
-                                }}
-                              >
-                                {doctor?.map((item) => (
-                                  <SelectItem key={String(item.doctorid)}>
-                                    {item?.name}
-                                  </SelectItem>
-                                ))}
-                              </Select>
-                            )}
-                          </form.Field>
+                          <span>
+                            ..........................................
+                          </span>
                         )}
+                        <Button
+                          size="sm"
+                          isIconOnly
+                          className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
+                          variant="flat"
+                          isDisabled={
+                            patFormData?.data_form?.form?.doctor_id !==
+                            user.userid
+                          }
+                        >
+                          <Edit3 className="size-5" />
+                        </Button>
                       </div>
 
-                      <span className="text-sm text-gray-500 dark:text-white">
-                        (ชื่อแพทย์)
-                      </span>
+                      <p className="max-w-xs text-sm">
+                        ({" "}
+                        {patFormData?.data_form?.doctor_user?.person_name ?? ""}{" "}
+                        )
+                      </p>
                     </div>
 
                     {/* นักรังสีแพทย์ */}
@@ -675,17 +669,20 @@ export default function page({
                           isIconOnly
                           className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
                           variant="flat"
+                          isDisabled={
+                            patFormData?.data_form?.form?.staff_id !==
+                            user.userid
+                          }
                           onPress={() => setOpenSign03(true)}
                         >
                           <Edit3 className="size-5" />
                         </Button>
                       </div>
-                      <Input
-                        className="max-w-xs"
-                        size="sm"
-                        radius="sm"
-                        placeholder="ชื่อ-นามสกุล"
-                      />
+                      <p className="max-w-xs text-sm">
+                        ({" "}
+                        {patFormData?.data_form?.staff_user?.person_name ?? ""}{" "}
+                        )
+                      </p>
                     </div>
 
                     {/* พยาน */}
@@ -746,22 +743,26 @@ export default function page({
                             />
                           )}
                         </span>
+
                         <Button
                           size="sm"
                           isIconOnly
                           className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
                           variant="flat"
                           onPress={() => setOpenSign04(true)}
+                          isDisabled={
+                            patFormData?.data_form?.form?.nurse_id !==
+                            user.userid
+                          }
                         >
                           <Edit3 className="size-5" />
                         </Button>
                       </div>
-                      <Input
-                        className="max-w-xs"
-                        size="sm"
-                        radius="sm"
-                        placeholder="ชื่อ-นามสกุล"
-                      />
+                      <p className="max-w-xs text-sm">
+                        ( {""}
+                        {patFormData?.data_form?.nurse_user?.person_name ?? ""}
+                        {""} )
+                      </p>
                     </div>
 
                     <div className="pt-2 flex justify-end">

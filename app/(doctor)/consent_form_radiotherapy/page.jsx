@@ -32,6 +32,9 @@ import { Pagination } from "@heroui/pagination";
 import ModalForm1 from "./create_form_1/page";
 import ModalForm2 from "./create_form_2/page";
 import ModalForm3 from "./create_form_3/page";
+import ModalEditForm1 from "../../(staff)/form/edit/edit_form_1/page";
+import ModalEditForm2 from "../../(staff)/form/edit/edit_form_2/page";
+import ModalEditForm3 from "../../(staff)/form/edit/edit_form_3/page";
 import ViewForm from "./view/page";
 import useHook from "./useHook";
 import { Input } from "@heroui/input";
@@ -81,6 +84,16 @@ export default function Page() {
     visibleColumns,
     setVisibleColumns,
     filteredColumns,
+    modalEditForm1,
+    setModalEditForm1,
+    modalEditForm2,
+    setModalEditForm2,
+    modalEditForm3,
+    setModalEditForm3,
+    handleSelectIdForm,
+    patFormData,
+    selectIdForm,
+    fetchData,
   } = useHook();
 
   const renderCell = (item, key) => {
@@ -176,6 +189,30 @@ export default function Page() {
           loadData();
           setSelectForm("");
         }}
+      />
+      <ModalEditForm1
+        patFormData={patFormData}
+        openForm1={modalEditForm1}
+        modalRef={modalRef}
+        selectIdForm={selectIdForm}
+        fetchData={fetchData}
+        closeForm1={() => setModalEditForm1(false)}
+      />
+      <ModalEditForm2
+        patFormData={patFormData}
+        openForm2={modalEditForm2}
+        modalRef={modalRef}
+        selectIdForm={selectIdForm}
+        fetchData={fetchData}
+        closeForm2={() => setModalEditForm2(false)}
+      />
+      <ModalEditForm3
+        patFormData={patFormData}
+        openForm3={modalEditForm3}
+        modalRef={modalRef}
+        selectIdForm={selectIdForm}
+        fetchData={fetchData}
+        closeForm3={() => setModalEditForm3(false)}
       />
       <ViewForm
         isOpen={modalViewForm}
@@ -403,6 +440,10 @@ export default function Page() {
                       radius="lg"
                       variant="flat"
                       className="bg-neutral-900 text-white"
+                      onPress={() => {
+                        FormByFormId[i.form_type_id](true);
+                        handleSelectIdForm(i.id);
+                      }}
                     >
                       Edit
                     </Button>

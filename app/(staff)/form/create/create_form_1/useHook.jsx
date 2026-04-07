@@ -8,8 +8,15 @@ import { useAuth } from "@/context/AuthContext";
 
 export default function useHook({ closeForm1, selectForm }) {
   const { user } = useAuth();
-  const { SearchHn, SearchVisit, SearchVitalsign, DoctorCreateForm } =
-    useApiRequest();
+  const {
+    SearchHn,
+    SearchVisit,
+    SearchVitalsign,
+    DoctorCreateForm,
+    staffList,
+    fetchDoctor,
+  } = useApiRequest();
+  const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
   const [hnInput, setHnInput] = useState("");
   const [pat, setPat] = useState(null);
   const modalRefSign = useRef(null);
@@ -22,6 +29,19 @@ export default function useHook({ closeForm1, selectForm }) {
   const [vitalsignList, setVitalSignList] = useState([]);
   const [vitalsignId, setVitalsignId] = useState("");
   const [vitalsignData, setVitalsignData] = useState([]);
+  const [staff, setStaff] = useState([]);
+  const [doctor, setDoctor] = useState([]);
+
+  useEffect(() => {
+    if (didFetch.current) return; // check flag ก่อน
+    didFetch.current = true;
+    staffList()
+      .then((data) => setStaff(data || []))
+      .catch(console.error);
+    fetchDoctor()
+      .then((data) => setDoctor(data.doctorFormatted || []))
+      .catch(console.error);
+  }, [staffList, fetchDoctor]);
 
   const openModal = () => {
     setOpenSign01((prev) => !prev);
@@ -81,6 +101,10 @@ export default function useHook({ closeForm1, selectForm }) {
     vitalsign_id: null,
     pat_age: "",
     doctor_sign: "",
+    doctor_id: null,
+    staff_id: null,
+    nurse_id: null,
+    viewer: null,
   });
 
   const [field, setField] = useState(initialField());
@@ -93,6 +117,10 @@ export default function useHook({ closeForm1, selectForm }) {
     visit_id: z.coerce.number().nullable(),
     vitalsign_id: z.coerce.number().nullable(),
     doctor_sign: z.string().optional(),
+    doctor_id: z.string().nullable(),
+    staff_id: z.string().nullable(),
+    nurse_id: z.string().nullable(),
+    viewer: z.string().nullable(),
   });
 
   const handleChange = async (e) => {
@@ -318,5 +346,7 @@ export default function useHook({ closeForm1, selectForm }) {
     handleSaveSignature,
     signature,
     user,
+    staff,
+    doctor,
   };
 }

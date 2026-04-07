@@ -1,17 +1,22 @@
 "use client";
+import { addToast } from "@heroui/toast";
 import React, { useEffect, useRef, useState } from "react";
 import { useApiRequest } from "@/hooks/useApi";
 import { formComponentMap } from "@/components/form-config/formComponentMap";
 
 export default function useHook() {
-  const { fetchForm, FormList } = useApiRequest();
+  const { fetchForm, FormList, FormListByHn, DataFormById } = useApiRequest();
   const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
   const modalRef = useRef(null);
   const [modalForm1, setModalForm1] = useState(false);
   const [modalForm2, setModalForm2] = useState(false);
   const [modalForm3, setModalForm3] = useState(false);
+  const [modalEditForm1, setModalEditForm1] = useState(false);
+  const [modalEditForm2, setModalEditForm2] = useState(false);
+  const [modalEditForm3, setModalEditForm3] = useState(false);
+  const [selectIdForm, setSelectIdForm] = useState(null);
+  const [patFormData, setPatFormData] = useState(null);
 
-  //modal view
   const [modalViewForm, setModalViewForm] = useState(false);
   // set state form id and form type id
   const [formId, setFormId] = useState(null);
@@ -63,39 +68,6 @@ export default function useHook() {
     loadData();
   }, [page, limit, debounceSearch, status]); // ✅ สำคัญ
 
-  const statusStyle = {
-    Pending: "bg-[#ffedd5] text-[#d97706]",
-    Saved: "bg-blue-100 text-blue-500",
-    Success: "bg-green-100 text-green-700",
-    Cancel: "bg-red-100 text-red-600",
-  };
-
-  const FormByFormId = {
-    1: setModalForm1,
-    2: setModalForm2,
-    3: setModalForm3,
-  };
-
-  //handle select form id and form type id
-
-  const handleOpenView = async (form_id, form_type_id) => {
-    if (!form_id || !form_type_id) return;
-    try {
-      await formComponentMap[form_type_id]?.();
-
-      setFormId(form_id);
-      setFormTypeId(form_type_id);
-      setModalViewForm(true);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  //page
-  const totalPages = pagination.totalPages;
-  const totalForm = pagination.total;
-  const countFormInPage = `${pagination.from} - ${pagination.to}`;
-
   const limitData = [
     { id: 1, key: "10" },
     { id: 2, key: "25" },
@@ -117,6 +89,108 @@ export default function useHook() {
 
   const filteredColumns = columns.filter((col) => visibleColumns.has(col.key));
 
+  const statusStyle = {
+    Pending: "bg-[#ffedd5] text-[#d97706]",
+    Saved: "bg-blue-100 text-blue-500",
+    Success: "bg-green-100 text-green-700",
+    Cancel: "bg-red-100 text-red-600",
+  };
+
+  const FormByFormId = {
+    1: setModalEditForm1,
+    2: setModalEditForm2,
+    3: setModalEditForm3,
+  };
+
+  // ค้น หา form ตาม HN
+  const [searchFormByHn, setSearchFormByHn] = useState("");
+  const [formPatList, setFormPatList] = useState([]);
+
+  const handleSearch = async () => {
+    if (!searchFormByHn) {
+      setFormPatList([]);
+      addToast({
+        title: "กรุณากรอก HN",
+        description: "กรุณากรอก HN ที่ต้องการค้นหา",
+        color: "warning",
+      });
+      return;
+    }
+    try {
+      const data = await FormListByHn(searchFormByHn);
+      if (data.length > 0) {
+        setFormPatList(data);
+        addToast({
+          title: "ค้นหาสำเร็จ",
+          description: `พบข้อมูล ${data.length} รายการ`,
+          color: "success",
+        });
+      } else {
+        setFormPatList([]);
+        addToast({
+          title: "ไม่พบข้อมูล",
+          description: "ไม่พบข้อมูลที่ค้นหา",
+          color: "warning",
+        });
+      }
+    } catch (error) {
+      addToast({
+        title: "error",
+        description: "เกิดข้อผิดพลาดในการค้นหา",
+        color: "danger",
+      });
+    }
+  };
+
+  const handleSelectIdForm = (id) => {
+    try {
+      setSelectIdForm(id);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (!selectIdForm) return;
+
+    if (modalEditForm1 || modalEditForm2 || modalEditForm3) {
+      const fetchData = async () => {
+        const data = await DataFormById(selectIdForm);
+        if (data) {
+          setPatFormData(data);
+        }
+      };
+
+      fetchData();
+    }
+  }, [modalEditForm1, modalEditForm2, modalEditForm3]);
+
+  const fetchData = async () => {
+    if (!searchFormByHn) return;
+    setFormPatList([]);
+    try {
+      const data = await FormListByHn(searchFormByHn);
+      if (data.length > 0) {
+        setFormPatList(data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleOpenView = async (form_id, form_type_id) => {
+    if (!form_id || !form_type_id) return;
+    try {
+      await formComponentMap[form_type_id]?.();
+
+      setFormId(form_id);
+      setFormTypeId(form_type_id);
+      setModalViewForm(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const formatThaiDateTime = (date) => {
     const d = new Date(date);
 
@@ -130,34 +204,44 @@ export default function useHook() {
     return `${day}-${month}-${year} ${hours}:${minute} น.`;
   };
 
+  //page
+  const totalPages = pagination.totalPages;
+  const totalForm = pagination.total;
+  const countFormInPage = `${pagination.from} - ${pagination.to}`;
+
   return {
     modalRef,
-    modalForm1,
-    setModalForm1,
-    modalForm2,
-    setModalForm2,
-    modalForm3,
-    setModalForm3,
-    form,
-    selectForm,
-    setSelectForm,
-    formList,
+    modalEditForm1,
+    setModalEditForm1,
+    modalEditForm2,
+    setModalEditForm2,
+    modalEditForm3,
+    setModalEditForm3,
+    formPatList,
+    searchFormByHn,
+    setSearchFormByHn,
+    handleSearch,
     statusStyle,
     FormByFormId,
-    FormList,
-    setFormList,
-    // mockData,
-    //modalView by type id
-    modalViewForm,
-    setModalViewForm,
-    //set state form id and form type id
+    handleSelectIdForm,
+    patFormData,
+    selectIdForm,
+    fetchData,
+    //
+    selectForm,
+    setSelectForm,
+    //form
+    form,
+    formList,
+
     formId,
     setFormId,
     formTypeId,
     setFormTypeId,
-
-    //handle open view
+    modalViewForm,
+    setModalViewForm,
     handleOpenView,
+
     loadData,
     totalPages,
     totalForm,
@@ -175,5 +259,12 @@ export default function useHook() {
     visibleColumns,
     setVisibleColumns,
     filteredColumns,
+
+    modalForm1,
+    setModalForm1,
+    modalForm2,
+    setModalForm2,
+    modalForm3,
+    setModalForm3,
   };
 }
