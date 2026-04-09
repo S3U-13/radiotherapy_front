@@ -4,8 +4,10 @@ import { useForm } from "@tanstack/react-form";
 import React, { useEffect, useRef, useState } from "react";
 import { useApiRequest } from "@/hooks/useApi";
 import { addToast } from "@heroui/toast";
+import { useWarn } from "@/context/WarnContext";
 
 export default function useHook({ closeForm2, selectForm }) {
+  const { setReloadWarn } = useWarn();
   const { SearchHn, DoctorCreateForm } = useApiRequest();
   const [hnInput, setHnInput] = useState("");
   const [pat, setPat] = useState(null);
@@ -119,6 +121,7 @@ export default function useHook({ closeForm2, selectForm }) {
         setHnInput("");
         setSignature(null);
         closeForm2();
+        loadDataCountWarn();
       } else if (!data) {
         addToast({
           title: "Fails",

@@ -5,9 +5,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { useApiRequest } from "@/hooks/useApi";
 import { addToast } from "@heroui/toast";
 import { useAuth } from "@/context/AuthContext";
+import { useWarn } from "@/context/WarnContext";
 
 export default function useHook({ closeForm1, selectForm }) {
   const { user } = useAuth();
+  const { loadDataCountWarn } = useWarn();
   const {
     SearchHn,
     SearchVisit,
@@ -164,6 +166,7 @@ export default function useHook({ closeForm1, selectForm }) {
         setVitalsignId("");
         setSignature(null);
         closeForm1();
+        loadDataCountWarn();
       } else if (!data) {
         addToast({
           title: "Fails",

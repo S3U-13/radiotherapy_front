@@ -11,6 +11,7 @@ import {
 } from "@heroui/modal";
 import { Radio, RadioGroup } from "@heroui/radio";
 import React from "react";
+import { Info, PenSquare } from "lucide-react";
 import useHook from "./hook/useHook";
 import Sign01 from "./patient_signature/page";
 import Sign02 from "./staff_signature/page";
@@ -55,6 +56,15 @@ export default function page({
     selectIdForm,
     fetchData,
   });
+
+  const [confirmSignModal, setConfirmSignModal] = React.useState({
+    isOpen: false,
+    role: null,
+  });
+  const handleApproveSignature = () => {
+    // สามารถใส่ Logic สำหรับการใช้อนุญาตลายเซ็นตรงนี้ได้เลย
+    setConfirmSignModal({ isOpen: false, role: null });
+  };
 
   const {
     choice,
@@ -563,206 +573,356 @@ export default function page({
                     </span>
 
                     {/* ผู้ป่วย */}
-                    <div className="rounded-xl light:border light:border-gray-200 bg-[#f9f9f9] p-6 space-y-3 shadow-sm dark:bg-[#1f1e1e]">
-                      <span className="font-medium text-gray-700 dark:text-white text-sm">
-                        ผู้ป่วย / ตัวแทนผู้ป่วย
-                      </span>
-                      <div className="flex flex-wrap gap-3 items-center">
-                        <span className="text-sm flex items-center gap-2 text-default-700">
-                          ลงชื่อ{" "}
+                    <div className="rounded-xl border border-gray-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#131317]/50 p-5 sm:p-6 space-y-4 shadow-sm hover:border-gray-300 dark:hover:border-neutral-700 transition-all relative">
+                      <div className="pb-3 border-b border-gray-100 dark:border-neutral-800/80 flex items-center justify-between">
+                        <span className="font-semibold text-gray-800 dark:text-gray-200 text-[15px] flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-neutral-600"></div>
+                          ผู้ป่วย / ตัวแทนผู้ป่วย
+                        </span>
+                      </div>
+                      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center justify-between">
+                        <Input
+                          className="max-w-[300px]"
+                          size="sm"
+                          radius="sm"
+                          label="ชื่อ-สกุล"
+                          labelPlacement="outside-left"
+                          placeholder="ระบุชื่อ-นามสกุล"
+                          classNames={{
+                            inputWrapper:
+                              "shadow-none border border-gray-200/80 dark:border-neutral-700/80 bg-gray-50/50 dark:bg-neutral-900/50 hover:bg-white dark:hover:bg-neutral-800",
+                          }}
+                        />
+                        <div className="flex-shrink-0 flex items-center gap-3">
+                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400 mr-2">
+                            ลงลายมือชื่อ
+                          </span>
                           {!signature ? (
-                            <span className="text-gray-400">
-                              .............................
-                            </span>
+                            <div className="w-[180px] h-[50px] rounded-lg border-2 border-dashed border-gray-300 dark:border-neutral-700 flex items-center justify-center text-gray-400 dark:text-neutral-500 text-xs bg-gray-50 dark:bg-neutral-800/30">
+                              รอการลงนาม
+                            </div>
                           ) : (
                             <img
                               src={signature}
                               alt="signature"
-                              className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
+                              className="border border-gray-200 dark:border-neutral-700 rounded-lg shadow-sm w-[180px] h-[50px] object-contain bg-white dark:bg-transparent"
                             />
                           )}
-                        </span>
-                        <Button
-                          size="sm"
-                          isIconOnly
-                          className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
-                          variant="flat"
-                          onPress={() => setOpenSign01(true)}
-                        >
-                          <Edit3 className="size-5" />
-                        </Button>
+                          <Button
+                            size="sm"
+                            isIconOnly
+                            className="bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 shadow-sm"
+                            onPress={() => setOpenSign01(true)}
+                          >
+                            <Edit3 size={16} />
+                          </Button>
+                        </div>
                       </div>
-                      <Input
-                        className="max-w-xs"
-                        size="sm"
-                        radius="sm"
-                        placeholder="ชื่อ-นามสกุล"
-                      />
                     </div>
 
                     {/* แพทย์ */}
-                    <div className="rounded-xl light:border light:border-gray-200 bg-[#f9f9f9] p-6 space-y-3 shadow-sm dark:bg-[#1f1e1e]">
-                      <span className="font-medium text-gray-700 dark:text-white text-sm">
-                        แพทย์
-                      </span>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-default-700">ลงชื่อ</span>{" "}
-                        {patFormData?.data_form?.doctorsign?.doctor_sign ? (
-                          <Image
-                            className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
-                            src={
-                              patFormData?.data_form?.doctorsign
-                                ? patFormData?.data_form?.doctorsign
-                                    ?.doctor_sign
-                                : null
-                            }
-                            alt=""
-                          />
-                        ) : (
-                          <span>
-                            ..........................................
-                          </span>
-                        )}
-                        <Button
-                          size="sm"
-                          isIconOnly
-                          className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
-                          variant="flat"
-                          isDisabled={
-                            patFormData?.data_form?.form?.doctor_id !==
-                            user.userid
-                          }
-                        >
-                          <Edit3 className="size-5" />
-                        </Button>
+                    <div className="rounded-xl border border-gray-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#131317]/50 p-5 sm:p-6 space-y-4 shadow-sm hover:border-gray-300 dark:hover:border-neutral-700 transition-all relative">
+                      <div className="pb-3 border-b border-gray-100 dark:border-neutral-800/80 flex items-center justify-between">
+                        <span className="font-semibold text-gray-800 dark:text-gray-200 text-[15px] flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-neutral-600"></div>
+                          แพทย์
+                        </span>
                       </div>
-
-                      <p className="max-w-xs text-sm">
-                        ({" "}
-                        {patFormData?.data_form?.doctor_user?.person_name ?? ""}{" "}
-                        )
-                      </p>
+                      {patFormData?.data_form?.form?.doctor_userid ===
+                        user?.userid && (
+                        <div className="mt-2 flex items-center justify-between p-3.5 rounded-xl bg-neutral-100/80 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700/50">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-white dark:bg-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 shadow-sm border border-neutral-200 dark:border-neutral-600">
+                              <Info size={16} />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">
+                                คุณมีสิทธิ์ลงนาม
+                              </p>
+                              <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                                แบบฟอร์มนี้ต้องการลายเซ็นของคุณ
+                              </p>
+                            </div>
+                          </div>
+                          <Button
+                            size="sm"
+                            className="bg-neutral-900 text-white shadow-sm hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white font-medium"
+                            onPress={() =>
+                              setConfirmSignModal({
+                                isOpen: true,
+                                role: "doctor",
+                              })
+                            }
+                          >
+                            ตรวจสอบ
+                          </Button>
+                        </div>
+                      )}
+                      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center justify-between">
+                        <Input
+                          className="max-w-[300px]"
+                          size="sm"
+                          radius="sm"
+                          label="ชื่อ-สกุล"
+                          labelPlacement="outside-left"
+                          value={
+                            patFormData?.data_form?.doctor_user?.person_name ??
+                            ""
+                          }
+                          isReadOnly
+                          classNames={{
+                            inputWrapper:
+                              "shadow-none border border-gray-200/80 dark:border-neutral-700/80 bg-gray-50/50 dark:bg-neutral-900/50",
+                          }}
+                        />
+                        <div className="flex-shrink-0 flex items-center gap-3">
+                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400 mr-2">
+                            ลงลายมือชื่อ
+                          </span>
+                          {!patFormData?.data_form?.doctorsign?.doctor_sign ? (
+                            <div className="w-[180px] h-[50px] rounded-lg border-2 border-dashed border-gray-300 dark:border-neutral-700 flex items-center justify-center text-gray-400 dark:text-neutral-500 text-xs bg-gray-50 dark:bg-neutral-800/30">
+                              รอการลงนาม
+                            </div>
+                          ) : (
+                            <Image
+                              src={patFormData.data_form.doctorsign.doctor_sign}
+                              alt="signature"
+                              className="border border-gray-200 dark:border-neutral-700 rounded-lg shadow-sm w-[180px] h-[50px] object-contain bg-white dark:bg-transparent"
+                            />
+                          )}
+                          <Button
+                            size="sm"
+                            isIconOnly
+                            className="bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 shadow-sm"
+                            isDisabled={
+                              patFormData?.data_form?.form?.doctor_id !==
+                              user.userid
+                            }
+                          >
+                            <Edit3 size={16} />
+                          </Button>
+                        </div>
+                      </div>
                     </div>
 
                     {/* นักรังสีแพทย์ */}
-                    <div className="rounded-xl light:border light:border-gray-200 bg-[#f9f9f9] p-6 space-y-3 shadow-sm dark:bg-[#1f1e1e]">
-                      <span className="font-medium text-gray-700 dark:text-white text-sm">
-                        นักรังสีแพทย์
-                      </span>
-                      <div className="flex flex-wrap gap-3 items-center">
-                        <span className="text-sm flex items-center gap-2 text-default-700 dark:text-white">
-                          ลงชื่อ{" "}
+                    <div className="rounded-xl border border-gray-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#131317]/50 p-5 sm:p-6 space-y-4 shadow-sm hover:border-gray-300 dark:hover:border-neutral-700 transition-all relative">
+                      <div className="pb-3 border-b border-gray-100 dark:border-neutral-800/80 flex items-center justify-between">
+                        <span className="font-semibold text-gray-800 dark:text-gray-200 text-[15px] flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-neutral-600"></div>
+                          นักรังสีแพทย์
+                        </span>
+                      </div>
+                      {patFormData?.data_form?.form?.staff_id ===
+                        user?.userid && (
+                        <div className="mt-2 flex items-center justify-between p-3.5 rounded-xl bg-neutral-100/80 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700/50">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-white dark:bg-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 shadow-sm border border-neutral-200 dark:border-neutral-600">
+                              <Info size={16} />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">
+                                คุณมีสิทธิ์ลงนาม
+                              </p>
+                              <p className="text-xs text-neutral-600 dark:text-neutral-400">
+                                แบบฟอร์มนี้ต้องการลายเซ็นของคุณ
+                              </p>
+                            </div>
+                          </div>
+                          <Button
+                            size="sm"
+                            className="bg-neutral-900 text-white shadow-sm hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white font-medium"
+                            onPress={() =>
+                              setConfirmSignModal({
+                                isOpen: true,
+                                role: "staff",
+                              })
+                            }
+                          >
+                            ตรวจสอบ
+                          </Button>
+                        </div>
+                      )}
+                      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center justify-between">
+                        <Input
+                          className="max-w-[300px]"
+                          size="sm"
+                          radius="sm"
+                          label="ชื่อ-สกุล"
+                          labelPlacement="outside-left"
+                          value={
+                            patFormData?.data_form?.staff_user?.[0]
+                              ?.person_name ?? ""
+                          }
+                          isReadOnly
+                          classNames={{
+                            inputWrapper:
+                              "shadow-none border border-gray-200/80 dark:border-neutral-700/80 bg-gray-50/50 dark:bg-neutral-900/50",
+                          }}
+                        />
+                        <div className="flex-shrink-0 flex items-center gap-3">
+                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400 mr-2">
+                            ลงลายมือชื่อ
+                          </span>
                           {!signature3 ? (
-                            <span className="text-gray-400">
-                              .............................
-                            </span>
+                            <div className="w-[180px] h-[50px] rounded-lg border-2 border-dashed border-gray-300 dark:border-neutral-700 flex items-center justify-center text-gray-400 dark:text-neutral-500 text-xs bg-gray-50 dark:bg-neutral-800/30">
+                              รอการลงนาม
+                            </div>
                           ) : (
                             <img
                               src={signature3}
                               alt="signature3"
-                              className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
+                              className="border border-gray-200 dark:border-neutral-700 rounded-lg shadow-sm w-[180px] h-[50px] object-contain bg-white dark:bg-transparent"
                             />
                           )}
-                        </span>
-                        <Button
-                          size="sm"
-                          isIconOnly
-                          className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
-                          variant="flat"
-                          isDisabled={
-                            patFormData?.data_form?.form?.staff_id !==
-                            user.userid
-                          }
-                          onPress={() => setOpenSign03(true)}
-                        >
-                          <Edit3 className="size-5" />
-                        </Button>
+                          <Button
+                            size="sm"
+                            isIconOnly
+                            className="bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 shadow-sm"
+                            isDisabled={
+                              patFormData?.data_form?.form?.staff_id !==
+                              user.userid
+                            }
+                            onPress={() => setOpenSign03(true)}
+                          >
+                            <Edit3 size={16} />
+                          </Button>
+                        </div>
                       </div>
-                      <p className="max-w-xs text-sm">
-                        ({" "}
-                        {patFormData?.data_form?.staff_user?.person_name ?? ""}{" "}
-                        )
-                      </p>
                     </div>
 
                     {/* พยาน */}
-                    <div className="rounded-xl light:border light:border-gray-200 bg-[#f9f9f9] p-6 space-y-3 shadow-sm dark:bg-[#1f1e1e]">
-                      <span className="font-medium text-gray-700 dark:text-white text-sm">
-                        พยาน
-                      </span>
-                      <div className="flex flex-wrap gap-3 items-center">
-                        <span className="text-sm flex items-center gap-2 text-default-700">
-                          ลงชื่อ{" "}
+                    <div className="rounded-xl border border-gray-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#131317]/50 p-5 sm:p-6 space-y-4 shadow-sm hover:border-gray-300 dark:hover:border-neutral-700 transition-all relative">
+                      <div className="pb-3 border-b border-gray-100 dark:border-neutral-800/80 flex items-center justify-between">
+                        <span className="font-semibold text-gray-800 dark:text-gray-200 text-[15px] flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-neutral-600"></div>
+                          พยาน
+                        </span>
+                      </div>
+                      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center justify-between">
+                        <Input
+                          className="max-w-[300px]"
+                          size="sm"
+                          radius="sm"
+                          label="ชื่อ-สกุล"
+                          labelPlacement="outside-left"
+                          placeholder="ระบุชื่อ-นามสกุล"
+                          classNames={{
+                            inputWrapper:
+                              "shadow-none border border-gray-200/80 dark:border-neutral-700/80 bg-gray-50/50 dark:bg-neutral-900/50 hover:bg-white dark:hover:bg-neutral-800",
+                          }}
+                        />
+                        <div className="flex-shrink-0 flex items-center gap-3">
+                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400 mr-2">
+                            ลงลายมือชื่อ
+                          </span>
                           {!signature2 ? (
-                            <span className="text-gray-400">
-                              .............................
-                            </span>
+                            <div className="w-[180px] h-[50px] rounded-lg border-2 border-dashed border-gray-300 dark:border-neutral-700 flex items-center justify-center text-gray-400 dark:text-neutral-500 text-xs bg-gray-50 dark:bg-neutral-800/30">
+                              รอการลงนาม
+                            </div>
                           ) : (
                             <img
                               src={signature2}
                               alt="signature"
-                              className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
+                              className="border border-gray-200 dark:border-neutral-700 rounded-lg shadow-sm w-[180px] h-[50px] object-contain bg-white dark:bg-transparent"
                             />
                           )}
-                        </span>
-                        <Button
-                          size="sm"
-                          isIconOnly
-                          className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
-                          variant="flat"
-                          onPress={() => setOpenSign02(true)}
-                        >
-                          <Edit3 className="size-5" />
-                        </Button>
+                          <Button
+                            size="sm"
+                            isIconOnly
+                            className="bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 shadow-sm"
+                            onPress={() => setOpenSign02(true)}
+                          >
+                            <Edit3 size={16} />
+                          </Button>
+                        </div>
                       </div>
-                      <Input
-                        className="max-w-xs"
-                        size="sm"
-                        radius="sm"
-                        placeholder="ชื่อ-นามสกุล"
-                      />
                     </div>
 
                     {/* พยาบาล */}
-                    <div className="rounded-xl light:border light:border-gray-200 bg-[#f9f9f9] p-6 space-y-3 shadow-sm dark:bg-[#1f1e1e]">
-                      <span className="font-medium text-gray-700 dark:text-white text-sm">
-                        พยาบาล
-                      </span>
-                      <div className="flex flex-wrap gap-3 items-center">
-                        <span className="text-sm flex items-center gap-2 text-default-700">
-                          ลงชื่อ{" "}
+                    <div className="rounded-xl border border-gray-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#131317]/50 p-5 sm:p-6 space-y-4 shadow-sm hover:border-gray-300 dark:hover:border-neutral-700 transition-all relative">
+                      <div className="pb-3 border-b border-gray-100 dark:border-neutral-800/80 flex items-center justify-between">
+                        <span className="font-semibold text-gray-800 dark:text-gray-200 text-[15px] flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-neutral-600"></div>
+                          พยาบาล
+                        </span>
+                      </div>
+                      {patFormData?.data_form?.form?.nurse_id ===
+                        user?.userid && (
+                        <div className="mt-2 flex items-center justify-between p-3.5 rounded-xl bg-blue-50/50 dark:bg-blue-500/5 border border-blue-100 dark:border-blue-500/20">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-500/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                              <Info size={16} />
+                            </div>
+                            <div>
+                              <p className="text-sm font-semibold text-blue-900 dark:text-blue-100">
+                                คุณมีสิทธิ์ลงนาม
+                              </p>
+                              <p className="text-xs text-blue-700 dark:text-blue-300">
+                                แบบฟอร์มนี้ต้องการลายเซ็นของคุณ
+                              </p>
+                            </div>
+                          </div>
+                          <Button
+                            size="sm"
+                            className="bg-blue-600 text-white shadow-sm hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 font-medium"
+                            onPress={() =>
+                              setConfirmSignModal({
+                                isOpen: true,
+                                role: "nurse",
+                              })
+                            }
+                          >
+                            ตรวจสอบ
+                          </Button>
+                        </div>
+                      )}
+                      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center justify-between">
+                        <Input
+                          className="max-w-[300px]"
+                          size="sm"
+                          radius="sm"
+                          label="ชื่อ-สกุล"
+                          labelPlacement="outside-left"
+                          value={
+                            patFormData?.data_form?.nurse_user?.[0]
+                              ?.person_name ?? ""
+                          }
+                          isReadOnly
+                          classNames={{
+                            inputWrapper:
+                              "shadow-none border border-gray-200/80 dark:border-neutral-700/80 bg-gray-50/50 dark:bg-neutral-900/50",
+                          }}
+                        />
+                        <div className="flex-shrink-0 flex items-center gap-3">
+                          <span className="text-sm font-medium text-gray-500 dark:text-gray-400 mr-2">
+                            ลงลายมือชื่อ
+                          </span>
                           {!nurseSignature ? (
-                            <span className="text-gray-400">
-                              .............................
-                            </span>
+                            <div className="w-[180px] h-[50px] rounded-lg border-2 border-dashed border-gray-300 dark:border-neutral-700 flex items-center justify-center text-gray-400 dark:text-neutral-500 text-xs bg-gray-50 dark:bg-neutral-800/30">
+                              รอการลงนาม
+                            </div>
                           ) : (
                             <img
                               src={nurseSignature}
                               alt="nurse_signature"
-                              className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
+                              className="border border-gray-200 dark:border-neutral-700 rounded-lg shadow-sm w-[180px] h-[50px] object-contain bg-white dark:bg-transparent"
                             />
                           )}
-                        </span>
-
-                        <Button
-                          size="sm"
-                          isIconOnly
-                          className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
-                          variant="flat"
-                          onPress={() => setOpenSign04(true)}
-                          isDisabled={
-                            patFormData?.data_form?.form?.nurse_id !==
-                            user.userid
-                          }
-                        >
-                          <Edit3 className="size-5" />
-                        </Button>
+                          <Button
+                            size="sm"
+                            isIconOnly
+                            className="bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 shadow-sm"
+                            onPress={() => setOpenSign04(true)}
+                            isDisabled={
+                              patFormData?.data_form?.form?.nurse_id !==
+                              user.userid
+                            }
+                          >
+                            <Edit3 size={16} />
+                          </Button>
+                        </div>
                       </div>
-                      <p className="max-w-xs text-sm">
-                        ( {""}
-                        {patFormData?.data_form?.nurse_user?.person_name ?? ""}
-                        {""} )
-                      </p>
                     </div>
 
                     <div className="pt-2 flex justify-end">
@@ -863,6 +1023,55 @@ export default function page({
                   }}
                   onSave={handleSaveSignature4}
                 />
+
+                {/* Confirm Signature Modal */}
+                <Modal
+                  isOpen={confirmSignModal.isOpen}
+                  onOpenChange={(open) =>
+                    setConfirmSignModal({ ...confirmSignModal, isOpen: open })
+                  }
+                  size="sm"
+                  classNames={{
+                    base: "dark:bg-[#18181B]",
+                  }}
+                >
+                  <ModalContent>
+                    {(onClose) => (
+                      <>
+                        <ModalHeader className="flex flex-col gap-1 items-center pb-0 pt-6">
+                          <div className="w-12 h-12 rounded-full bg-neutral-100 dark:bg-neutral-800 flex items-center justify-center text-neutral-700 dark:text-neutral-300 mb-4 border border-neutral-200 dark:border-neutral-700">
+                            <PenSquare size={24} />
+                          </div>
+                          <p className="text-lg font-semibold text-neutral-900 dark:text-white">
+                            ยืนยันการใช้ลายเซ็น
+                          </p>
+                        </ModalHeader>
+                        <ModalBody className="text-center pb-6">
+                          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                            คุณต้องการอนุญาตให้ใช้ลายเซ็นของคุณในแบบฟอร์มนี้หรือไม่?
+                          </p>
+                        </ModalBody>
+                        <ModalFooter className="flex justify-center gap-3 w-full pb-6 border-none">
+                          <Button
+                            variant="flat"
+                            className="font-medium flex-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300"
+                            onPress={() =>
+                              setConfirmSignModal({ isOpen: false, role: null })
+                            }
+                          >
+                            ไม่อนุญาต
+                          </Button>
+                          <Button
+                            className="font-medium flex-1 shadow-sm bg-neutral-900 text-white dark:bg-white dark:text-neutral-900"
+                            onPress={handleApproveSignature}
+                          >
+                            อนุญาต
+                          </Button>
+                        </ModalFooter>
+                      </>
+                    )}
+                  </ModalContent>
+                </Modal>
               </ModalBody>
 
               <ModalFooter>

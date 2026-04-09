@@ -4,6 +4,7 @@ import { useForm } from "@tanstack/react-form";
 import React, { useEffect, useRef, useState } from "react";
 import { useApiRequest } from "@/hooks/useApi";
 import { addToast } from "@heroui/toast";
+import { useAuth } from "@/context/AuthContext";
 
 export default function useHook({
   closeForm3,
@@ -14,6 +15,7 @@ export default function useHook({
   setSignature3,
   setNurseSignature,
 }) {
+  const { user } = useAuth();
   const { fetchChoice, Relation } = useApiRequest();
   const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
   const [openSign01, setOpenSign01] = useState(false);
@@ -113,5 +115,6 @@ export default function useHook({
     pat_name,
     handleCloseModal,
     relation,
+    user,
   };
 }

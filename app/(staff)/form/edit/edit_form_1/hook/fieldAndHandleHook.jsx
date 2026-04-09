@@ -4,6 +4,7 @@ import * as z from "zod";
 import { useForm } from "@tanstack/react-form";
 import { addToast } from "@heroui/toast";
 import { useApiRequest } from "@/hooks/useApi";
+import { useWarn } from "@/context/WarnContext";
 
 export default function fieldAndHandleHook({
   closeForm1,
@@ -11,6 +12,7 @@ export default function fieldAndHandleHook({
   fetchData,
 }) {
   const { PatFillOutForm } = useApiRequest();
+  const { loadDataCountWarn } = useWarn();
   const modalRefSign = useRef(null);
 
   const [signature, setSignature] = useState(null);
@@ -148,6 +150,7 @@ export default function fieldAndHandleHook({
         setSignature2(null);
         setSignature3(null);
         setNurseSignature(null);
+        loadDataCountWarn();
       } else if (!data) {
         addToast({
           title: "Fails",

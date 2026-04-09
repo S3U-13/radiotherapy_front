@@ -4,8 +4,10 @@ import { useForm } from "@tanstack/react-form";
 import React, { useEffect, useRef, useState } from "react";
 import { useApiRequest } from "@/hooks/useApi";
 import { addToast } from "@heroui/toast";
+import { useWarn } from "@/context/WarnContext";
 
 export default function useHook({ closeForm3, selectForm }) {
+  const { loadDataCountWarn } = useWarn();
   const { SearchHn, DoctorCreateForm } = useApiRequest();
   const modalRefSign = useRef(null);
   const [openSign01, setOpenSign01] = useState(false);
@@ -109,6 +111,7 @@ export default function useHook({ closeForm3, selectForm }) {
           variant: "flat",
           radius: "lg",
         });
+        loadDataCountWarn();
         form.reset();
         setHnInput("");
         setSignature(null);

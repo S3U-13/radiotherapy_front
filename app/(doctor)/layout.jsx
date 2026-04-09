@@ -4,12 +4,18 @@ import Sidebar from "@/components/sidebar";
 import Navbar from "@/components/navbar";
 import { AuthProvider } from "@/context/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import { WarnProvider } from "@/context/WarnContext";
+import { FormProvider } from "@/context/FormContext";
 
 export default function Layout({ children }) {
   return (
     <AuthProvider>
       <ProtectedRoute role={["doctor"]}>
-        <Content>{children}</Content>
+        <WarnProvider>
+          <FormProvider>
+            <Content>{children}</Content>
+          </FormProvider>
+        </WarnProvider>
       </ProtectedRoute>
     </AuthProvider>
   );

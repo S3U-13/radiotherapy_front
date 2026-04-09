@@ -149,6 +149,14 @@ export const useApiRequest = () => {
   const fetchDoctor = () =>
     apiRequest("/api/user/doctors-group-radio-therapy", "GET");
 
+  // fetch count warn
+  const fetchCountWarn = () => apiRequest("/api/user/count-warn", "GET");
+
+  const changeStatusWarn = (id, status) =>
+    apiRequest(`/api/user/change-status-warn/${id}`, "PUT", {
+      status,
+    });
+
   return {
     prenameApi,
     fetchForm,
@@ -167,11 +175,13 @@ export const useApiRequest = () => {
     staffList,
     fetchDataUsers,
     addOrDeleteStaff,
+    changeStatusWarn,
     // signature
     getSignature,
     userAddSignature,
 
     // fetch
     fetchDoctor,
+    fetchCountWarn,
   };
 };
