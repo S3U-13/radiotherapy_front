@@ -10,7 +10,7 @@ import {
   ModalHeader,
 } from "@heroui/modal";
 import { Radio, RadioGroup } from "@heroui/radio";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Info, PenSquare } from "lucide-react";
 import useHook from "./hook/useHook";
 import Sign01 from "./patient_signature/page";
@@ -23,6 +23,7 @@ import { Select, SelectItem } from "@heroui/select";
 import { Checkbox, CheckboxGroup } from "@heroui/checkbox";
 import { Image } from "@heroui/image";
 import fieldAndHandleHook from "./hook/fieldAndHandleHook";
+import useConfirmSignature from "./hook/confirmSignatureHook";
 
 export default function page({
   patFormData,
@@ -40,30 +41,66 @@ export default function page({
     isSubmitting,
     signature,
     signature2,
-    signature3,
-    nurseSignature,
     setSignature,
     setSignature2,
-    setSignature3,
-    setNurseSignature,
     modalRefSign,
     handleSaveSignature,
     handleSaveSignature2,
-    handleSaveSignature3,
-    handleSaveSignature4,
   } = fieldAndHandleHook({
     closeForm1,
     selectIdForm,
     fetchData,
   });
 
-  const [confirmSignModal, setConfirmSignModal] = React.useState({
+  const {
+    handleConfirmSignature,
+    setField,
+    signatureData,
+    setSignatureData,
+    loading: confirmLoading,
+  } = useConfirmSignature();
+
+  const [staffSign, setStaffSign] = useState(null);
+  const [nurseSign, setNurseSign] = useState(null);
+  const [doctorSign, setDoctorSign] = useState(null);
+
+  useEffect(() => {
+    setDoctorSign(patFormData?.data_form?.doctorsign?.doctor_sign || null);
+    setStaffSign(patFormData?.data_form?.staffsign?.staff_sign || null);
+    setNurseSign(patFormData?.data_form?.nursesign?.nurse_sign || null);
+  }, [patFormData]);
+
+  useEffect(() => {
+    if (signatureData && signatureData.type) {
+      if (signatureData.type === "doctor") {
+        setDoctorSign(signatureData.signature || null);
+      } else if (signatureData.type === "staff") {
+        setStaffSign(signatureData.signature || null);
+      } else if (signatureData.type === "nurse") {
+        setNurseSign(signatureData.signature || null);
+      }
+    }
+  }, [signatureData]);
+
+  useEffect(() => {
+    if (!openForm1 && setSignatureData) {
+      setSignatureData(null);
+    }
+  }, [openForm1, setSignatureData]);
+
+  const [confirmSignModal, setConfirmSignModal] = useState({
     isOpen: false,
     role: null,
   });
-  const handleApproveSignature = () => {
-    // สามารถใส่ Logic สำหรับการใช้อนุญาตลายเซ็นตรงนี้ได้เลย
-    setConfirmSignModal({ isOpen: false, role: null });
+
+  const handleApproveSignature = async (confirmValue) => {
+    const success = await handleConfirmSignature(confirmValue);
+    if (success) {
+      setConfirmSignModal({ isOpen: false, role: null });
+      if (typeof fetchData === "function") {
+        fetchData();
+      }
+    }
   };
 
   const {
@@ -93,9 +130,31 @@ export default function page({
     setSelectedDisease,
     setSignature,
     setSignature2,
-    setSignature3,
-    setNurseSignature,
   });
+
+  const getFieldNameByRole = (role) => {
+    const map = {
+      staff: "staff_sign_id",
+      nurse: "nurse_sign_id",
+      doctor: "doctor_sign_id",
+    };
+    return map[role] || "";
+  };
+
+  useEffect(() => {
+    if (signatureData && user?.role) {
+      const fieldName = getFieldNameByRole(user.role);
+
+      if (fieldName) {
+        form.setFieldValue(fieldName, signatureData.id);
+      }
+    }
+    if (user?.role === "staff") {
+      form.setFieldValue("staff_posid", user.PosID);
+    }
+  }, [signatureData, user?.role]);
+
+  const fieldName = getFieldNameByRole(user?.role);
 
   // const prename = [
   //   { key: "1", label: "นาย" },
@@ -647,12 +706,18 @@ export default function page({
                           <Button
                             size="sm"
                             className="bg-neutral-900 text-white shadow-sm hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white font-medium"
-                            onPress={() =>
+                            onPress={() => {
+                              setField({
+                                userid: user?.userid,
+                                doctorid:
+                                  patFormData?.data_form?.form?.doctor_id,
+                                role: "doctor",
+                              });
                               setConfirmSignModal({
                                 isOpen: true,
                                 role: "doctor",
-                              })
-                            }
+                              });
+                            }}
                           >
                             ตรวจสอบ
                           </Button>
@@ -679,28 +744,17 @@ export default function page({
                           <span className="text-sm font-medium text-gray-500 dark:text-gray-400 mr-2">
                             ลงลายมือชื่อ
                           </span>
-                          {!patFormData?.data_form?.doctorsign?.doctor_sign ? (
+                          {!doctorSign ? (
                             <div className="w-[180px] h-[50px] rounded-lg border-2 border-dashed border-gray-300 dark:border-neutral-700 flex items-center justify-center text-gray-400 dark:text-neutral-500 text-xs bg-gray-50 dark:bg-neutral-800/30">
                               รอการลงนาม
                             </div>
                           ) : (
                             <Image
-                              src={patFormData.data_form.doctorsign.doctor_sign}
+                              src={doctorSign}
                               alt="signature"
                               className="border border-gray-200 dark:border-neutral-700 rounded-lg shadow-sm w-[180px] h-[50px] object-contain bg-white dark:bg-transparent"
                             />
                           )}
-                          <Button
-                            size="sm"
-                            isIconOnly
-                            className="bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 shadow-sm"
-                            isDisabled={
-                              patFormData?.data_form?.form?.doctor_id !==
-                              user.userid
-                            }
-                          >
-                            <Edit3 size={16} />
-                          </Button>
                         </div>
                       </div>
                     </div>
@@ -732,12 +786,17 @@ export default function page({
                           <Button
                             size="sm"
                             className="bg-neutral-900 text-white shadow-sm hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white font-medium"
-                            onPress={() =>
+                            onPress={() => {
+                              setField({
+                                userid: user?.userid,
+                                doctorid: null,
+                                role: "staff",
+                              });
                               setConfirmSignModal({
                                 isOpen: true,
                                 role: "staff",
-                              })
-                            }
+                              });
+                            }}
                           >
                             ตรวจสอบ
                           </Button>
@@ -764,29 +823,17 @@ export default function page({
                           <span className="text-sm font-medium text-gray-500 dark:text-gray-400 mr-2">
                             ลงลายมือชื่อ
                           </span>
-                          {!signature3 ? (
+                          {!staffSign ? (
                             <div className="w-[180px] h-[50px] rounded-lg border-2 border-dashed border-gray-300 dark:border-neutral-700 flex items-center justify-center text-gray-400 dark:text-neutral-500 text-xs bg-gray-50 dark:bg-neutral-800/30">
                               รอการลงนาม
                             </div>
                           ) : (
                             <img
-                              src={signature3}
+                              src={staffSign}
                               alt="signature3"
                               className="border border-gray-200 dark:border-neutral-700 rounded-lg shadow-sm w-[180px] h-[50px] object-contain bg-white dark:bg-transparent"
                             />
                           )}
-                          <Button
-                            size="sm"
-                            isIconOnly
-                            className="bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 shadow-sm"
-                            isDisabled={
-                              patFormData?.data_form?.form?.staff_id !==
-                              user.userid
-                            }
-                            onPress={() => setOpenSign03(true)}
-                          >
-                            <Edit3 size={16} />
-                          </Button>
                         </div>
                       </div>
                     </div>
@@ -849,29 +896,34 @@ export default function page({
                       </div>
                       {patFormData?.data_form?.form?.nurse_id ===
                         user?.userid && (
-                        <div className="mt-2 flex items-center justify-between p-3.5 rounded-xl bg-blue-50/50 dark:bg-blue-500/5 border border-blue-100 dark:border-blue-500/20">
+                        <div className="mt-2 flex items-center justify-between p-3.5 rounded-xl bg-neutral-100/80 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-700/50">
                           <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-500/30 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                            <div className="w-8 h-8 rounded-full bg-white dark:bg-neutral-700 flex items-center justify-center text-neutral-700 dark:text-neutral-300 shadow-sm border border-neutral-200 dark:border-neutral-600">
                               <Info size={16} />
                             </div>
                             <div>
-                              <p className="text-sm font-semibold text-blue-900 dark:text-blue-100">
+                              <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">
                                 คุณมีสิทธิ์ลงนาม
                               </p>
-                              <p className="text-xs text-blue-700 dark:text-blue-300">
+                              <p className="text-xs text-neutral-600 dark:text-neutral-400">
                                 แบบฟอร์มนี้ต้องการลายเซ็นของคุณ
                               </p>
                             </div>
                           </div>
                           <Button
                             size="sm"
-                            className="bg-blue-600 text-white shadow-sm hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 font-medium"
-                            onPress={() =>
+                            className="bg-neutral-900 text-white shadow-sm hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-white font-medium"
+                            onPress={() => {
+                              setField({
+                                userid: user?.userid,
+                                doctorid: null,
+                                role: "nurse",
+                              });
                               setConfirmSignModal({
                                 isOpen: true,
                                 role: "nurse",
-                              })
-                            }
+                              });
+                            }}
                           >
                             ตรวจสอบ
                           </Button>
@@ -898,32 +950,28 @@ export default function page({
                           <span className="text-sm font-medium text-gray-500 dark:text-gray-400 mr-2">
                             ลงลายมือชื่อ
                           </span>
-                          {!nurseSignature ? (
+                          {!nurseSign ? (
                             <div className="w-[180px] h-[50px] rounded-lg border-2 border-dashed border-gray-300 dark:border-neutral-700 flex items-center justify-center text-gray-400 dark:text-neutral-500 text-xs bg-gray-50 dark:bg-neutral-800/30">
                               รอการลงนาม
                             </div>
                           ) : (
                             <img
-                              src={nurseSignature}
+                              src={nurseSign}
                               alt="nurse_signature"
                               className="border border-gray-200 dark:border-neutral-700 rounded-lg shadow-sm w-[180px] h-[50px] object-contain bg-white dark:bg-transparent"
                             />
                           )}
-                          <Button
-                            size="sm"
-                            isIconOnly
-                            className="bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 shadow-sm"
-                            onPress={() => setOpenSign04(true)}
-                            isDisabled={
-                              patFormData?.data_form?.form?.nurse_id !==
-                              user.userid
-                            }
-                          >
-                            <Edit3 size={16} />
-                          </Button>
                         </div>
                       </div>
                     </div>
+                    <form.Field name={fieldName}>
+                      {(field) => (
+                        <Input
+                          value={field.state.value ?? ""}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        />
+                      )}
+                    </form.Field>
 
                     <div className="pt-2 flex justify-end">
                       <DatePicker
@@ -1013,7 +1061,6 @@ export default function page({
                   onClose={() => {
                     setOpenSign03(false);
                   }}
-                  onSave={handleSaveSignature3}
                 />
                 <Sign04
                   modalRefSign={modalRefSign}
@@ -1021,7 +1068,6 @@ export default function page({
                   onClose={() => {
                     setOpenSign04(false);
                   }}
-                  onSave={handleSaveSignature4}
                 />
 
                 {/* Confirm Signature Modal */}
@@ -1055,15 +1101,15 @@ export default function page({
                           <Button
                             variant="flat"
                             className="font-medium flex-1 bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300"
-                            onPress={() =>
-                              setConfirmSignModal({ isOpen: false, role: null })
-                            }
+                            onPress={() => handleApproveSignature("N")}
+                            isDisabled={confirmLoading}
                           >
                             ไม่อนุญาต
                           </Button>
                           <Button
                             className="font-medium flex-1 shadow-sm bg-neutral-900 text-white dark:bg-white dark:text-neutral-900"
-                            onPress={handleApproveSignature}
+                            onPress={() => handleApproveSignature("Y")}
+                            isLoading={confirmLoading}
                           >
                             อนุญาต
                           </Button>

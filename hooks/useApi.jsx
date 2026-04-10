@@ -145,6 +145,19 @@ export const useApiRequest = () => {
     }
   };
 
+  const confirmSignModal = async (value) => {
+    try {
+      const data = await apiRequest(
+        "/api/user/confirm-signature",
+        "POST",
+        value,
+      );
+      return data ?? null;
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   // fetch doctor
   const fetchDoctor = () =>
     apiRequest("/api/user/doctors-group-radio-therapy", "GET");
@@ -179,6 +192,7 @@ export const useApiRequest = () => {
     // signature
     getSignature,
     userAddSignature,
+    confirmSignModal,
 
     // fetch
     fetchDoctor,

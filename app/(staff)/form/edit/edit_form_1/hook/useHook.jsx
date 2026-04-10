@@ -11,8 +11,6 @@ export default function useHook({
   setSelectedDisease,
   setSignature,
   setSignature2,
-  setSignature3,
-  setNurseSignature,
 }) {
   const { user } = useAuth();
   const { fetchChoice, prenameApi, Relation, fetchDoctor } = useApiRequest();
@@ -120,16 +118,6 @@ export default function useHook({
         setState: setSignature2,
         field: "witness_sign",
       },
-      {
-        value: patFormData?.data_form?.staffsign?.staff_sign,
-        setState: setSignature3,
-        field: "staff_sign",
-      },
-      {
-        value: patFormData?.data_form?.nursesign?.nurse_sign,
-        setState: setNurseSignature,
-        field: "nurse_sign",
-      },
     ];
 
     signMap.forEach(({ value, setState, field }) => {
@@ -176,8 +164,6 @@ export default function useHook({
     form.reset();
     setSignature(null);
     setSignature2(null);
-    setSignature3(null);
-    setNurseSignature(null);
   };
 
   return {

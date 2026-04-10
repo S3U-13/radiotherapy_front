@@ -14,11 +14,8 @@ export default function fieldAndHandleHook({
   const { PatFillOutForm } = useApiRequest();
   const { loadDataCountWarn } = useWarn();
   const modalRefSign = useRef(null);
-
   const [signature, setSignature] = useState(null);
   const [signature2, setSignature2] = useState(null);
-  const [signature3, setSignature3] = useState(null);
-  const [nurseSignature, setNurseSignature] = useState(null);
   const Field = () => ({
     form_type_id: null,
     hn: null,
@@ -42,12 +39,13 @@ export default function fieldAndHandleHook({
     witness_sign: "",
     witness_sign_date: null,
     staff_id: null,
-    staff_position: "",
-    staff_sign: "",
+    staff_posid: null,
+    staff_sign_id: null,
     staff_sign_date: null,
     nurse_id: null,
-    nurse_sign: "",
+    nurse_sign_id: null,
     nurse_sign_date: null,
+    doctor_sign_id: null,
   });
 
   // const [field, setField] = useState(Field());
@@ -76,11 +74,13 @@ export default function fieldAndHandleHook({
     witness_sign: z.string().optional(),
     witness_sign_date: z.string().nullable(),
     staff_id: z.number().nullable(),
-    staff_sign: z.string().optional(),
+    staff_sign_id: z.number().nullable(),
     staff_sign_date: z.string().nullable(),
     nurse_id: z.number().nullable(),
-    nurse_sign: z.string().optional(),
+    nurse_sign_id: z.number().nullable(),
     nurse_sign_date: z.string().nullable(),
+    doctor_sign_id: z.number().nullable(),
+    staff_posid: z.number().nullable(),
   });
 
   //handle and payload
@@ -148,8 +148,6 @@ export default function fieldAndHandleHook({
         setSelectedDisease([]);
         setSignature(null);
         setSignature2(null);
-        setSignature3(null);
-        setNurseSignature(null);
         loadDataCountWarn();
       } else if (!data) {
         addToast({
@@ -211,20 +209,20 @@ export default function fieldAndHandleHook({
     // 👉 สามารถ fetch ไป backend ได้ เช่น:
     // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
   };
-  const handleSaveSignature3 = (dataUrl) => {
-    setSignature3(dataUrl);
-    form.setFieldValue("staff_sign", dataUrl);
-    // console.log("📜 ลายเซ็น:", dataUrl);
-    // 👉 สามารถ fetch ไป backend ได้ เช่น:
-    // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
-  };
-  const handleSaveSignature4 = (dataUrl) => {
-    setNurseSignature(dataUrl);
-    form.setFieldValue("nurse_sign", dataUrl);
-    // console.log("📜 ลายเซ็น:", dataUrl);
-    // 👉 สามารถ fetch ไป backend ได้ เช่น:
-    // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
-  };
+  // const handleSaveSignature3 = (dataUrl) => {
+  //   setSignature3(dataUrl);
+  //   form.setFieldValue("staff_sign", dataUrl);
+  //   // console.log("📜 ลายเซ็น:", dataUrl);
+  //   // 👉 สามารถ fetch ไป backend ได้ เช่น:
+  //   // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
+  // };
+  // const handleSaveSignature4 = (dataUrl) => {
+  //   setNurseSignature(dataUrl);
+  //   form.setFieldValue("nurse_sign", dataUrl);
+  //   // console.log("📜 ลายเซ็น:", dataUrl);
+  //   // 👉 สามารถ fetch ไป backend ได้ เช่น:
+  //   // await fetch('/api/upload-signature', { method: 'POST', body: JSON.stringify({ signature: dataUrl }) })
+  // };
   return {
     form,
     selectedDisease,
@@ -233,16 +231,12 @@ export default function fieldAndHandleHook({
     isSubmitting,
     signature,
     signature2,
-    signature3,
-    nurseSignature,
+
     setSignature,
     setSignature2,
-    setSignature3,
-    setNurseSignature,
+
     modalRefSign,
     handleSaveSignature,
     handleSaveSignature2,
-    handleSaveSignature3,
-    handleSaveSignature4,
   };
 }
