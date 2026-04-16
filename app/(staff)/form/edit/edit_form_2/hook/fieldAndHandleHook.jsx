@@ -32,12 +32,13 @@ export default function fieldAndHandleHook({
     witness_sign: "",
     witness_sign_date: null,
     staff_id: null,
-    staff_position: "",
-    staff_sign: "",
+    staff_posid: null,
+    staff_sign_id: null,
     staff_sign_date: null,
     nurse_id: null,
-    nurse_sign: "",
+    nurse_sign_id: null,
     nurse_sign_date: null,
+    doctor_sign_id: null,
   });
 
   const defaultValues = Field();
@@ -56,11 +57,13 @@ export default function fieldAndHandleHook({
     witness_sign: z.string().optional(),
     witness_sign_date: z.string().nullable(),
     staff_id: z.number().nullable(),
-    staff_sign: z.string().optional(),
+    staff_sign_id: z.number().nullable(),
     staff_sign_date: z.string().nullable(),
     nurse_id: z.number().nullable(),
-    nurse_sign: z.string().optional(),
+    nurse_sign_id: z.number().nullable(),
     nurse_sign_date: z.string().nullable(),
+    doctor_sign_id: z.number().nullable(),
+    staff_posid: z.number().nullable(),
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -96,8 +99,6 @@ export default function fieldAndHandleHook({
         fetchData();
         setSignature(null);
         setSignature2(null);
-        setSignature3(null);
-        setNurseSignature(null);
         loadDataCountWarn();
       } else if (!data) {
         addToast({

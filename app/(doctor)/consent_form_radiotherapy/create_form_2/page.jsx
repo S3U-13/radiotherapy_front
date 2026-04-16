@@ -14,6 +14,7 @@ import React from "react";
 import useHook from "./useHook";
 import { Edit3, Search } from "@deemlol/next-icons";
 import Sign01 from "./signature01/page";
+import { Select, SelectItem } from "@heroui/select";
 
 export default function page({ openForm2, closeForm2, modalRef, selectForm }) {
   const {
@@ -28,6 +29,8 @@ export default function page({ openForm2, closeForm2, modalRef, selectForm }) {
     setOpenSign01,
     handleSaveSignature,
     signature,
+    staff,
+    doctor,
   } = useHook({ closeForm2, selectForm });
   return (
     <div>
@@ -207,47 +210,229 @@ export default function page({ openForm2, closeForm2, modalRef, selectForm }) {
                 </section>
 
                 {/* SECTION 4: ลายเซ็นและพยาน */}
-                <section className="light:border light:border-gray-200 rounded-2xl p-6 bg-white shadow-sm dark:bg-[#181818] space-y-4">
-                  <h2 className="text-gray-700 font-semibold text-base flex items-center gap-2 mb-4 dark:text-white">
-                    <span className="w-1 h-5 bg-neutral-600 rounded-full"></span>
-                    ลายเซ็นและพยาน
-                  </h2>
+                <section className="rounded-2xl bg-white p-6 shadow-sm space-y-6 dark:bg-[#181818]">
+                  {/* ลายเซ็น */}
+                  <div className="grid gap-5 mt-4">
+                    <span className="text-gray-700 dark:text-white text-md font-semibold">
+                      จึงได้ลงลายมือชื่อไว้เป็นหลักฐาน
+                    </span>
 
-                  <div className="rounded-xl border border-gray-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#131317]/50 p-5 sm:p-6 space-y-4 shadow-sm hover:border-gray-300 dark:hover:border-neutral-700 transition-all relative">
-                    <div className="pb-3 border-b border-gray-100 dark:border-neutral-800/80 flex items-center justify-between">
-                      <span className="font-semibold text-gray-800 dark:text-gray-200 text-[15px] flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-neutral-600"></div>
-                        แพทย์
+                    {/* ผู้ป่วย */}
+                    {/* <div className="rounded-xl light:border light:border-gray-200 bg-[#f9f9f9] p-6 space-y-3 shadow-sm dark:bg-[#1f1e1e]">
+                      <span className="font-medium text-gray-700 dark:text-white text-sm">
+                        ผู้ป่วย / ตัวแทนผู้ป่วย
                       </span>
-                    </div>
-                    <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 items-start sm:items-center justify-between">
+                      <div className="flex flex-wrap gap-3 items-center">
+                        <span className="text-sm flex items-center gap-2 text-default-700">
+                          ลงชื่อ{" "}
+                          {!signature ? (
+                            <span className="text-gray-400">
+                              .............................
+                            </span>
+                          ) : (
+                            <img
+                              src={signature}
+                              alt="signature"
+                              className="border border-gray-200 rounded-lg shadow w-[180px] h-[50px] object-contain bg-white"
+                            />
+                          )}
+                        </span>
+                        <Button
+                          size="sm"
+                          isIconOnly
+                          className="bg-neutral-900 text-white dark:bg-neutral-800 dark:hover:bg-neutral-700"
+                          variant="flat"
+                          onPress={() => setOpenSign01(true)}
+                        >
+                          <Edit3 className="size-5" />
+                        </Button>
+                      </div>
                       <Input
-                        className="max-w-[300px]"
+                        className="max-w-xs"
                         size="sm"
                         radius="sm"
                         placeholder="ชื่อ-นามสกุล"
                       />
-                      <div className="flex items-center gap-3">
-                        {!signature ? (
-                          <div className="w-[180px] h-[50px] rounded-lg border-2 border-dashed border-gray-300 dark:border-neutral-700 flex items-center justify-center text-gray-400 dark:text-neutral-500 text-xs bg-gray-50 dark:bg-neutral-800/30">
-                            รอการลงนาม
-                          </div>
-                        ) : (
-                          <img
-                            src={signature}
-                            alt="signature"
-                            className="border border-gray-200 dark:border-neutral-700 rounded-lg shadow-sm w-[180px] h-[50px] object-contain bg-white dark:bg-transparent"
-                          />
-                        )}
-                        <Button
-                          size="sm"
-                          isIconOnly
-                          className="bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700 shadow-sm"
-                          onPress={() => setOpenSign01(true)}
-                        >
-                          <Edit3 size={16} />
-                        </Button>
+                    </div> */}
+
+                    {/* แพทย์ */}
+                    <div className="rounded-xl border border-gray-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#131317]/50 p-5 sm:p-6 space-y-4 shadow-sm hover:border-gray-300 dark:hover:border-neutral-700 transition-all relative">
+                      <div className="pb-3 border-b border-gray-100 dark:border-neutral-800/80 flex items-center justify-between">
+                        <span className="font-semibold text-gray-800 dark:text-gray-200 text-[15px] flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-neutral-600"></div>
+                          แพทย์
+                        </span>
                       </div>
+                      <div className="w-full">
+                        <form.Field name="doctor_id">
+                          {(field) => (
+                            <Select
+                              label="กรุณาเลือกแพทย์เพื่อขออนุญาตใช้ลายเซ็น"
+                              className="w-full max-w-[500px]"
+                              size="sm"
+                              radius="sm"
+                              placeholder=""
+                              selectedKeys={
+                                field.state.value ? [field.state.value] : []
+                              }
+                              onSelectionChange={(keys) => {
+                                const value = Array.from(keys)[0];
+                                field.handleChange(value);
+                              }}
+                              classNames={{
+                                trigger:
+                                  "shadow-none border border-gray-200/80 dark:border-neutral-700/80 bg-gray-50/50 dark:bg-neutral-900/50 hover:bg-white dark:hover:bg-neutral-800",
+                              }}
+                            >
+                              {doctor?.map((item) => (
+                                <SelectItem key={String(item.doctorid)}>
+                                  {`${item?.name} ${item?.location_name}`}
+                                </SelectItem>
+                              ))}
+                            </Select>
+                          )}
+                        </form.Field>
+                      </div>
+                    </div>
+
+                    {/* นักรังสีแพทย์ */}
+                    <div className="rounded-xl border border-gray-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#131317]/50 p-5 sm:p-6 space-y-4 shadow-sm hover:border-gray-300 dark:hover:border-neutral-700 transition-all relative">
+                      <div className="pb-3 border-b border-gray-100 dark:border-neutral-800/80 flex items-center justify-between">
+                        <span className="font-semibold text-gray-800 dark:text-gray-200 text-[15px] flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-neutral-600"></div>
+                          นักรังสีแพทย์
+                        </span>
+                      </div>
+                      <div className="w-full">
+                        <form.Field name="staff_id">
+                          {(field) => (
+                            <Select
+                              label="กรุณาเลือกนักรังสีแพทย์เพื่อขออนุญาตใช้ลายเซ็น"
+                              className="w-full max-w-[500px]"
+                              size="sm"
+                              radius="sm"
+                              placeholder=""
+                              selectedKeys={
+                                field.state.value ? [field.state.value] : []
+                              }
+                              onSelectionChange={(keys) => {
+                                const value = Array.from(keys)[0];
+                                field.handleChange(value);
+                              }}
+                              classNames={{
+                                trigger:
+                                  "shadow-none border border-gray-200/80 dark:border-neutral-700/80 bg-gray-50/50 dark:bg-neutral-900/50 hover:bg-white dark:hover:bg-neutral-800",
+                              }}
+                            >
+                              {staff?.map((item) => (
+                                <SelectItem key={String(item.userid)}>
+                                  {`${item?.person_name} ${item?.position}`}
+                                </SelectItem>
+                              ))}
+                            </Select>
+                          )}
+                        </form.Field>
+                      </div>
+                    </div>
+
+                    {/* พยาน */}
+                    {/* <div className="rounded-xl light:border light:border-gray-200 bg-[#f9f9f9] p-6 space-y-3 shadow-sm dark:bg-[#1f1e1e]">
+                      <span className="font-medium text-gray-700 dark:text-white text-sm">
+                        พยาน
+                      </span>
+
+                      <Input
+                        className="max-w-xs"
+                        size="sm"
+                        radius="sm"
+                        placeholder="ชื่อ-นามสกุล"
+                      />
+                    </div> */}
+
+                    {/* พยาบาล */}
+                    <div className="rounded-xl border border-gray-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#131317]/50 p-5 sm:p-6 space-y-4 shadow-sm hover:border-gray-300 dark:hover:border-neutral-700 transition-all relative">
+                      <div className="pb-3 border-b border-gray-100 dark:border-neutral-800/80 flex items-center justify-between">
+                        <span className="font-semibold text-gray-800 dark:text-gray-200 text-[15px] flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-neutral-600"></div>
+                          พยาบาล
+                        </span>
+                      </div>
+                      <div className="w-full">
+                        <form.Field name="nurse_id">
+                          {(field) => (
+                            <Select
+                              label="กรุณาเลือกพยาบาลเพื่อขออนุญาตใช้ลายเซ็น"
+                              className="w-full max-w-[500px]"
+                              size="sm"
+                              radius="sm"
+                              placeholder=""
+                              selectedKeys={
+                                field.state.value ? [field.state.value] : []
+                              }
+                              onSelectionChange={(keys) => {
+                                const value = Array.from(keys)[0];
+                                field.handleChange(value);
+                              }}
+                              classNames={{
+                                trigger:
+                                  "shadow-none border border-gray-200/80 dark:border-neutral-700/80 bg-gray-50/50 dark:bg-neutral-900/50 hover:bg-white dark:hover:bg-neutral-800",
+                              }}
+                            >
+                              {staff?.map((item) => (
+                                <SelectItem key={String(item.userid)}>
+                                  {`${item?.person_name} ${item?.position}`}
+                                </SelectItem>
+                              ))}
+                            </Select>
+                          )}
+                        </form.Field>
+                      </div>
+                    </div>
+                    <div className="rounded-xl border border-gray-200/80 dark:border-neutral-800/80 bg-white dark:bg-[#131317]/50 p-5 sm:p-6 space-y-4 shadow-sm hover:border-gray-300 dark:hover:border-neutral-700 transition-all relative">
+                      <div className="pb-3 border-b border-gray-100 dark:border-neutral-800/80 flex items-center justify-between">
+                        <span className="font-semibold text-gray-800 dark:text-gray-200 text-[15px] flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-neutral-600"></div>
+                          ผู้ตรวจสอบ
+                        </span>
+                      </div>
+                      <div className="w-full">
+                        <form.Field name="viewer">
+                          {(field) => (
+                            <Select
+                              label="กรุณาเลือกผู้ตรวจสอบ"
+                              className="w-full max-w-[500px]"
+                              size="sm"
+                              radius="sm"
+                              placeholder=""
+                              selectedKeys={
+                                field.state.value ? [field.state.value] : []
+                              }
+                              onSelectionChange={(keys) => {
+                                const value = Array.from(keys)[0];
+                                field.handleChange(value);
+                              }}
+                              classNames={{
+                                trigger:
+                                  "shadow-none border border-gray-200/80 dark:border-neutral-700/80 bg-gray-50/50 dark:bg-neutral-900/50 hover:bg-white dark:hover:bg-neutral-800",
+                              }}
+                            >
+                              {staff?.map((item) => (
+                                <SelectItem key={String(item.userid)}>
+                                  {`${item?.person_name} ${item?.position}`}
+                                </SelectItem>
+                              ))}
+                            </Select>
+                          )}
+                        </form.Field>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 flex justify-end">
+                      <DatePicker
+                        labelPlacement="outside"
+                        className="w-40"
+                        label="วันที่"
+                      />
                     </div>
                   </div>
                 </section>

@@ -54,6 +54,7 @@ export default function page() {
     FormByFormId,
     handleSelectIdForm,
     patFormData,
+    setPatFormData,
     selectIdForm,
     fetchData,
 
@@ -113,13 +114,15 @@ export default function page() {
 
       case "status":
         return (
-          <span
-            className={`px-6 py-2 text-xs rounded-full font-medium ${
-              statusStyle[item?.status] || "bg-gray-100 text-gray-600"
-            }`}
-          >
-            {item.status}
-          </span>
+          <div className="flex justify-center">
+            <span
+              className={`px-6 py-2 text-xs rounded-full font-medium ${
+                statusStyle[item?.status] || "bg-gray-100 text-gray-600"
+              }`}
+            >
+              {item.status}
+            </span>
+          </div>
         );
 
       case "createdAt":
@@ -197,7 +200,12 @@ export default function page() {
         modalRef={modalRef}
         selectIdForm={selectIdForm}
         fetchData={fetchData}
-        closeForm1={() => setModalEditForm1(false)}
+        closeForm1={() => {
+          setModalEditForm1(false);
+          setPatFormData(null);
+          loadData();
+          setSelectForm("");
+        }}
       />
       <ModalEditForm2
         patFormData={patFormData}
@@ -205,7 +213,12 @@ export default function page() {
         modalRef={modalRef}
         selectIdForm={selectIdForm}
         fetchData={fetchData}
-        closeForm2={() => setModalEditForm2(false)}
+        closeForm2={() => {
+          setModalEditForm2(false);
+          setPatFormData(null);
+          loadData();
+          setSelectForm("");
+        }}
       />
       <ModalEditForm3
         patFormData={patFormData}
@@ -213,7 +226,12 @@ export default function page() {
         modalRef={modalRef}
         selectIdForm={selectIdForm}
         fetchData={fetchData}
-        closeForm3={() => setModalEditForm3(false)}
+        closeForm3={() => {
+          setModalEditForm3(false);
+          setPatFormData(null);
+          loadData();
+          setSelectForm("");
+        }}
       />
       <ViewForm
         isOpen={modalViewForm}

@@ -162,6 +162,9 @@ export default function useHook() {
       };
 
       fetchData();
+    } else {
+      // ปิดทุก modal แล้ว: reset patFormData
+      setPatFormData(null);
     }
   }, [modalEditForm1, modalEditForm2, modalEditForm3]);
 

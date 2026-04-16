@@ -130,6 +130,7 @@ export default function page({
     setSelectedDisease,
     setSignature,
     setSignature2,
+    openForm1,
   });
 
   const getFieldNameByRole = (role) => {
@@ -967,6 +968,7 @@ export default function page({
                     <form.Field name={fieldName}>
                       {(field) => (
                         <Input
+                          type="hidden"
                           value={field.state.value ?? ""}
                           onChange={(e) => field.handleChange(e.target.value)}
                         />

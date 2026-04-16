@@ -12,8 +12,7 @@ export default function useHook({
   form,
   setSignature,
   setSignature2,
-  setSignature3,
-  setNurseSignature,
+  openForm3,
 }) {
   const { user } = useAuth();
   const { fetchChoice, Relation } = useApiRequest();
@@ -58,26 +57,33 @@ export default function useHook({
     );
     form.setFieldValue("disease", patFormData?.data_form?.form?.disease ?? "");
 
+    //set sign — guard: อย่า set ถ้า modal ปิดอยู่
+    if (!openForm3) return;
     const signMap = [
       {
-        value: patFormData?.data_form?.patientsign?.patient_sign,
+        value: patFormData?.data_form?.patientsign?.patient_sign ?? null,
         setState: setSignature,
         field: "patient_sign",
       },
       {
-        value: patFormData?.data_form?.witnesssign?.witness_sign,
+        value: patFormData?.data_form?.witnesssign?.witness_sign ?? null,
         setState: setSignature2,
         field: "witness_sign",
       },
+    ];
+
+    const userSignIdMap = [
       {
-        value: patFormData?.data_form?.staffsign?.staff_sign,
-        setState: setSignature3,
-        field: "staff_sign",
+        value: patFormData?.data_form?.staffsign?.signature_id,
+        field: "staff_sign_id",
       },
       {
-        value: patFormData?.data_form?.nursesign?.nurse_sign,
-        setState: setNurseSignature,
-        field: "nurse_sign",
+        value: patFormData?.data_form?.nursesign?.signature_id,
+        field: "nurse_sign_id",
+      },
+      {
+        value: patFormData?.data_form?.doctorsign?.signature_id,
+        field: "doctor_sign_id",
       },
     ];
 
@@ -87,7 +93,13 @@ export default function useHook({
         form.setFieldValue(field, value);
       }
     });
-  }, [patFormData]);
+
+    userSignIdMap.forEach(({ value, field }) => {
+      if (value) {
+        form.setFieldValue(field, value);
+      }
+    });
+  }, [patFormData, openForm3]);
 
   const pat_name = patFormData?.data_pat?.pat
     ? `${patFormData?.data_pat?.pat?.prename}${patFormData?.data_pat?.pat?.firstname} ${patFormData?.data_pat?.pat?.lastname}`
@@ -98,8 +110,6 @@ export default function useHook({
     form.reset();
     setSignature(null);
     setSignature2(null);
-    setSignature3(null);
-    setNurseSignature(null);
   };
 
   return {

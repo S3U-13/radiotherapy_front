@@ -1,13 +1,15 @@
 "use client";
 import { BarChart2, Menu } from "@deemlol/next-icons";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { ChevronDown, Edit2 } from "lucide-react";
 import { Button } from "@heroui/button";
 import { Link } from "@heroui/link";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export default function Sidebar() {
+  const { user } = useAuth();
   const pathname = usePathname();
 
   const menu_config = [
@@ -16,18 +18,22 @@ export default function Sidebar() {
       name: "Dashboard",
       path: "/dashboard",
       icon: <BarChart2 size={22} className="text-default-700" />,
-      role: "doctor",
+      role: ["staff", "nurse", "doctor"],
     },
     {
       id: 2,
       name: "Consent Form",
       icon: <Edit2 size={18} className="text-default-700" />,
       children: [
-        { id: 1, name: "Consent Form", path: "/consent_form_radiotherapy" },
-        { id: 2, name: "Drafts", path: "/drafts", count: 3, type: "warning" },
-        { id: 3, name: "Released", path: "/released" },
-        { id: 4, name: "Comments", path: "/comments" },
-        { id: 5, name: "Scheduled", path: "/scheduled", count: 8 },
+        {
+          id: 1,
+          name: "Consent Form",
+          path: "/consent_form_radiotherapy",
+        },
+        // { id: 2, name: "Drafts", path: "/drafts", count: 3, type: "warning" },
+        // { id: 3, name: "Released", path: "/released" },
+        // { id: 4, name: "Comments", path: "/comments" },
+        // { id: 5, name: "Scheduled", path: "/scheduled", count: 8 },
       ],
       role: "doctor",
     },
@@ -36,7 +42,11 @@ export default function Sidebar() {
       name: "Menu",
       children: [
         { id: 1, name: "Manage Staff", path: "/manage_staff" },
-        { id: 2, name: "Consent Form", path: "/form" },
+        {
+          id: 2,
+          name: "Consent Form",
+          path: "/form",
+        },
       ],
       icon: <Menu size={22} className="text-default-700" />,
       role: ["staff", "nurse"],
@@ -50,8 +60,13 @@ export default function Sidebar() {
   };
 
   // 👉 เปิด accordion ตาม path อัตโนมัติ
+
+  const menu = useMemo(() => {
+    return menu_config.filter((item) => item.role.includes(user.role));
+  }, [user.role]);
+
   useEffect(() => {
-    const found = menu_config.find((item) =>
+    const found = menu.find((item) =>
       item.children?.some((sub) => sub.path === pathname),
     );
 
@@ -61,7 +76,7 @@ export default function Sidebar() {
   return (
     <div className="w-70 px-4 flex flex-col relative">
       <div className="space-y-2">
-        {menu_config.map((item) => {
+        {menu.map((item) => {
           const isOpen = openId === item.id;
 
           // 👉 เมนูปกติ

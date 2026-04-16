@@ -11,6 +11,7 @@ export default function useHook({
   setSelectedDisease,
   setSignature,
   setSignature2,
+  openForm1,
 }) {
   const { user } = useAuth();
   const { fetchChoice, prenameApi, Relation, fetchDoctor } = useApiRequest();
@@ -106,7 +107,8 @@ export default function useHook({
       String(patFormData?.data_form?.patient_contact?.relation) ?? "",
     );
 
-    //set sign
+    //set sign — guard: อย่า set ถ้า modal ปิดอยู่
+    if (!openForm1) return;
     const signMap = [
       {
         value: patFormData?.data_form?.patientsign?.patient_sign,
@@ -119,6 +121,20 @@ export default function useHook({
         field: "witness_sign",
       },
     ];
+    const userSignIdMap = [
+      {
+        value: patFormData?.data_form?.staffsign?.signature_id,
+        field: "staff_sign_id",
+      },
+      {
+        value: patFormData?.data_form?.nursesign?.signature_id,
+        field: "nurse_sign_id",
+      },
+      {
+        value: patFormData?.data_form?.doctorsign?.signature_id,
+        field: "doctor_sign_id",
+      },
+    ];
 
     signMap.forEach(({ value, setState, field }) => {
       if (value) {
@@ -126,7 +142,13 @@ export default function useHook({
         form.setFieldValue(field, value);
       }
     });
-  }, [patFormData]);
+
+    userSignIdMap.forEach(({ value, field }) => {
+      if (value) {
+        form.setFieldValue(field, value);
+      }
+    });
+  }, [patFormData, openForm1]);
 
   // service
   const calculateAge = (birthdate) => {

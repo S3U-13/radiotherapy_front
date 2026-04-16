@@ -7,7 +7,9 @@ import { addToast } from "@heroui/toast";
 import { useWarn } from "@/context/WarnContext";
 
 export default function useHook({ closeForm3, selectForm }) {
-  const { SearchHn, DoctorCreateForm } = useApiRequest();
+  const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
+  const { SearchHn, DoctorCreateForm, staffList, fetchDoctor } =
+    useApiRequest();
   const { loadDataCountWarn } = useWarn();
   const modalRefSign = useRef(null);
   const [openSign01, setOpenSign01] = useState(false);
@@ -16,6 +18,19 @@ export default function useHook({ closeForm3, selectForm }) {
   const [signature, setSignature] = useState(null);
   const [hnInput, setHnInput] = useState("");
   const [pat, setPat] = useState(null);
+  const [staff, setStaff] = useState([]);
+  const [doctor, setDoctor] = useState([]);
+
+  useEffect(() => {
+    if (didFetch.current) return; // check flag ก่อน
+    didFetch.current = true;
+    staffList()
+      .then((data) => setStaff(data || []))
+      .catch(console.error);
+    fetchDoctor()
+      .then((data) => setDoctor(data.doctorFormatted || []))
+      .catch(console.error);
+  }, [staffList, fetchDoctor]);
 
   const handleSearchHn = async () => {
     if (!hnInput) {
@@ -66,6 +81,10 @@ export default function useHook({ closeForm3, selectForm }) {
     hn: null,
     pat_age: "",
     doctor_sign: "",
+    doctor_id: null,
+    staff_id: null,
+    nurse_id: null,
+    viewer: null,
   });
 
   const [field, setField] = useState(initialField());
@@ -76,6 +95,10 @@ export default function useHook({ closeForm3, selectForm }) {
     form_type_id: z.number().nullable(),
     hn: z.coerce.number().nullable(),
     doctor_sign: z.string().optional(),
+    doctor_id: z.string().nullable(),
+    staff_id: z.string().nullable(),
+    nurse_id: z.string().nullable(),
+    viewer: z.string().nullable(),
   });
 
   const handleChange = async (e) => {
@@ -190,5 +213,7 @@ export default function useHook({ closeForm3, selectForm }) {
     form,
     handleSubmit,
     isSubmitting,
+    staff,
+    doctor,
   };
 }

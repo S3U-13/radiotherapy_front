@@ -154,6 +154,7 @@ export default function useHook() {
     if (!selectIdForm) return;
 
     if (modalEditForm1 || modalEditForm2 || modalEditForm3) {
+      setPatFormData(null); // reset ก่อนโหลดใหม่
       const fetchData = async () => {
         const data = await DataFormById(selectIdForm);
         if (data) {
@@ -162,6 +163,9 @@ export default function useHook() {
       };
 
       fetchData();
+    } else {
+      // ปิดทุก modal แล้ว: reset patFormData
+      setPatFormData(null);
     }
   }, [modalEditForm1, modalEditForm2, modalEditForm3]);
 
@@ -225,6 +229,7 @@ export default function useHook() {
     FormByFormId,
     handleSelectIdForm,
     patFormData,
+    setPatFormData,
     selectIdForm,
     fetchData,
     //

@@ -196,7 +196,11 @@ export default function Page() {
         modalRef={modalRef}
         selectIdForm={selectIdForm}
         fetchData={fetchData}
-        closeForm1={() => setModalEditForm1(false)}
+        closeForm1={() => {
+          setModalEditForm1(false);
+          loadData();
+          setSelectForm("");
+        }}
       />
       <ModalEditForm2
         patFormData={patFormData}
@@ -204,7 +208,11 @@ export default function Page() {
         modalRef={modalRef}
         selectIdForm={selectIdForm}
         fetchData={fetchData}
-        closeForm2={() => setModalEditForm2(false)}
+        closeForm2={() => {
+          setModalEditForm2(false);
+          loadData();
+          setSelectForm("");
+        }}
       />
       <ModalEditForm3
         patFormData={patFormData}
@@ -212,7 +220,11 @@ export default function Page() {
         modalRef={modalRef}
         selectIdForm={selectIdForm}
         fetchData={fetchData}
-        closeForm3={() => setModalEditForm3(false)}
+        closeForm3={() => {
+          setModalEditForm3(false);
+          loadData();
+          setSelectForm("");
+        }}
       />
       <ViewForm
         isOpen={modalViewForm}
