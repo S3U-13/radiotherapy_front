@@ -347,7 +347,10 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                                 const value = Array.from(keys)[0];
                                 field.handleChange(value);
                               }}
-                              classNames={{ trigger: "shadow-none border border-gray-200/80 dark:border-neutral-700/80 bg-gray-50/50 dark:bg-neutral-900/50 hover:bg-white dark:hover:bg-neutral-800" }}
+                              classNames={{
+                                trigger:
+                                  "shadow-none border border-gray-200/80 dark:border-neutral-700/80 bg-gray-50/50 dark:bg-neutral-900/50 hover:bg-white dark:hover:bg-neutral-800",
+                              }}
                             >
                               {doctor?.map((item) => (
                                 <SelectItem key={String(item.doctorid)}>
@@ -384,7 +387,10 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                                 const value = Array.from(keys)[0];
                                 field.handleChange(value);
                               }}
-                              classNames={{ trigger: "shadow-none border border-gray-200/80 dark:border-neutral-700/80 bg-gray-50/50 dark:bg-neutral-900/50 hover:bg-white dark:hover:bg-neutral-800" }}
+                              classNames={{
+                                trigger:
+                                  "shadow-none border border-gray-200/80 dark:border-neutral-700/80 bg-gray-50/50 dark:bg-neutral-900/50 hover:bg-white dark:hover:bg-neutral-800",
+                              }}
                             >
                               {staff?.map((item) => (
                                 <SelectItem key={String(item.userid)}>
@@ -435,7 +441,10 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                                 const value = Array.from(keys)[0];
                                 field.handleChange(value);
                               }}
-                              classNames={{ trigger: "shadow-none border border-gray-200/80 dark:border-neutral-700/80 bg-gray-50/50 dark:bg-neutral-900/50 hover:bg-white dark:hover:bg-neutral-800" }}
+                              classNames={{
+                                trigger:
+                                  "shadow-none border border-gray-200/80 dark:border-neutral-700/80 bg-gray-50/50 dark:bg-neutral-900/50 hover:bg-white dark:hover:bg-neutral-800",
+                              }}
                             >
                               {staff?.map((item) => (
                                 <SelectItem key={String(item.userid)}>
@@ -470,7 +479,10 @@ export default function page({ openForm1, closeForm1, modalRef, selectForm }) {
                                 const value = Array.from(keys)[0];
                                 field.handleChange(value);
                               }}
-                              classNames={{ trigger: "shadow-none border border-gray-200/80 dark:border-neutral-700/80 bg-gray-50/50 dark:bg-neutral-900/50 hover:bg-white dark:hover:bg-neutral-800" }}
+                              classNames={{
+                                trigger:
+                                  "shadow-none border border-gray-200/80 dark:border-neutral-700/80 bg-gray-50/50 dark:bg-neutral-900/50 hover:bg-white dark:hover:bg-neutral-800",
+                              }}
                             >
                               {staff?.map((item) => (
                                 <SelectItem key={String(item.userid)}>

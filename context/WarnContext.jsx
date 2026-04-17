@@ -6,15 +6,37 @@ const WarnContext = createContext();
 
 export const WarnProvider = ({ children }) => {
   const didFetch = useRef(false);
-  const { fetchCountWarn } = useApiRequest();
+  const { fetchCountWarnPending } = useApiRequest();
   const [countWarn, setCountWarn] = useState(0);
   const [notifications, setNotifications] = useState([]);
+  const [countWarnSigned, setCountWarnSigned] = useState(0);
+  const [notificationsSigned, setNotificationsSigned] = useState([]);
+  // const [type, setType] = useState("pending");
 
-  const loadDataCountWarn = async () => {
-    try {
-      const data = await fetchCountWarn();
+  const refreshByType = async (type) => {
+    const data = await fetchCountWarnPending(type);
+
+    if (type === "pending") {
+      setNotifications(data.data);
       setCountWarn(data.count);
-      setNotifications(data.notifications);
+    } else {
+      setNotificationsSigned(data.data);
+      setCountWarnSigned(data.count);
+    }
+  };
+
+  const loadAll = async () => {
+    try {
+      const [pendingData, historyData] = await Promise.all([
+        fetchCountWarnPending("pending"),
+        fetchCountWarnPending("history"),
+      ]);
+
+      setCountWarn(pendingData?.count || 0);
+      setNotifications(pendingData?.data || []);
+
+      setCountWarnSigned(historyData?.count || 0);
+      setNotificationsSigned(historyData?.data || []);
     } catch (error) {
       console.error(error);
     }
@@ -23,7 +45,7 @@ export const WarnProvider = ({ children }) => {
   useEffect(() => {
     if (didFetch.current) return;
     didFetch.current = true;
-    loadDataCountWarn();
+    loadAll();
   }, []);
 
   return (
@@ -31,7 +53,12 @@ export const WarnProvider = ({ children }) => {
       value={{
         notifications,
         countWarn,
-        loadDataCountWarn,
+        refreshByType,
+        // setType,
+        // type,
+        loadAll,
+        notificationsSigned,
+        countWarnSigned,
       }}
     >
       {children}

@@ -7,7 +7,7 @@ import { addToast } from "@heroui/toast";
 import { useWarn } from "@/context/WarnContext";
 
 export default function useHook({ closeForm3, selectForm }) {
-  const { loadDataCountWarn } = useWarn();
+  const { loadAll } = useWarn();
   const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
   const { SearchHn, DoctorCreateForm, staffList, fetchDoctor } =
     useApiRequest();
@@ -134,10 +134,10 @@ export default function useHook({ closeForm3, selectForm }) {
           variant: "flat",
           radius: "lg",
         });
-        loadDataCountWarn();
         form.reset();
         setHnInput("");
         setSignature(null);
+        loadAll();
         closeForm3();
       } else if (!data) {
         addToast({

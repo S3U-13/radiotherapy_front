@@ -17,7 +17,7 @@ export default function useHook({ closeForm1, selectForm }) {
     staffList,
     fetchDoctor,
   } = useApiRequest();
-  const { loadDataCountWarn } = useWarn();
+  const { loadAll } = useWarn();
   const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
   const [hnInput, setHnInput] = useState("");
   const [pat, setPat] = useState(null);
@@ -165,8 +165,8 @@ export default function useHook({ closeForm1, selectForm }) {
         setVitalSignList([]);
         setVitalsignId("");
         setSignature(null);
+        loadAll();
         closeForm1();
-        loadDataCountWarn();
       } else if (!data) {
         addToast({
           title: "Fails",

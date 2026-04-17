@@ -7,7 +7,7 @@ import { addToast } from "@heroui/toast";
 import { useWarn } from "@/context/WarnContext";
 
 export default function useHook({ closeForm2, selectForm }) {
-  const { loadDataCountWarn } = useWarn();
+  const { loadAll } = useWarn();
   const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
   const { SearchHn, DoctorCreateForm, staffList, fetchDoctor } =
     useApiRequest();
@@ -137,8 +137,8 @@ export default function useHook({ closeForm2, selectForm }) {
         form.reset();
         setHnInput("");
         setSignature(null);
+        loadAll();
         closeForm2();
-        loadDataCountWarn();
       } else if (!data) {
         addToast({
           title: "Fails",

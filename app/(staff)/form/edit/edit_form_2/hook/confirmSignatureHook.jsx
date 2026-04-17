@@ -5,7 +5,7 @@ import { useWarn } from "@/context/WarnContext";
 
 export default function useConfirmSignature() {
   const { confirmSignModal } = useApiRequest();
-  const { loadDataCountWarn } = useWarn();
+  const { loadAll } = useWarn();
 
   const [signatureData, setSignatureData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -48,7 +48,7 @@ export default function useConfirmSignature() {
         });
 
         // ✅ refresh warn
-        loadDataCountWarn();
+        loadAll();
         return true;
       } catch (error) {
         console.error("❌ confirmSignature error:", error);
@@ -57,7 +57,7 @@ export default function useConfirmSignature() {
         setLoading(false);
       }
     },
-    [field, confirmSignModal, loadDataCountWarn],
+    [field, confirmSignModal, loadAll],
   );
 
   return {

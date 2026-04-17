@@ -116,7 +116,7 @@ export default function Navbar() {
         </h1>
 
         <div className="flex items-center gap-5">
-          <div>
+          {/* <div>
             <Input
               isClearable
               classNames={{
@@ -143,7 +143,7 @@ export default function Navbar() {
               radius="lg"
               startContent={<SearchIcon />}
             />
-          </div>
+          </div> */}
 
           {/* message icon */}
           <Dropdown placement="bottom-end">

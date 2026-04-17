@@ -6,7 +6,7 @@ const FormContext = createContext();
 
 export const FormProvider = ({ children }) => {
   const { DataFormById, FormListByHn, changeStatusWarn } = useApiRequest();
-  const { loadDataCountWarn } = useWarn(); // 👈 ดึงมาใช้ตรงนี้
+  const { loadAll } = useWarn(); // 👈 ดึงมาใช้ตรงนี้
   const modalRef = useRef(null);
 
   const [formId, setFormId] = useState(null);
@@ -66,7 +66,7 @@ export const FormProvider = ({ children }) => {
       if (form_status === "pending") {
         const data = await changeStatusWarn(action_id, status);
         if (data) {
-          loadDataCountWarn();
+          loadAll();
         }
       }
     } catch (error) {

@@ -163,7 +163,8 @@ export const useApiRequest = () => {
     apiRequest("/api/user/doctors-group-radio-therapy", "GET");
 
   // fetch count warn
-  const fetchCountWarn = () => apiRequest("/api/user/count-warn", "GET");
+  const fetchCountWarnPending = (type) =>
+    apiRequest(`/api/user/count-warn?type=${type}`, "GET");
 
   const changeStatusWarn = (id, status) =>
     apiRequest(`/api/user/change-status-warn/${id}`, "PUT", {
@@ -196,6 +197,6 @@ export const useApiRequest = () => {
 
     // fetch
     fetchDoctor,
-    fetchCountWarn,
+    fetchCountWarnPending,
   };
 };
