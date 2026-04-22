@@ -1,31 +1,28 @@
 // WarnContext.js
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import { useApiRequest } from "@/hooks/useApi";
+import { socket } from "@/lib/socket";
 
 const WarnContext = createContext();
 
 export const WarnProvider = ({ children }) => {
-  const didFetch = useRef(false);
   const { fetchCountWarnPending } = useApiRequest();
+
   const [countWarn, setCountWarn] = useState(0);
   const [notifications, setNotifications] = useState([]);
+
   const [countWarnSigned, setCountWarnSigned] = useState(0);
   const [notificationsSigned, setNotificationsSigned] = useState([]);
-  // const [type, setType] = useState("pending");
 
-  const refreshByType = async (type) => {
-    const data = await fetchCountWarnPending(type);
+  const loadingRef = useRef(false); // 🔥 กันยิง API ซ้ำ
 
-    if (type === "pending") {
-      setNotifications(data.data);
-      setCountWarn(data.count);
-    } else {
-      setNotificationsSigned(data.data);
-      setCountWarnSigned(data.count);
-    }
-  };
-
+  // -------------------------
+  // โหลดข้อมูลทั้งหมด
+  // -------------------------
   const loadAll = async () => {
+    if (loadingRef.current) return; // ❗กันยิงซ้ำ
+    loadingRef.current = true;
+
     try {
       const [pendingData, historyData] = await Promise.all([
         fetchCountWarnPending("pending"),
@@ -38,13 +35,54 @@ export const WarnProvider = ({ children }) => {
       setCountWarnSigned(historyData?.count || 0);
       setNotificationsSigned(historyData?.data || []);
     } catch (error) {
-      console.error(error);
+      console.error("LOAD WARN ERROR:", error);
+    } finally {
+      loadingRef.current = false;
     }
   };
 
+  // -------------------------
+  // โหลดแยก type (optional)
+  // -------------------------
+  const refreshByType = async (type) => {
+    try {
+      const data = await fetchCountWarnPending(type);
+
+      if (type === "pending") {
+        setNotifications(data?.data || []);
+        setCountWarn(data?.count || 0);
+      } else {
+        setNotificationsSigned(data?.data || []);
+        setCountWarnSigned(data?.count || 0);
+      }
+    } catch (err) {
+      console.error("REFRESH TYPE ERROR:", err);
+    }
+  };
+
+  // -------------------------
+  // socket listener
+  // -------------------------
   useEffect(() => {
-    if (didFetch.current) return;
-    didFetch.current = true;
+    const handleReload = () => {
+      loadAll();
+    };
+    socket.on("new-notification", handleReload);
+    socket.on("form-saved", handleReload);
+    socket.on("form-progress", handleReload);
+    socket.on("form-success", handleReload);
+    return () => {
+      socket.off("new-notification", handleReload);
+      socket.off("form-saved", handleReload);
+      socket.off("form-progress", handleReload);
+      socket.off("form-success", handleReload);
+    };
+  }, []);
+
+  // -------------------------
+  // initial load
+  // -------------------------
+  useEffect(() => {
     loadAll();
   }, []);
 
@@ -53,12 +91,10 @@ export const WarnProvider = ({ children }) => {
       value={{
         notifications,
         countWarn,
-        refreshByType,
-        // setType,
-        // type,
-        loadAll,
         notificationsSigned,
         countWarnSigned,
+        loadAll,
+        refreshByType,
       }}
     >
       {children}

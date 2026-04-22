@@ -333,7 +333,16 @@ export default function Navbar() {
                   Message
                 </Link>
               </DropdownItem>
-              <DropdownItem key="analytics">Analytics</DropdownItem>
+              <DropdownItem key="ChangePassword">
+                <Link
+                  size="sm"
+                  className="w-full"
+                  color="foreground"
+                  href="/ChangePassword"
+                >
+                  Change Password
+                </Link>
+              </DropdownItem>
               <DropdownItem key="system">System</DropdownItem>
               <DropdownItem key="configurations">Configurations</DropdownItem>
               <DropdownItem key="help_and_feedback">

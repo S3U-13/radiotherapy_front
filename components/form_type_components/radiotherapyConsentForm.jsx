@@ -103,34 +103,37 @@ export default function RadiotherapyConsentForm({
               ข้าพเจ้าเเละผู้เทนของข้าพเจ้าเข้าใจถึงข้อมูลอันเป็นประโยชน์ดังกล่าว
               เเละซักถามข้อมูลอันเป็นประโยชน์ต่อการตัดสินใจได้ครบถ่วนเเล้ว
             </p>
-            <div className="flex flex-col sm:flex-row gap-6 mb-8 justify-center bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 p-6 rounded-xl">
+            <div className="flex flex-col gap-6 mb-8 justify-center bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-700 p-6 rounded-xl">
               <div
-                className={`flex items-center gap-3 px-4 py-2 rounded-lg ${form_data.consent === 9 ? "bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800" : ""}`}
+                className={`flex items-start gap-3 px-4 py-2 rounded-lg ${form_data.consent === 11 ? "bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800" : ""}`}
               >
                 <span
-                  className={`text-2xl leading-none ${form_data.consent === 9 ? "text-green-600 dark:text-green-400" : "text-gray-300 dark:text-zinc-600"}`}
+                  className={`text-2xl leading-none ${form_data.consent === 11 ? "text-green-600 dark:text-green-400" : "text-gray-300 dark:text-zinc-600"}`}
                 >
-                  {form_data.consent === 9 ? "☑" : "☐"}
+                  {form_data.consent === 11 ? "☑" : "☐"}
                 </span>
                 <span
-                  className={`text-base ${form_data.consent === 9 ? "text-green-700 dark:text-green-300 font-semibold" : "text-gray-600 dark:text-zinc-400"}`}
+                  className={`text-base ${form_data.consent === 11 ? "text-green-700 dark:text-green-300 font-semibold" : "text-gray-600 dark:text-zinc-400"}`}
                 >
-                  ยินยอมให้ทำการตรวจ
+                  ตัดสินใจเข้ารับการรักษาดังกล่าว เเละ จะไม่ฟ้องร้อง เรียกร้อง
+                  หรือ เอาความผิดกับโรงพยาบาล
+                  รวมทั้งเเพทย์เเละเจ้าหน้าที่ผู้เกี่ยวข้อง
+                  ในผลอันไม่พึงประสงค์ที่อาจเกิดขึ้นกับการรักษาดังกล่าว
                 </span>
               </div>
 
               <div
-                className={`flex items-center gap-3 px-4 py-2 rounded-lg ${form_data.consent === 10 ? "bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800" : ""}`}
+                className={`flex items-center gap-3 px-4 py-2 rounded-lg ${form_data.consent === 12 ? "bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800" : ""}`}
               >
                 <span
-                  className={`text-2xl leading-none ${form_data.consent === 10 ? "text-red-600 dark:text-red-400" : "text-gray-300 dark:text-zinc-600"}`}
+                  className={`text-2xl leading-none ${form_data.consent === 12 ? "text-red-600 dark:text-red-400" : "text-gray-300 dark:text-zinc-600"}`}
                 >
-                  {form_data.consent === 10 ? "☑" : "☐"}
+                  {form_data.consent === 12 ? "☑" : "☐"}
                 </span>
                 <span
-                  className={`text-base ${form_data.consent === 10 ? "text-red-700 dark:text-red-300 font-semibold" : "text-gray-600 dark:text-zinc-400"}`}
+                  className={`text-base ${form_data.consent === 12 ? "text-red-700 dark:text-red-300 font-semibold" : "text-gray-600 dark:text-zinc-400"}`}
                 >
-                  ไม่ยินยอมให้ทำการตรวจ
+                  ปฏิเสธการรักษา
                 </span>
               </div>
             </div>

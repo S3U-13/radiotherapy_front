@@ -102,7 +102,7 @@ export default function MessagePage() {
     <div className="w-full h-full shadow-sm rounded-2xl bg-white dark:bg-[#131317] flex flex-col md:flex-row border border-transparent dark:border-neutral-800/50 overflow-hidden min-h-[calc(100vh-120px)]">
       {/* ---------------- Left Sidebar ---------------- */}
       <div className="w-full md:w-[280px] lg:w-[300px] border-b md:border-b-0 md:border-r border-gray-100 dark:border-neutral-800/50 flex flex-col bg-gray-50/30 dark:bg-neutral-900/20">
-        <div className="p-6">
+        {/* <div className="p-6">
           <Button
             className="w-full bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200 font-medium py-6 shadow-sm"
             radius="md"
@@ -110,10 +110,10 @@ export default function MessagePage() {
           >
             ข้อความใหม่
           </Button>
-        </div>
+        </div> */}
 
         <div className="px-4 pb-6 flex-1 overflow-y-auto">
-          <div className="text-xs font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-3 px-2">
+          <div className="text-xs font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider mb-3 px-2 pt-8">
             กล่องจดหมาย
           </div>
 

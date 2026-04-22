@@ -106,6 +106,17 @@ export default function useHook({
       "relation",
       String(patFormData?.data_form?.patient_contact?.relation) ?? "",
     );
+    form.setFieldValue("cr", patFormData?.data_form?.staff_note?.cr ?? "");
+    form.setFieldValue("egfr", patFormData?.data_form?.staff_note?.egfr ?? "");
+    form.setFieldValue(
+      "contrast_media",
+      patFormData?.data_form?.staff_note?.contrast_media ?? "",
+    );
+    form.setFieldValue(
+      "volume_cc",
+      patFormData?.data_form?.staff_note?.volume_cc ?? "",
+    );
+    form.setFieldValue("note", patFormData?.data_form?.staff_note?.note ?? "");
 
     //set sign — guard: อย่า set ถ้า modal ปิดอยู่
     if (!openForm1) return;

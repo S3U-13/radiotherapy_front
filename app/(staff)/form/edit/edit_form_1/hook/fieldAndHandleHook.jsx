@@ -46,6 +46,12 @@ export default function fieldAndHandleHook({
     nurse_sign_id: null,
     nurse_sign_date: null,
     doctor_sign_id: null,
+    //staff note
+    cr: "",
+    egfr: "",
+    contrast_media: "",
+    volume_cc: "",
+    note: "",
   });
 
   // const [field, setField] = useState(Field());
@@ -81,6 +87,13 @@ export default function fieldAndHandleHook({
     nurse_sign_date: z.string().nullable(),
     doctor_sign_id: z.number().nullable(),
     staff_posid: z.number().nullable(),
+
+    //staff note
+    cr: z.string().optional(),
+    egfr: z.string().optional(),
+    contrast_media: z.string().optional(),
+    volume_cc: z.string().optional(),
+    note: z.string().optional(),
   });
 
   //handle and payload

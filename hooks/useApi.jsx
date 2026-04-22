@@ -77,7 +77,7 @@ export const useApiRequest = () => {
   const DoctorCreateForm = async (value) => {
     try {
       const data = await apiRequest(
-        "/api/user/doc-create-form-radio-therapy",
+        "/api/user/create-form-radio-therapy",
         "POST",
         value,
       );

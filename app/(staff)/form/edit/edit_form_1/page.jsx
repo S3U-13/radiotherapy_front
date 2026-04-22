@@ -609,7 +609,7 @@ export default function page({
                           className="col-span-8"
                           orientation="horizontal"
                           classNames={{ base: "text-sm text-gray-700" }}
-                          value={field.state.value ?? ""}
+                          value={field.state.value}
                           onChange={(e) => field.handleChange(e.target.value)}
                         >
                           {choice
@@ -993,12 +993,18 @@ export default function page({
                   </h2>
                   <div className="grid grid-cols-6 items-center text-sm space-y-3 rounded-xl light:border light:border-gray-200 bg-[#f9f9f9] p-6 shadow-inner col-span-7 md:col-span-4 dark:bg-[#1f1e1e]">
                     {" "}
-                    <Textarea
-                      isClearable
-                      className="col-span-6"
-                      label="บันทึก (กรณีผู้ป่วยเเพ้สารทึบรังสี)"
-                      variant="flat"
-                    />
+                    <form.Field name="note">
+                      {(field) => (
+                        <Textarea
+                          isClearable
+                          className="col-span-6"
+                          label="บันทึก (กรณีผู้ป่วยเเพ้สารทึบรังสี)"
+                          variant="flat"
+                          value={field.state.value ?? ""}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        />
+                      )}
+                    </form.Field>
                     <div className="dark:text-white">
                       <span>ลงชื่อ........................</span>
                       <span className="block">
@@ -1009,35 +1015,59 @@ export default function page({
                   </div>
 
                   <div className="grid grid-cols-6 gap-2 items-center text-sm  space-y-1 rounded-xl light:border light:border-gray-200 bg-[#f9f9f9] p-6 shadow-inner col-span-7 md:col-span-3 dark:bg-[#1f1e1e]">
-                    <Input
-                      label="Cr"
-                      size="sm"
-                      radius="sm"
-                      className="col-span-6 md:col-span-3"
-                    />
+                    <form.Field name="cr">
+                      {(field) => (
+                        <Input
+                          label="Cr"
+                          size="sm"
+                          radius="sm"
+                          className="col-span-6 "
+                          value={field.state.value ?? ""}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        />
+                      )}
+                    </form.Field>
 
-                    <Input
-                      label="eGFR"
-                      size="sm"
-                      radius="sm"
-                      className="col-span-6 md:col-span-3"
-                    />
+                    <form.Field name="egfr">
+                      {(field) => (
+                        <Input
+                          label="eGFR"
+                          size="sm"
+                          radius="sm"
+                          className="col-span-6"
+                          value={field.state.value ?? ""}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        />
+                      )}
+                    </form.Field>
 
                     <p className="text-xs text-center text-gray-500 dark:text-white col-span-6">
                       (ต้องมี Cr ≤ 1.5 mg%, eGFR ≥ 45)
                     </p>
 
-                    <Input
-                      label="Contrast media"
-                      size="sm"
-                      className="col-span-6"
-                    />
+                    <form.Field name="contrast_media">
+                      {(field) => (
+                        <Input
+                          label="Contrast media"
+                          size="sm"
+                          className="col-span-6"
+                          value={field.state.value ?? ""}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        />
+                      )}
+                    </form.Field>
 
-                    <Input
-                      label="ปริมาณ (CC)"
-                      size="sm"
-                      className="col-span-6"
-                    />
+                    <form.Field name="volume_cc">
+                      {(field) => (
+                        <Input
+                          label="ปริมาณ (CC)"
+                          size="sm"
+                          className="col-span-6"
+                          value={field.state.value ?? ""}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                        />
+                      )}
+                    </form.Field>
                   </div>
                 </section>
 

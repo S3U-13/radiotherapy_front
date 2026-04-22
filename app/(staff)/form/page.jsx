@@ -556,7 +556,7 @@ export default function page() {
                 ))}
 
                 {/* 🔥 Action */}
-                <TableCell className="flex justify-center">
+                <TableCell>
                   {/* <div className="flex justify-center gap-2">
                     <Button
                       size="sm"
@@ -594,67 +594,73 @@ export default function page() {
                       </Button>
                     )}
                   </div> */}
-                  <Dropdown
-                    classNames={{
-                      base: "before:bg-default-200", // change arrow background
-                      content:
-                        "py-1 px-1 border border-default-200 bg-linear-to-br from-white to-default-200 dark:from-default-50 dark:to-black",
-                    }}
-                  >
-                    <DropdownTrigger>
-                      <Button
-                        variant="flat"
-                        isIconOnly
-                        color="default"
-                        size="sm"
-                      >
-                        <MoreVertical
-                          size={16}
-                          className="text-neutral-700 dark:text-white"
-                          strokeWidth={1.5}
-                        />
-                      </Button>
-                    </DropdownTrigger>
-                    <DropdownMenu
-                      aria-label="Dropdown menu with description"
-                      variant="faded"
+                  <div className="mx-auto w-8">
+                    <Dropdown
+                      classNames={{
+                        base: "before:bg-default-200", // change arrow background
+                        content:
+                          "py-1 px-1 border border-default-200 bg-linear-to-br from-white to-default-200 dark:from-default-50 dark:to-black",
+                      }}
                     >
-                      <DropdownSection title="Actions">
-                        <DropdownItem
-                          key="View"
-                          description="View Form"
-                          startContent={<AddNoteIcon className={iconClasses} />}
-                          onPress={() => handleOpenView(i?.id, i?.form_type_id)}
+                      <DropdownTrigger>
+                        <Button
+                          variant="flat"
+                          isIconOnly
+                          color="default"
+                          size="sm"
                         >
-                          View
-                        </DropdownItem>
-                        <DropdownItem
-                          key="Edit"
-                          description="Edit Form"
-                          startContent={
-                            <EditDocumentIcon className={iconClasses} />
-                          }
-                          onPress={() => {
-                            FormByFormId[i.form_type_id](true);
-                            handleSelectIdForm(i.id);
-                          }}
-                        >
-                          Edit
-                        </DropdownItem>
-                        {i.status === "Success" && (
+                          <MoreVertical
+                            size={16}
+                            className="text-neutral-700 dark:text-white"
+                            strokeWidth={1.5}
+                          />
+                        </Button>
+                      </DropdownTrigger>
+                      <DropdownMenu
+                        aria-label="Dropdown menu with description"
+                        variant="faded"
+                      >
+                        <DropdownSection title="Actions">
                           <DropdownItem
-                            key="Print"
-                            description="Print PDF Form"
+                            key="View"
+                            description="View Form"
                             startContent={
-                              <CopyDocumentIcon className={iconClasses} />
+                              <AddNoteIcon className={iconClasses} />
+                            }
+                            onPress={() =>
+                              handleOpenView(i?.id, i?.form_type_id)
                             }
                           >
-                            Print PDF
+                            View
                           </DropdownItem>
-                        )}
-                      </DropdownSection>
-                    </DropdownMenu>
-                  </Dropdown>
+                          <DropdownItem
+                            key="Edit"
+                            description="Edit Form"
+                            startContent={
+                              <EditDocumentIcon className={iconClasses} />
+                            }
+                            onPress={() => {
+                              FormByFormId[i.form_type_id](true);
+                              handleSelectIdForm(i.id);
+                            }}
+                          >
+                            Edit
+                          </DropdownItem>
+                          {i.status === "Success" && (
+                            <DropdownItem
+                              key="Print"
+                              description="Print PDF Form"
+                              startContent={
+                                <CopyDocumentIcon className={iconClasses} />
+                              }
+                            >
+                              Print PDF
+                            </DropdownItem>
+                          )}
+                        </DropdownSection>
+                      </DropdownMenu>
+                    </Dropdown>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}

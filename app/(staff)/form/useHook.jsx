@@ -3,10 +3,10 @@ import { addToast } from "@heroui/toast";
 import React, { useEffect, useRef, useState } from "react";
 import { useApiRequest } from "@/hooks/useApi";
 import { formComponentMap } from "@/components/form-config/formComponentMap";
+import { socket } from "@/lib/socket";
 
 export default function useHook() {
   const { fetchForm, FormList, FormListByHn, DataFormById } = useApiRequest();
-  const didFetch = useRef(false); // 🔑 flag ป้องกันเบิ้ล
   const modalRef = useRef(null);
   const [modalForm1, setModalForm1] = useState(false);
   const [modalForm2, setModalForm2] = useState(false);
@@ -46,15 +46,36 @@ export default function useHook() {
     }
   };
 
-  useEffect(() => {
-    if (didFetch.current) return; // check flag ก่อน
-    didFetch.current = true;
-    fetchForm()
-      .then((data) => setForm(data || []))
-      .catch(console.error);
+  const loadFetchForm = async () => {
+    try {
+      const data = await fetchForm();
+      setForm(data || []);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-    loadData();
-  }, [fetchForm]);
+  useEffect(() => {
+    loadFetchForm();
+  }, []);
+
+  useEffect(() => {
+    const handleReload = () => {
+      loadData();
+    };
+    socket.on("new-notification", handleReload);
+    socket.on("form-progress", handleReload);
+    socket.on("form-saved", handleReload);
+    socket.on("form-success", handleReload);
+
+    return () => {
+      socket.off("new-notification", handleReload);
+      socket.off("form-progress", handleReload);
+      socket.off("form-saved", handleReload);
+      socket.off("form-success", handleReload);
+    };
+  }, [page, limit, debounceSearch, status]);
+
   //page
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -168,6 +189,37 @@ export default function useHook() {
       setPatFormData(null);
     }
   }, [modalEditForm1, modalEditForm2, modalEditForm3]);
+
+  useEffect(() => {
+    if (!selectIdForm) return;
+
+    const handleUpdate = async (payload) => {
+      console.log("🔥 SOCKET HIT:", payload);
+      console.log("👉 selectIdForm:", selectIdForm);
+      console.log("👉 payload.form_id:", payload.form_id);
+
+      if (Number(payload.form_id) !== Number(selectIdForm)) {
+        console.log("❌ NOT MATCH → RETURN");
+        return;
+      }
+
+      const data = await DataFormById(selectIdForm);
+      console.log("data", data);
+      if (data) {
+        setPatFormData(data);
+      }
+    };
+
+    socket.on("form-progress", handleUpdate);
+    socket.on("form-saved", handleUpdate);
+    socket.on("form-success", handleUpdate);
+
+    return () => {
+      socket.off("form-progress", handleUpdate);
+      socket.off("form-saved", handleUpdate);
+      socket.off("form-success", handleUpdate);
+    };
+  }, [selectIdForm]);
 
   const fetchData = async () => {
     if (!searchFormByHn) return;

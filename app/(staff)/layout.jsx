@@ -6,16 +6,19 @@ import { AuthProvider } from "@/context/AuthContext";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { WarnProvider } from "@/context/WarnContext";
 import { FormProvider } from "@/context/FormContext";
+import SocketProvider from "@/context/SocketProvider";
 
 export default function Layout({ children }) {
   return (
     <AuthProvider>
       <ProtectedRoute role={["staff", "nurse"]}>
-        <WarnProvider>
-          <FormProvider>
-            <Content>{children}</Content>
-          </FormProvider>
-        </WarnProvider>
+        <SocketProvider>
+          <WarnProvider>
+            <FormProvider>
+              <Content>{children}</Content>
+            </FormProvider>
+          </WarnProvider>
+        </SocketProvider>
       </ProtectedRoute>
     </AuthProvider>
   );
