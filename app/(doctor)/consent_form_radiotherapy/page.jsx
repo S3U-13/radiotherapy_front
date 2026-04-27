@@ -36,10 +36,12 @@ import ModalForm3 from "./create_form_3/page";
 import ModalEditForm1 from "../../(staff)/form/edit/edit_form_1/page";
 import ModalEditForm2 from "../../(staff)/form/edit/edit_form_2/page";
 import ModalEditForm3 from "../../(staff)/form/edit/edit_form_3/page";
+import PreviewPDF from "@/components/pdf/previewPDF";
 import ViewForm from "./view/page";
 import useHook from "./useHook";
 import { Input } from "@heroui/input";
 import { Select, SelectItem } from "@heroui/select";
+import previewPDFHook from "./previewPDFHook";
 
 export const AddNoteIcon = (props) => {
   return (
@@ -208,6 +210,9 @@ export default function Page() {
     fetchData,
   } = useHook();
 
+  const { handlePreviewPDF, modalPreviewPDF, setModalPreviewPDF, pdfUrl } =
+    previewPDFHook();
+
   const renderCell = (item, key) => {
     switch (key) {
       case "id":
@@ -274,6 +279,11 @@ export default function Page() {
 
   return (
     <div className="p-6 space-y-4 bg-white shadow-md rounded-xl dark:bg-[#131317]">
+      <PreviewPDF
+        open={modalPreviewPDF}
+        onClose={() => setModalPreviewPDF(false)}
+        pdfData={pdfUrl}
+      />
       <ModalForm1
         openForm1={modalForm1}
         selectForm={selectForm}
@@ -628,6 +638,10 @@ export default function Page() {
                             startContent={
                               <CopyDocumentIcon className={iconClasses} />
                             }
+                            onPress={() => {
+                              handlePreviewPDF(i.id);
+                              setModalPreviewPDF(true);
+                            }}
                           >
                             Print PDF
                           </DropdownItem>

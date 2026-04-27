@@ -171,6 +171,19 @@ export const useApiRequest = () => {
       status,
     });
 
+  const previewPDF = async (id) => {
+    const res = await fetch(`${API_URL}/api/user/preview-generate-pdf/${id}`, {
+      method: "GET",
+      credentials: "include",
+    });
+
+    if (!res.ok) {
+      throw new Error(`Error: ${res.status}`);
+    }
+
+    return await res.blob(); // 👈 ใช้ blob เท่านั้น
+  };
+
   return {
     prenameApi,
     fetchForm,
@@ -198,5 +211,6 @@ export const useApiRequest = () => {
     // fetch
     fetchDoctor,
     fetchCountWarnPending,
+    previewPDF,
   };
 };
