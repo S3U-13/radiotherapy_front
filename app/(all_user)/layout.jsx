@@ -21,7 +21,7 @@ export default function Layout({ children }) {
   );
 }
 
-export function Content({ children }) {
+function Content({ children }) {
   return (
     <div className="min-h-screen flex flex-col bg-[#F1F1F1] dark:bg-[#0e0e11]">
       {/* ---- Navbar ---- */}

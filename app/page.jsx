@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import LoginModal from "./login/page";
+import LoginModal from "./login/loginModal";
 import { Button } from "@heroui/button";
 import { ThemeSwitch } from "@/components/theme-switch";
 

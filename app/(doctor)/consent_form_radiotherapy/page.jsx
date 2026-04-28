@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableHeader,
@@ -30,20 +30,22 @@ import {
 } from "@deemlol/next-icons";
 import { Tooltip } from "@heroui/tooltip";
 import { Pagination } from "@heroui/pagination";
-import ModalForm1 from "./create_form_1/page";
-import ModalForm2 from "./create_form_2/page";
-import ModalForm3 from "./create_form_3/page";
-import ModalEditForm1 from "../../(staff)/form/edit/edit_form_1/page";
-import ModalEditForm2 from "../../(staff)/form/edit/edit_form_2/page";
-import ModalEditForm3 from "../../(staff)/form/edit/edit_form_3/page";
+
+import SimulationCreateModal from "@/components/radiotherapy/create/create_form_1/simulation";
+import RadiotherapyCreateModal from "@/components/radiotherapy/create/create_form_2/radiotherapy";
+import BrachytherapyCreateModal from "@/components/radiotherapy/create/create_form_3/brachytherapy";
+import SimulationEditModal from "@/components/radiotherapy/edit/edit_form_1/simulation";
+import RadiotherapyEditModal from "@/components/radiotherapy/edit/edit_form_2/radiotherapy";
+import BrachytherapyEditModal from "@/components/radiotherapy/edit/edit_form_3/brachytherapy";
+
 import PreviewPDF from "@/components/pdf/previewPDF";
-import ViewForm from "./view/page";
+import ViewForm from "@/components/radiotherapy/view/viewForm";
 import useHook from "./useHook";
 import { Input } from "@heroui/input";
 import { Select, SelectItem } from "@heroui/select";
 import previewPDFHook from "./previewPDFHook";
 
-export const AddNoteIcon = (props) => {
+const AddNoteIcon = (props) => {
   return (
     <svg
       aria-hidden="true"
@@ -68,7 +70,7 @@ export const AddNoteIcon = (props) => {
   );
 };
 
-export const CopyDocumentIcon = (props) => {
+const CopyDocumentIcon = (props) => {
   return (
     <svg
       aria-hidden="true"
@@ -97,7 +99,7 @@ export const CopyDocumentIcon = (props) => {
   );
 };
 
-export const EditDocumentIcon = (props) => {
+const EditDocumentIcon = (props) => {
   return (
     <svg
       aria-hidden="true"
@@ -122,7 +124,7 @@ export const EditDocumentIcon = (props) => {
   );
 };
 
-export const DeleteDocumentIcon = (props) => {
+const DeleteDocumentIcon = (props) => {
   return (
     <svg
       aria-hidden="true"
@@ -213,6 +215,8 @@ export default function Page() {
   const { handlePreviewPDF, modalPreviewPDF, setModalPreviewPDF, pdfUrl } =
     previewPDFHook();
 
+  const [refresh, setRefresh] = useState(0);
+
   const renderCell = (item, key) => {
     switch (key) {
       case "id":
@@ -284,7 +288,7 @@ export default function Page() {
         onClose={() => setModalPreviewPDF(false)}
         pdfData={pdfUrl}
       />
-      <ModalForm1
+      <SimulationCreateModal
         openForm1={modalForm1}
         selectForm={selectForm}
         modalRef={modalRef}
@@ -294,7 +298,7 @@ export default function Page() {
           setSelectForm("");
         }}
       />
-      <ModalForm2
+      <RadiotherapyCreateModal
         openForm2={modalForm2}
         selectForm={selectForm}
         modalRef={modalRef}
@@ -304,7 +308,7 @@ export default function Page() {
           setSelectForm("");
         }}
       />
-      <ModalForm3
+      <BrachytherapyCreateModal
         openForm3={modalForm3}
         selectForm={selectForm}
         modalRef={modalRef}
@@ -314,7 +318,7 @@ export default function Page() {
           setSelectForm("");
         }}
       />
-      <ModalEditForm1
+      <SimulationEditModal
         patFormData={patFormData}
         openForm1={modalEditForm1}
         modalRef={modalRef}
@@ -326,7 +330,7 @@ export default function Page() {
           setSelectForm("");
         }}
       />
-      <ModalEditForm2
+      <RadiotherapyEditModal
         patFormData={patFormData}
         openForm2={modalEditForm2}
         modalRef={modalRef}
@@ -338,7 +342,7 @@ export default function Page() {
           setSelectForm("");
         }}
       />
-      <ModalEditForm3
+      <BrachytherapyEditModal
         patFormData={patFormData}
         openForm3={modalEditForm3}
         modalRef={modalRef}
@@ -357,6 +361,7 @@ export default function Page() {
         setFormId={setFormId}
         formTypeId={formTypeId}
         setFormTypeId={setFormTypeId}
+        refresh={refresh}
       />
       {/* 🔥 HEADER */}
       <div className="flex justify-between items-center">
@@ -614,7 +619,10 @@ export default function Page() {
                           key="View"
                           description="View Form"
                           startContent={<AddNoteIcon className={iconClasses} />}
-                          onPress={() => handleOpenView(i?.id, i?.form_type_id)}
+                          onPress={() => {
+                            handleOpenView(i?.id, i?.form_type_id);
+                            setRefresh((r) => r + 1);
+                          }}
                         >
                           View
                         </DropdownItem>

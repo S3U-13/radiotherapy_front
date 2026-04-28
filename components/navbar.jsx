@@ -23,9 +23,12 @@ import { useWarn } from "@/context/WarnContext";
 import { useApiRequest } from "@/hooks/useApi";
 import { useForm } from "@/context/FormContext";
 
-import ModalEditForm1 from "../app/(staff)/form/edit/edit_form_1/page";
-import ModalEditForm2 from "../app/(staff)/form/edit/edit_form_2/page";
-import ModalEditForm3 from "../app/(staff)/form/edit/edit_form_3/page";
+// import SimulationCreateModal from "@components/radiotherapy/create/create_form_1/simulation";
+// import RadiotherapyCreateModal from "@components/radiotherapy/create/create_form_2/Radiotherapy";
+// import BrachytherapyCreateModal from "@components/radiotherapy/create/create_form_3/Brachytherapy";
+import SimulationEditModal from "./radiotherapy/edit/edit_form_1/simulation";
+import RadiotherapyEditModal from "./radiotherapy/edit/edit_form_2/radiotherapy";
+import BrachytherapyEditModal from "./radiotherapy/edit/edit_form_3/brachytherapy";
 
 export const SearchIcon = () => {
   return (
@@ -361,7 +364,7 @@ export default function Navbar() {
           </Dropdown>
         </div>
       </div>
-      <ModalEditForm1
+      <SimulationEditModal
         patFormData={patFormData}
         openForm1={modalEditForm1}
         modalRef={modalRef}
@@ -369,7 +372,7 @@ export default function Navbar() {
         fetchData={fetchData}
         closeForm1={() => setModalEditForm1(false)}
       />
-      <ModalEditForm2
+      <RadiotherapyEditModal
         patFormData={patFormData}
         openForm2={modalEditForm2}
         modalRef={modalRef}
@@ -377,7 +380,7 @@ export default function Navbar() {
         fetchData={fetchData}
         closeForm2={() => setModalEditForm2(false)}
       />
-      <ModalEditForm3
+      <BrachytherapyEditModal
         patFormData={patFormData}
         openForm3={modalEditForm3}
         modalRef={modalRef}

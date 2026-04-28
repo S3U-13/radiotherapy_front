@@ -194,9 +194,9 @@ export default function useHook() {
     if (!selectIdForm) return;
 
     const handleUpdate = async (payload) => {
-      console.log("🔥 SOCKET HIT:", payload);
-      console.log("👉 selectIdForm:", selectIdForm);
-      console.log("👉 payload.form_id:", payload.form_id);
+      // console.log("🔥 SOCKET HIT:", payload);
+      // console.log("👉 selectIdForm:", selectIdForm);
+      // console.log("👉 payload.form_id:", payload.form_id);
 
       if (Number(payload.form_id) !== Number(selectIdForm)) {
         console.log("❌ NOT MATCH → RETURN");
@@ -204,7 +204,6 @@ export default function useHook() {
       }
 
       const data = await DataFormById(selectIdForm);
-      console.log("data", data);
       if (data) {
         setPatFormData(data);
       }
